@@ -8,15 +8,6 @@ public class MusicSwitch : MonoBehaviour
     public float crossfadeDuration = 3;
     public int currentTrackIndex = 0;
 
-    public KeyCode switchKey = KeyCode.X;
-    void Update()
-    {
-        if (Input.GetKeyDown(switchKey))
-        {
-            SwitchTrack(currentTrackIndex);
-        }
-    }
-
     public void SwitchTrack(int trackIndex)
     {
         for (int i = 0; i < tracks.Length; ++i)
