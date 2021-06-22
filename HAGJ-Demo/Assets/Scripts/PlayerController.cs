@@ -36,7 +36,11 @@ public class PlayerController : PhysicsObject {
     public float attackRange = 0.5f;
     public LayerMask enemyLayers;
 
-    void Awake() {
+    public static PlayerController Instance { get; private set; }
+
+    public override void Awake() {
+        base.Awake();
+        Instance = this;
         currentStamina = maxStamina;
         currentHealth = maxHealth;
         healthBar.SetMaxHealth(maxHealth);
@@ -46,7 +50,7 @@ public class PlayerController : PhysicsObject {
     public override void Update() {
         base.Update();
         
-        if (Input.GetMouseButtonDown(0)) {
+        if (Input.GetMouseButtonDown(0)&& !PauseMenu.gameIsPaused) {
             LittleAttack();
         }
     }
@@ -108,5 +112,15 @@ public class PlayerController : PhysicsObject {
             yield return regenTick;
         }
         regen = null;
+    }
+    public void TakeDamage(float damage) {
+        if (damage >= currentHealth) {
+            // Loose State
+        }
+        else {
+            currentHealth -= damage;
+            //Play MCHurtAnimation
+            healthBar.SetHealth(currentHealth);
+        }
     }
 }

@@ -19,13 +19,10 @@ public class PhysicsObject : MonoBehaviour {
     protected const float minMoveDistance = 0.001f;
     protected const float shellRadius = 0.01f;
 
-    void Start() {
+    public virtual void Awake() {
         contactFilter.useTriggers = false;
         contactFilter.SetLayerMask(Physics2D.GetLayerCollisionMask(gameObject.layer));
         contactFilter.useLayerMask = true;
-    }
-
-    void OnEnable() {
         rb2d = GetComponent<Rigidbody2D>();
     }
 
