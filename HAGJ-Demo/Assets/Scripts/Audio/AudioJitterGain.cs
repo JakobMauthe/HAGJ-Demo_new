@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 /// <summary>
-/// Applies simple PerlinNoise to an attached AudioSourceController.
+/// Applies simple PerlinNoise to an attached AudioSourceController's Output Gain.
 /// </summary>
 
 [RequireComponent(typeof(AudioSourceController))]

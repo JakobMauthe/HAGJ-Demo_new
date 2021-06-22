@@ -14,11 +14,83 @@ public class AudioManager : MonoBehaviour
     public int playerStamina;
 
     [Header("Music")]
-    public List<AudioClip> musicClips = new List<AudioClip>();
+    public MusicSwitch musicSwitch;
+    [Range(-81, 24)] public float musicVolume;
+    GameObject[] musicObjects;
+    public KeyCode switchKey = KeyCode.X;
+    public int currentTrackIndex = -1;
+
+    [Header("Environment")]
+    [Range(-81, 24)] public float environmentVolume;
+    GameObject[] environmentObjects;
+
+    [Header("Player")]
+    public GameObject jumpContainer;
+    public KeyCode jumpKey = KeyCode.Space; // if there's time, link to events but it's probably fine without.
+
+
+
+    private bool hasInitialised = false;
+
 
     void Start()
     {
         listener = Camera.main.gameObject;
+        UpdateVolumes();
     }
+
+    private void OnValidate()
+    {
+        /*   FOR TESTING ONLY    */
+        if (Application.isPlaying)
+        {
+            if (!hasInitialised) return;
+            UpdateVolumes();
+        }
+       
+    }
+
+    void Update()
+    {
+
+
+        /*   FOR TESTING ONLY    */
+
+        if (Input.GetKeyDown(jumpKey))
+        {
+            jumpContainer.GetComponent<AudioSourceController>().PlayRandom(-6, 0, 0.9f, 1.0f);
+        }
+
+
+        if (Input.GetKeyDown(switchKey))
+        {
+            currentTrackIndex = (currentTrackIndex + 1) % (musicSwitch.tracks.Length - 1);
+            musicSwitch.extVol = musicVolume;
+            musicSwitch.SwitchTrack(currentTrackIndex);
+
+        }
+    }
+
+    void UpdateVolumes()
+    {
+        hasInitialised = true;
+
+        musicObjects = GameObject.FindGameObjectsWithTag("snd_music");
+        for (int i = 0; i < musicObjects.Length; ++i)
+        {            
+            musicObjects[i].GetComponent<AudioSourceController>().SetInputGain(musicVolume);
+        }
+
+
+        environmentObjects = GameObject.FindGameObjectsWithTag("snd_environment");
+        for (int i = 0; i < environmentObjects.Length; ++i)
+        {
+            environmentObjects[i].GetComponent<AudioSourceController>().SetInputGain(environmentVolume);
+        }
+    }
+
+
+
+
 
 }

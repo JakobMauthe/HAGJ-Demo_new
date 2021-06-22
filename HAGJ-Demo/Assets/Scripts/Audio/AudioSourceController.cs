@@ -1,5 +1,5 @@
 // By blubberbaleen. Find more at https://github.com/xvelastin/unityaudioutility //
-// v1.0 //
+// v1.1 - hagj crusader game jam //
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -69,6 +69,7 @@ public class AudioSourceController : MonoBehaviour
         audioSource.loop = false;
         audioSource.playOnAwake = false;
         audioSource.volume = AudioUtility.ConvertDbtoA(startingVolume);
+        audioSource.pitch = pitch;
         fadeVolume = startingVolume;
 
     }
@@ -131,7 +132,7 @@ public class AudioSourceController : MonoBehaviour
 
         if (loopClips)
         {
-            PlayLoopWithInterval();
+            PlayLoop();
         }
 
 
@@ -172,23 +173,79 @@ public class AudioSourceController : MonoBehaviour
 
     public void PlayNew(AudioClip clip)
     {
-        StopLooping(0.01f);
+        StopLooping(0);
         audioSource.clip = clip;
+        audioSource.Play();
+        
+        
+    }
+
+    public void PlayRandom()
+    {
+        StopLooping(0);
+        audioSource.clip = AudioUtility.RandomClipFromList(playlist);
+        audioSource.Play();        
+    }
+    /// <summary>
+    /// Plays one of the clips in the Playlist list at random.
+    /// </summary>
+    /// <param name="volRand">Volume randomisation range in decibels. Offset by input gain.</param>
+    /// <param name="pitchRand">Pitch randomisation range.</param>
+    public void PlayRandom(float volRand, float pitchRand)
+    {
+        float vol = Random.Range(-volRand, volRand);
+        FadeTo(vol, 0, 0.5f, false);
+
+        pitch = 1.0f + Random.Range(-pitchRand, pitchRand);
+        audioSource.pitch = pitch;
+
+        StopLooping(0);
+        audioSource.clip = AudioUtility.RandomClipFromList(playlist);
+        audioSource.Play();
+    }
+    /// <summary>
+    /// Plays one of the clips in the Playlist list at random.
+    /// </summary>
+    /// <param name="volMin">Volume modulation minimum (in db). Offset by input gain.</param>
+    /// <param name="volMax">Volume modulation minimum (in db). Offset by input gain.</param>
+    /// <param name="pitchMin">Pitch modulation minimum.</param>
+    /// <param name="pitchMax"></param>
+    public void PlayRandom(float volMin, float volMax, float pitchMin, float pitchMax)
+    {
+        float vol = Random.Range(volMin, volMax);
+        FadeTo(vol, 0, 0.5f, false);
+        pitch = Random.Range(pitchMin, pitchMax);
+        audioSource.pitch = pitch;
+
+        StopLooping(0);
+        audioSource.clip = AudioUtility.RandomClipFromList(playlist);
         audioSource.Play();
     }
 
 
-    public void PlayLoopWithInterval()
+
+    ///
+    public void PlayLoop()
     {
         loopClips = true;
         loopCoroutine = ClipLooper(intervalBetweenPlays);
         StartCoroutine(loopCoroutine);
     }
+    public void PlayLoop(int interval)
+    {
+        loopClips = true;
+        loopCoroutine = ClipLooper(interval);
+        StartCoroutine(loopCoroutine);
+    }
     public void StopLooping(float fadeOutTime)
     {
         if (loopCoroutine != null) StopCoroutine(loopCoroutine);
-        StartCoroutine(StopSourceAfter(fadeOutTime));
+
+        if (fadeOutTime > 0.0f) StartCoroutine(StopSourceAfter(fadeOutTime));           
+        else audioSource.Stop();
+
         looperIsLooping = false;
+
     }
 
     private IEnumerator StopSourceAfter(float waitTime)
@@ -197,7 +254,6 @@ public class AudioSourceController : MonoBehaviour
         audioSource.Stop();
         yield break;
     }
-
     private IEnumerator ClipLooper(float interval)
     {
         while (true)
@@ -259,6 +315,19 @@ public class AudioSourceController : MonoBehaviour
 
     public void FadeTo(float targetVol, float fadetime, float curveShape, bool stopAfterFade)
     {
+        if (fadetime <= 0.0f)
+        {
+            fadeVolume = targetVol;
+            UpdateParams();
+
+            if (stopAfterFade)
+            {
+                audioSource.Stop();
+            }               
+
+            return;
+        }
+        
         curveShape = Mathf.Clamp(curveShape, 0.0f, 1.0f);
 
         currentFadeTarget = targetVol;

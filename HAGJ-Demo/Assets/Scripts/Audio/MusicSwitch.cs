@@ -6,7 +6,7 @@ public class MusicSwitch : MonoBehaviour
 {
     public AudioSource[] tracks;
     public float crossfadeDuration = 3;
-    public int currentTrackIndex = 0;
+    public int currentMusicTrack = 0;
 
     public float extVol;
 
@@ -18,7 +18,7 @@ public class MusicSwitch : MonoBehaviour
             {
                 if (!CheckIfPlaying(tracks[i]))
                 {
-                    tracks[i].GetComponent<AudioSourceController>().PlayLoopWithInterval();
+                    tracks[i].GetComponent<AudioSourceController>().PlayLoop();
                 }                    
                 tracks[i].GetComponent<AudioSourceController>().FadeTo(extVol, crossfadeDuration, 1.0f, false);
             }
@@ -27,7 +27,7 @@ public class MusicSwitch : MonoBehaviour
                 tracks[i].GetComponent<AudioSourceController>().FadeTo(AudioUtility.MinSoundLevel(), crossfadeDuration * 3f, 0.5f, false);
             }
         }
-        currentTrackIndex = trackIndex;
+        currentMusicTrack = trackIndex;
     }
 
     private static bool CheckIfPlaying(AudioSource source)
