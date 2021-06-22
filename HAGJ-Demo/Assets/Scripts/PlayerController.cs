@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerController : PhysicsObject {
+
+    public Animator animator;
+
     //Health and Stamina
 
     public HealthBar healthBar;
@@ -25,16 +28,25 @@ public class PlayerController : PhysicsObject {
     public float jumpTakeOffSpeed = 5f;
 
 
-    //Attacking
-    [SerializeField, Range(0, 100)]
-    int attackLittleDamage = 20;
-
-    [SerializeField, Range(0, 100)]
-    int attackLittleStaminaCost = 20;
-
+    //Attacking 
     public Transform attackPoint;
-    public float attackRange = 0.5f;
     public LayerMask enemyLayers;
+    //Little Attack
+    [SerializeField, Range(0, 100)]
+    int attackLittleDamage = 15;
+
+    [SerializeField, Range(0, 100)]
+    int attackLittleStaminaCost = 10;
+
+    public float attackLittleRange = 0.5f;
+    //Heavy Attack
+    [SerializeField, Range(0, 100)]
+    int attackHeavyDamage = 40;
+
+    [SerializeField, Range(0, 100)]
+    int attackHeavyStaminaCost = 25;
+
+    public float attackHeavyRange = 1f;
 
     public static PlayerController Instance { get; private set; }
 
@@ -49,9 +61,13 @@ public class PlayerController : PhysicsObject {
 
     public override void Update() {
         base.Update();
+        animator.SetFloat("MovementSpeed", Mathf.Abs(velocity.x));
         
         if (Input.GetMouseButtonDown(0)&& !PauseMenu.gameIsPaused) {
             LittleAttack();
+        }
+        if (Input.GetMouseButtonDown(1) && !PauseMenu.gameIsPaused) {
+            HeavyAttack();
         }
     }
 
@@ -60,12 +76,26 @@ public class PlayerController : PhysicsObject {
             //not enough stamina; maybe play sound or higlight staminabar
             return;
         }
-        // Play AttackAnimation
+        animator.SetTrigger("HeavyAttack");
         UseStamina(attackLittleStaminaCost);
 
-        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayers);
+        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackLittleRange, enemyLayers);
         foreach (Collider2D enemy in hitEnemies) {
             enemy.GetComponent<BasicEnemyController>().TakeDamage((float)attackLittleDamage);
+        }
+    }
+
+    void HeavyAttack() {
+        if (currentStamina < attackHeavyStaminaCost) {
+            //not enough stamina; maybe play sound or higlight staminabar
+            return;
+        }
+        animator.SetTrigger("Attack2");
+        UseStamina(attackHeavyStaminaCost);
+
+        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackHeavyRange, enemyLayers);
+        foreach (Collider2D enemy in hitEnemies) {
+            enemy.GetComponent<BasicEnemyController>().TakeDamage((float)attackHeavyDamage);
         }
     }
     void UseStamina(int amount) {
@@ -87,7 +117,8 @@ public class PlayerController : PhysicsObject {
         if (attackPoint == null) {
             return;
         }
-        Gizmos.DrawWireSphere(attackPoint.position, attackRange);
+        Gizmos.DrawWireSphere(attackPoint.position, attackLittleRange);
+        Gizmos.DrawWireSphere(attackPoint.position, attackHeavyRange);
     }
 
     protected override void ComputeVelocity() {
