@@ -8,6 +8,8 @@ public class MusicSwitch : MonoBehaviour
     public float crossfadeDuration = 3;
     public int currentTrackIndex = 0;
 
+    public float extVol;
+
     public void SwitchTrack(int trackIndex)
     {
         for (int i = 0; i < tracks.Length; ++i)
@@ -18,7 +20,7 @@ public class MusicSwitch : MonoBehaviour
                 {
                     tracks[i].GetComponent<AudioSourceController>().PlayLoopWithInterval();
                 }                    
-                tracks[i].GetComponent<AudioSourceController>().FadeTo(0.0f, crossfadeDuration, 1.0f, false);
+                tracks[i].GetComponent<AudioSourceController>().FadeTo(extVol, crossfadeDuration, 1.0f, false);
             }
             else
             {
