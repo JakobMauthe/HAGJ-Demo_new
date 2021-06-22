@@ -8,6 +8,7 @@ public class PhysicsObject : MonoBehaviour {
     public float minGroundNormalY = 0.65f;
 
     protected Vector2 targetVelocity;
+    protected bool facingRight = true;
     protected bool grounded;
     protected Vector2 groundNormal;
     protected Rigidbody2D rb2d;
@@ -19,13 +20,10 @@ public class PhysicsObject : MonoBehaviour {
     protected const float minMoveDistance = 0.001f;
     protected const float shellRadius = 0.01f;
 
-    void Start() {
+    public virtual void Awake() {
         contactFilter.useTriggers = false;
         contactFilter.SetLayerMask(Physics2D.GetLayerCollisionMask(gameObject.layer));
         contactFilter.useLayerMask = true;
-    }
-
-    void OnEnable() {
         rb2d = GetComponent<Rigidbody2D>();
     }
 
@@ -85,5 +83,19 @@ public class PhysicsObject : MonoBehaviour {
             }
         }
         rb2d.position = rb2d.position + move.normalized * distance;
+        if (move.x > 0 && !facingRight) {
+            FlipLookDirection();
+        }
+        else if (move.x < 0 && facingRight) {
+            FlipLookDirection();
+        }
+    }
+
+    private void FlipLookDirection() {
+        facingRight = !facingRight;
+
+        Vector3 theScale = transform.localScale;
+        theScale.x *= -1;
+        transform.localScale = theScale;
     }
 }
