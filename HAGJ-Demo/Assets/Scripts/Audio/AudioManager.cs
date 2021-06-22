@@ -25,8 +25,10 @@ public class AudioManager : MonoBehaviour
     GameObject[] environmentObjects;
 
     [Header("Player")]
-    public GameObject jumpContainer;
+    public GameObject jumpGruntContainer;
     public KeyCode jumpKey = KeyCode.Space; // if there's time, link to events but it's probably fine without.
+    public GameObject playerDamageGruntContainer;
+    public KeyCode takeDamageKey = KeyCode.O;
 
 
 
@@ -58,8 +60,13 @@ public class AudioManager : MonoBehaviour
 
         if (Input.GetKeyDown(jumpKey))
         {
-            jumpContainer.GetComponent<AudioSourceController>().PlayRandom(-6, 0, 0.9f, 1.0f);
+            jumpGruntContainer.GetComponent<AudioSourceController>().PlayRandom(-6, 2, 0.9f, 1.0f);
         }
+        if (Input.GetKeyDown(takeDamageKey))
+        {
+            playerDamageGruntContainer.GetComponent<AudioSourceController>().PlayRandom(-3, 3, 0.9f, 1.1f);
+        }
+
 
 
         if (Input.GetKeyDown(switchKey))
