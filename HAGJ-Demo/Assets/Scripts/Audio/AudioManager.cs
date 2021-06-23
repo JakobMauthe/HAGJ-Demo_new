@@ -34,6 +34,7 @@ public class AudioManager : MonoBehaviour
     public AudioSourceController playerAttackGrunt;
     public AudioSourceController playerStaminaBreath;
     public AudioSourceController playerHealthHeartbeat;
+    
 
     public KeyCode jumpSoundKey = KeyCode.Space; // if there's time, link to events but it's probably fine without.
     public KeyCode takeDamageSoundKey = KeyCode.O; // TODO: link to events
@@ -83,19 +84,14 @@ public class AudioManager : MonoBehaviour
 
 
         /*   FOR TESTING ONLY    */
-
-        if (Input.GetKeyDown(jumpSoundKey))
-        {
-            jumpGrunt.PlayRandom(-6, 2, 0.9f, 1.0f);
-        }
+        
         if (Input.GetKeyDown(takeDamageSoundKey))
         {
-            
             TriggerPlayerTakesDamageAudio(10);
         }
         if (Input.GetKeyDown(playerDieSoundKey))
         {
-            playerDieGroan.PlayRandom(-2, 2, 0.95f, 1.0f);
+            TriggerPlayerDeathAudio();
         }
         if (Input.GetKeyDown(switchKey))
         {
@@ -105,6 +101,21 @@ public class AudioManager : MonoBehaviour
         }
     }
     #region Player Audio
+
+
+    /* MOVE */
+
+    public void TriggerPlayerWalk()
+    {
+
+    }
+    public void TriggerPlayerJump()
+    {
+        jumpGrunt.PlayRandom(-6, 2, 0.9f, 1.0f);
+    }
+    
+
+
 
     /* ATTACK */
     public void TriggerPlayerAttackAudio(AttackType attackType)
@@ -124,8 +135,7 @@ public class AudioManager : MonoBehaviour
     {
         StartCoroutine(CheckStamina());
     }
-
-    bool staminaAudioPlaying = false;
+    bool isStaminaAudioPlaying = false;
     IEnumerator CheckStamina()
     {
         while (true)
@@ -133,9 +143,9 @@ public class AudioManager : MonoBehaviour
             Debug.Log("AUDIO: running CheckStamina coroutine..");
             if (player.currentStamina < lowStaminaThreshold)
             {
-                if (!staminaAudioPlaying)
+                if (!isStaminaAudioPlaying)
                 {
-                    staminaAudioPlaying = true;
+                    isStaminaAudioPlaying = true;
                     playerStaminaBreath.FadeTo(0, 1, 0.5f, false);
                     playerStaminaBreath.PlayLoop();
                     
@@ -143,8 +153,8 @@ public class AudioManager : MonoBehaviour
             }
             else
             { 
-                if (staminaAudioPlaying) playerStaminaBreath.FadeTo(AudioUtility.MinSoundLevel(), 2, 0.5f, true);
-                staminaAudioPlaying = false;
+                if (isStaminaAudioPlaying) playerStaminaBreath.FadeTo(AudioUtility.MinSoundLevel(), 2, 0.5f, true);
+                isStaminaAudioPlaying = false;
                 yield break;
             }
             yield return new WaitForSeconds(0.1f);
@@ -160,7 +170,7 @@ public class AudioManager : MonoBehaviour
         StartCoroutine(CheckHealth());
     }
 
-    bool healthAudioPlaying = false;
+    bool isHealthAudioPlaying = false;
     IEnumerator CheckHealth()
     {
         while (true)
@@ -168,9 +178,9 @@ public class AudioManager : MonoBehaviour
             Debug.Log("AUDIO: running CheckHealth coroutine..");
             if (player.currentHealth < lowHealthThreshold)
             {
-                if (!healthAudioPlaying)
+                if (!isHealthAudioPlaying)
                 {
-                    healthAudioPlaying = true;
+                    isHealthAudioPlaying = true;
                     playerHealthHeartbeat.FadeTo(0, 0.1f, 0.5f, false);
                     playerHealthHeartbeat.PlayLoop();
 
@@ -179,12 +189,19 @@ public class AudioManager : MonoBehaviour
             else
             {
                 playerHealthHeartbeat.FadeTo(AudioUtility.MinSoundLevel(), 1f, 0.5f, true);
-                healthAudioPlaying = false;
+                isHealthAudioPlaying = false;
                 yield break;
             }
             yield return new WaitForSeconds(0.1f);
             yield return null;
         }
+    }
+
+    /* DIE */
+
+    public void TriggerPlayerDeathAudio()
+    {
+        playerDieGroan.PlayRandom(-3, 0, 0.95f, 1.05f);
     }
 
 

@@ -9,23 +9,32 @@ public class AudioEventsHandler : MonoBehaviour
     
     AudioManager manager;
     MusicSwitch switcher;
-
-    private void OnEnable()
-    {
-        // subscribe to events
-    }
-
+    EventManager em;
 
     private void Start()
     {
+        em = EventManager.Instance;
         manager = GetComponent<AudioManager>();
         switcher = manager.musicSwitch;
+
+        em.OnJumpInitiated += SendJump;
+        em.OnPlayerGetsHit += SendPlayerHit;
+        em.OnPlayerDeath += SendPlayerDeath;
     }
 
-    #region Public Methods
-    public void TriggerPlayerTakesDamageAudio(float damage)
+    private void SendPlayerDeath(object sender, System.EventArgs e)
     {
-        AudioManager.Instance.TriggerPlayerTakesDamageAudio(damage);
+        throw new System.NotImplementedException();
+    }
+
+    private void SendPlayerHit(object sender, System.EventArgs e)
+    {
+        manager.TriggerPlayerTakesDamageAudio(10);
+    }
+
+    private void SendJump(object sender, System.EventArgs e)
+    {
+        manager.TriggerPlayerJump();
     }
 
     public void TriggerPlayerOutOfBreathAudio()
@@ -34,8 +43,6 @@ public class AudioEventsHandler : MonoBehaviour
     }
 
 
-
-#endregion
 
 
 
@@ -50,6 +57,6 @@ private void SwitchMusic(int trackIndex)
 
     private void OnDisable()
     {
-        // unsubscribe to events
+        em.OnJumpInitiated -= SendJump;
     }
 }
