@@ -12,7 +12,7 @@ public class MusicSwitch : MonoBehaviour
 
     public void SwitchTrack(int trackIndex)
     {
-        Debug.Log("Switching to track #" + trackIndex + " from #" + currentMusicTrack);
+       // Debug.Log("Switching from track #" + currentMusicTrack + " to #" + trackIndex);
         if (trackIndex == currentMusicTrack) return;
 
         for (int i = 0; i < tracks.Length; ++i)

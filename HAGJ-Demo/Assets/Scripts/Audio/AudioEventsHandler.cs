@@ -58,5 +58,7 @@ private void SwitchMusic(int trackIndex)
     private void OnDisable()
     {
         em.OnJumpInitiated -= SendJump;
+        em.OnPlayerGetsHit -= SendPlayerHit;
+        em.OnPlayerDeath -= SendPlayerDeath;
     }
 }

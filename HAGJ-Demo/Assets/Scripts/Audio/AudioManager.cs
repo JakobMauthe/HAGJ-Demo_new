@@ -11,24 +11,23 @@ public class AudioManager : MonoBehaviour
     public PlayerController player;
 
     [Header("Game Variables")]
-    public int playerHealth;
-    public int lowHealthThreshold;
-    public int playerStamina;
-    public int lowStaminaThreshold;
+    [SerializeField, Range(0, 100)] int lowHealthThreshold = 25;
+    [SerializeField, Range(0, 100)] int lowStaminaThreshold = 33;
 
     [Header("Music")]
     public MusicSwitch musicSwitch;
-    [Range(-81, 24)] public float musicVolume;
+    [SerializeField, Range(-81, 24)] float musicVolume;
     GameObject[] musicObjects;
     public KeyCode switchKey = KeyCode.X;
     public int currentTrackIndex = -1;
 
     [Header("Environment")]
-    [Range(-81, 24)] public float environmentVolume;
+    [SerializeField, Range(-81, 24)] float environmentVolume;
     GameObject[] environmentObjects;
 
     [Header("Player")]
-    public AudioSourceController jumpGrunt;
+    [SerializeField, Range(-81, 24)] float playerVolume;
+    public AudioSourceController playerJumpGrunt;
     public AudioSourceController playerDamageGrunt;
     public AudioSourceController playerDieGroan;
     public AudioSourceController playerAttackGrunt;
@@ -63,7 +62,7 @@ public class AudioManager : MonoBehaviour
     void Start()
     {
         if (!listener) listener = Camera.main.gameObject;
-        if (!player) player = GameObject.Find("Player").GetComponent<PlayerController>();
+        if (!player) player = PlayerController.Instance;
 
         UpdateVolumes();
     }
@@ -111,22 +110,23 @@ public class AudioManager : MonoBehaviour
     }
     public void TriggerPlayerJump()
     {
-        jumpGrunt.PlayRandom(-6, 2, 0.9f, 1.0f);
+        playerJumpGrunt.PlayRandom(-6, 2, 0.9f, 1.0f);
     }
     
 
 
 
     /* ATTACK */
+    // Comes directly from PlayerAudioEventHandler on the model.
     public void TriggerPlayerAttackAudio(AttackType attackType)
     {
         if (attackType == AttackType.light)
         {
-            playerDamageGrunt.PlayRandom(-9, -3, 0.95f, 1.15f);
+            playerAttackGrunt.PlayRandom(-9, -3, 0.95f, 1.15f);
         }
         else if (attackType == AttackType.heavy)
         {
-            playerDamageGrunt.PlayRandom(-3, 3, 0.85f, 1.0f);
+            playerAttackGrunt.PlayRandom(-3, 3, 0.85f, 1.0f);
         }
     }
     /* STAMINA */
@@ -141,7 +141,7 @@ public class AudioManager : MonoBehaviour
         while (true)
         {
             Debug.Log("AUDIO: running CheckStamina coroutine..");
-            if (player.currentStamina < lowStaminaThreshold)
+            if (player.Stamina < lowStaminaThreshold)
             {
                 if (!isStaminaAudioPlaying)
                 {
@@ -176,7 +176,7 @@ public class AudioManager : MonoBehaviour
         while (true)
         {
             Debug.Log("AUDIO: running CheckHealth coroutine..");
-            if (player.currentHealth < lowHealthThreshold)
+            if (player.Health < lowHealthThreshold)
             {
                 if (!isHealthAudioPlaying)
                 {
@@ -223,6 +223,15 @@ public class AudioManager : MonoBehaviour
         {
             environmentObjects[i].GetComponent<AudioSourceController>().SetInputGain(environmentVolume);
         }
+
+        // Player //
+        playerAttackGrunt.SetInputGain(playerVolume);
+        playerDamageGrunt.SetInputGain(playerVolume);
+        playerDieGroan.SetInputGain(playerVolume);
+        playerHealthHeartbeat.SetInputGain(playerVolume);
+        playerStaminaBreath.SetInputGain(playerVolume);
+        playerJumpGrunt.SetInputGain(playerVolume);
+
     }
 
 

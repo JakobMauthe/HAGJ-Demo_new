@@ -2552,8 +2552,6 @@ MonoBehaviour:
   staminaBar: {fileID: 1576564891}
   maxHealth: 100
   maxStamina: 100
-  currentHealth: 0
-  currentStamina: 0
   maxMovementSpeed: 5
   jumpTakeOffSpeed: 12
   attackPoint: {fileID: 1230146867}
