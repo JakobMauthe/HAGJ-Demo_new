@@ -8,10 +8,13 @@ public class AudioManager : MonoBehaviour
     public static AudioManager Instance { get { return _instance; } }
 
     public GameObject listener;
+    public PlayerController player;
 
     [Header("Game Variables")]
     public int playerHealth;
+    public int lowHealthThreshold;
     public int playerStamina;
+    public int lowStaminaThreshold;
 
     [Header("Music")]
     public MusicSwitch musicSwitch;
@@ -25,10 +28,12 @@ public class AudioManager : MonoBehaviour
     GameObject[] environmentObjects;
 
     [Header("Player")]
-    public GameObject jumpGruntContainer;
-    public GameObject playerDamageGruntContainer;
-    public GameObject playerDieGroanContainer;
-    public GameObject playerAttackGruntContainer;
+    public AudioSourceController jumpGrunt;
+    public AudioSourceController playerDamageGrunt;
+    public AudioSourceController playerDieGroan;
+    public AudioSourceController playerAttackGrunt;
+    public AudioSourceController playerStaminaBreath;
+    public AudioSourceController playerHealthHeartbeat;
 
     public KeyCode jumpSoundKey = KeyCode.Space; // if there's time, link to events but it's probably fine without.
     public KeyCode takeDamageSoundKey = KeyCode.O; // TODO: link to events
@@ -56,7 +61,9 @@ public class AudioManager : MonoBehaviour
 
     void Start()
     {
-        listener = Camera.main.gameObject;
+        if (!listener) listener = Camera.main.gameObject;
+        if (!player) player = GameObject.Find("Player").GetComponent<PlayerController>();
+
         UpdateVolumes();
     }
 
@@ -79,19 +86,17 @@ public class AudioManager : MonoBehaviour
 
         if (Input.GetKeyDown(jumpSoundKey))
         {
-            jumpGruntContainer.GetComponent<AudioSourceController>().PlayRandom(-6, 2, 0.9f, 1.0f);
+            jumpGrunt.PlayRandom(-6, 2, 0.9f, 1.0f);
         }
         if (Input.GetKeyDown(takeDamageSoundKey))
         {
-            playerDamageGruntContainer.GetComponent<AudioSourceController>().PlayRandom(-3, 3, 0.9f, 1.1f);
+            
+            TriggerPlayerTakesDamageAudio(10);
         }
         if (Input.GetKeyDown(playerDieSoundKey))
         {
-            playerDieGroanContainer.GetComponent<AudioSourceController>().PlayRandom(-2, 2, 0.95f, 1.0f);
+            playerDieGroan.PlayRandom(-2, 2, 0.95f, 1.0f);
         }
-
-
-
         if (Input.GetKeyDown(switchKey))
         {
             currentTrackIndex = (currentTrackIndex + 1) % (musicSwitch.tracks.Length - 1);
@@ -100,18 +105,89 @@ public class AudioManager : MonoBehaviour
         }
     }
     #region Player Audio
-    public void TriggerPlayerAttackAudio(string attackType)
-    {
-        if (attackType == "light")
-        {
-            playerDamageGruntContainer.GetComponent<AudioSourceController>().PlayRandom(-9, -3, 0.95f, 1.15f);
-        }
-        else if (attackType == "heavy")
-        {
-            playerDamageGruntContainer.GetComponent<AudioSourceController>().PlayRandom(-3, 3, 0.85f, 1.0f);
-        }
 
+    /* ATTACK */
+    public void TriggerPlayerAttackAudio(AttackType attackType)
+    {
+        if (attackType == AttackType.light)
+        {
+            playerDamageGrunt.PlayRandom(-9, -3, 0.95f, 1.15f);
+        }
+        else if (attackType == AttackType.heavy)
+        {
+            playerDamageGrunt.PlayRandom(-3, 3, 0.85f, 1.0f);
+        }
     }
+    /* STAMINA */
+    // trigger stamina called from the audioeventshandler - coroutine runs audio and checks for stamina to regenerate //
+    public void TriggerStamina()
+    {
+        StartCoroutine(CheckStamina());
+    }
+
+    bool staminaAudioPlaying = false;
+    IEnumerator CheckStamina()
+    {
+        while (true)
+        {
+            Debug.Log("AUDIO: running CheckStamina coroutine..");
+            if (player.currentStamina < lowStaminaThreshold)
+            {
+                if (!staminaAudioPlaying)
+                {
+                    staminaAudioPlaying = true;
+                    playerStaminaBreath.FadeTo(0, 1, 0.5f, false);
+                    playerStaminaBreath.PlayLoop();
+                    
+                }
+            }
+            else
+            { 
+                if (staminaAudioPlaying) playerStaminaBreath.FadeTo(AudioUtility.MinSoundLevel(), 2, 0.5f, true);
+                staminaAudioPlaying = false;
+                yield break;
+            }
+            yield return new WaitForSeconds(0.1f);
+            yield return null;
+        }
+    }
+
+    /* TAKE DAMAGE */
+    public void TriggerPlayerTakesDamageAudio(float damage)
+    {
+        damage = AudioUtility.ScaleValue(damage, 0, 20, -6, 6);
+        playerDamageGrunt.PlayRandom(-3 + damage, 3 + damage, 0.9f, 1.1f);
+        StartCoroutine(CheckHealth());
+    }
+
+    bool healthAudioPlaying = false;
+    IEnumerator CheckHealth()
+    {
+        while (true)
+        {
+            Debug.Log("AUDIO: running CheckHealth coroutine..");
+            if (player.currentHealth < lowHealthThreshold)
+            {
+                if (!healthAudioPlaying)
+                {
+                    healthAudioPlaying = true;
+                    playerHealthHeartbeat.FadeTo(0, 0.1f, 0.5f, false);
+                    playerHealthHeartbeat.PlayLoop();
+
+                }
+            }
+            else
+            {
+                playerHealthHeartbeat.FadeTo(AudioUtility.MinSoundLevel(), 1f, 0.5f, true);
+                healthAudioPlaying = false;
+                yield break;
+            }
+            yield return new WaitForSeconds(0.1f);
+            yield return null;
+        }
+    }
+
+
     #endregion
 
     void UpdateVolumes()

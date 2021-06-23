@@ -357,7 +357,7 @@ public class AudioSourceController : MonoBehaviour
         float currentTime = 0f;
         float startVol = fadeVolume;
 
-        // Debug.Log(this + "on " + gameObject.name + " : Fading to " + targetVol + " from " + startVol + " over " + fadetime);
+         Debug.Log(this + "on " + gameObject.name + " : Fading to " + targetVol + " from " + startVol + " over " + fadetime);
 
         while (currentTime < fadetime)
         {
@@ -372,8 +372,8 @@ public class AudioSourceController : MonoBehaviour
 
         if (stopAfterFade)
         {
-            //yield return new WaitForSeconds(fadetime);
-            audioSource.Stop();
+            if (looperIsLooping) StopLooping(0);
+            else audioSource.Stop();
         }
 
         yield break;

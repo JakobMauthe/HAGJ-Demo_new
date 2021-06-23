@@ -17,8 +17,8 @@ public class PlayerController : PhysicsObject {
     [SerializeField, Range(0, 1000)]
     int maxStamina = 100;   
     
-    private float currentHealth;
-    private int currentStamina;
+    public float currentHealth;
+    public int currentStamina;
 
     private WaitForSeconds regenTick = new WaitForSeconds(0.1f);
     private Coroutine regen;

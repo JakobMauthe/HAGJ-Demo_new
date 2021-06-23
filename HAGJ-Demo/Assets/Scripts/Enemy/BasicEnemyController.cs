@@ -69,7 +69,7 @@ public class BasicEnemyController : PhysicsObject {
     }
 
     protected override void ComputeVelocity() {
-        Debug.Log(state);
+        //Debug.Log(state);
         switch (state) {
             case State.Patrol:
                 if (patrolFirstWayActive) {
