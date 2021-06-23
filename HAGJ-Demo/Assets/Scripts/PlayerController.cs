@@ -49,7 +49,8 @@ public class PlayerController : PhysicsObject {
 
     public float attackHeavyRange = 1f;
 
-    
+    public float Health => currentHealth;
+    public int Stamina => currentStamina;
 
     public static PlayerController Instance { get; private set; }
 
