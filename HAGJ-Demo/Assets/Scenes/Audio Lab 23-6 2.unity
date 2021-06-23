@@ -2559,10 +2559,10 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   attackLittleDamage: 15
-  attackLittleStaminaCost: 10
+  attackLittleStaminaCost: 4
   attackLittleRange: 0.5
   attackHeavyDamage: 40
-  attackHeavyStaminaCost: 25
+  attackHeavyStaminaCost: 15
   attackHeavyRange: 2
 --- !u!1 &1230146866
 GameObject:
@@ -3431,6 +3431,22 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 226414412, guid: b06472c8aa7c323409879d7a22e3d23c, type: 3}
+      propertyPath: outputGain
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 368038528, guid: b06472c8aa7c323409879d7a22e3d23c, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2032831531, guid: b06472c8aa7c323409879d7a22e3d23c, type: 3}
+      propertyPath: outputGain
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2958980472886951790, guid: b06472c8aa7c323409879d7a22e3d23c, type: 3}
+      propertyPath: outputGain
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5551191768769185360, guid: b06472c8aa7c323409879d7a22e3d23c, type: 3}
       propertyPath: m_RootOrder
       value: 11
@@ -3478,6 +3494,26 @@ PrefabInstance:
     - target: {fileID: 5551191768769185362, guid: b06472c8aa7c323409879d7a22e3d23c, type: 3}
       propertyPath: m_Name
       value: AudioManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 5551191768877756864, guid: b06472c8aa7c323409879d7a22e3d23c, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5551191769491970159, guid: b06472c8aa7c323409879d7a22e3d23c, type: 3}
+      propertyPath: outputGain
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5551191769939293405, guid: b06472c8aa7c323409879d7a22e3d23c, type: 3}
+      propertyPath: outputGain
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5551191770204680758, guid: b06472c8aa7c323409879d7a22e3d23c, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5551191770463625658, guid: b06472c8aa7c323409879d7a22e3d23c, type: 3}
+      propertyPath: outputGain
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b06472c8aa7c323409879d7a22e3d23c, type: 3}
