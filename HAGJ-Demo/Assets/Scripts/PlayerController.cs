@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -48,6 +49,8 @@ public class PlayerController : PhysicsObject {
 
     public float attackHeavyRange = 1f;
 
+    
+
     public static PlayerController Instance { get; private set; }
 
     public override void Awake() {
@@ -76,7 +79,7 @@ public class PlayerController : PhysicsObject {
             //not enough stamina; maybe play sound or higlight staminabar
             return;
         }
-        animator.SetTrigger("HeavyAttack");
+        animator.SetTrigger("Attack2"); 
         UseStamina(attackLittleStaminaCost);
 
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackLittleRange, enemyLayers);
@@ -90,7 +93,7 @@ public class PlayerController : PhysicsObject {
             //not enough stamina; maybe play sound or higlight staminabar
             return;
         }
-        animator.SetTrigger("Attack2");
+        animator.SetTrigger("HeavyAttack");
         UseStamina(attackHeavyStaminaCost);
 
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackHeavyRange, enemyLayers);
@@ -128,6 +131,8 @@ public class PlayerController : PhysicsObject {
 
         if (Input.GetButtonDown("Jump") && grounded) {
             velocity.y = jumpTakeOffSpeed;
+            EventManager.Instance.NotifyOfOnJumpInitiated(this);
+                
         }
         else if (Input.GetButtonUp("Jump")) {
             velocity.y = velocity.y * .5f;
@@ -146,10 +151,12 @@ public class PlayerController : PhysicsObject {
     }
     public void TakeDamage(float damage) {
         if (damage >= currentHealth) {
+            EventManager.Instance.NotifyOfOnPlayerDeath(this);
             // Loose State
         }
         else {
             currentHealth -= damage;
+            EventManager.Instance.NotifyOfOnPlayerGetsHit(this);
             //Play MCHurtAnimation
             healthBar.SetHealth(currentHealth);
         }
