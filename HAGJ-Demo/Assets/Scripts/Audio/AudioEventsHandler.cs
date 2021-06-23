@@ -35,7 +35,7 @@ public class AudioEventsHandler : MonoBehaviour
     }
     private void SelectMusicByScene(Scene oldScene, Scene newScene)
     {
-        Debug.Log("Scene changed. New scene: " + newScene.name);
+        Debug.Log("MUSIC: Scene change detected. New scene: " + newScene.name + ". Switching to new audio container.");
         string sceneName = newScene.name;
 
         if (sceneName.StartsWith("Main Menu"))
@@ -46,7 +46,7 @@ public class AudioEventsHandler : MonoBehaviour
         {
             SwitchMusic(1);
         }
-        else Debug.Log(this.name + ": Unknown scene triggered, music cue not set up.");
+        else Debug.LogError(this.name + ": Unknown scene triggered, music cue not set up.");
     }
 
     private void SwitchMusic(int trackIndex)
