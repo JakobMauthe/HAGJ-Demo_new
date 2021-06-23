@@ -26,11 +26,15 @@ public class AudioManager : MonoBehaviour
 
     [Header("Player")]
     public GameObject jumpGruntContainer;
-    public KeyCode jumpKey = KeyCode.Space; // if there's time, link to events but it's probably fine without.
     public GameObject playerDamageGruntContainer;
-    public KeyCode takeDamageKey = KeyCode.O; // TODO: link to events
     public GameObject playerDieGroanContainer;
+    public GameObject playerAttackGruntContainer;
+
+    public KeyCode jumpSoundKey = KeyCode.Space; // if there's time, link to events but it's probably fine without.
+    public KeyCode takeDamageSoundKey = KeyCode.O; // TODO: link to events
     public KeyCode playerDieSoundKey = KeyCode.Q;
+    public KeyCode playerAttackSoundKey = KeyCode.A;
+
 
 
 
@@ -38,6 +42,17 @@ public class AudioManager : MonoBehaviour
 
     private bool hasInitialised = false;
 
+    private void Awake()
+    {
+        if (_instance != null && _instance != this)
+        {
+            Destroy(this.gameObject);
+            return;
+        }
+
+        _instance = this;
+        DontDestroyOnLoad(this.gameObject);
+    }
 
     void Start()
     {
@@ -62,11 +77,11 @@ public class AudioManager : MonoBehaviour
 
         /*   FOR TESTING ONLY    */
 
-        if (Input.GetKeyDown(jumpKey))
+        if (Input.GetKeyDown(jumpSoundKey))
         {
             jumpGruntContainer.GetComponent<AudioSourceController>().PlayRandom(-6, 2, 0.9f, 1.0f);
         }
-        if (Input.GetKeyDown(takeDamageKey))
+        if (Input.GetKeyDown(takeDamageSoundKey))
         {
             playerDamageGruntContainer.GetComponent<AudioSourceController>().PlayRandom(-3, 3, 0.9f, 1.1f);
         }
@@ -80,11 +95,24 @@ public class AudioManager : MonoBehaviour
         if (Input.GetKeyDown(switchKey))
         {
             currentTrackIndex = (currentTrackIndex + 1) % (musicSwitch.tracks.Length - 1);
-            musicSwitch.extVol = musicVolume;
             musicSwitch.SwitchTrack(currentTrackIndex);
 
         }
     }
+    #region Player Audio
+    public void TriggerPlayerAttackAudio(string attackType)
+    {
+        if (attackType == "light")
+        {
+            playerDamageGruntContainer.GetComponent<AudioSourceController>().PlayRandom(-9, -3, 0.95f, 1.15f);
+        }
+        else if (attackType == "heavy")
+        {
+            playerDamageGruntContainer.GetComponent<AudioSourceController>().PlayRandom(-3, 3, 0.85f, 1.0f);
+        }
+
+    }
+    #endregion
 
     void UpdateVolumes()
     {
