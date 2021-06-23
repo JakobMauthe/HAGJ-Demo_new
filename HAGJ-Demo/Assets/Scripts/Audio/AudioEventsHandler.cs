@@ -1,55 +1,82 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.Events;
 /// <summary>
 /// A bit easier to keep the event subscription and the functions separate.
 /// </summary>
 public class AudioEventsHandler : MonoBehaviour
 {
     
-    AudioManager manager;
+    AudioManager AudioMan;
     MusicSwitch switcher;
-    EventManager em;
+    EventManager EventMan;
+
+    Scene currentScene;
+    
 
     private void Start()
     {
-        em = EventManager.Instance;
-        manager = GetComponent<AudioManager>();
-        switcher = manager.musicSwitch;
+        EventMan = EventManager.Instance;
+        AudioMan = GetComponent<AudioManager>();
+        currentScene = SceneManager.GetActiveScene();
+        
+        switcher = AudioMan.musicSwitch;
+        
 
-        em.OnJumpInitiated += SendJump;
-        em.OnPlayerGetsHit += SendPlayerHit;
-        em.OnPlayerDeath += SendPlayerDeath;
+        EventMan.OnJumpInitiated += SendJump;
+        EventMan.OnPlayerGetsHit += SendPlayerHit;
+        EventMan.OnPlayerDeath += SendPlayerDeath;
+
+        SceneManager.activeSceneChanged += SelectMusicByScene;
+
+        SelectMusicByScene(currentScene, currentScene);
     }
+    private void SelectMusicByScene(Scene oldScene, Scene newScene)
+    {
+        Debug.Log("Scene changed. New scene: " + newScene.name);
+        string sceneName = newScene.name;
+
+        if (sceneName.StartsWith("Main Menu"))
+        {
+            SwitchMusic(0);
+        }
+        else if (sceneName.StartsWith("Audio Lab"))
+        {
+            SwitchMusic(1);
+        }
+        else Debug.Log(this.name + ": Unknown scene triggered, music cue not set up.");
+    }
+
+    private void SwitchMusic(int trackIndex)
+    {
+        switcher.SwitchTrack(trackIndex);
+    }
+
 
     private void SendPlayerDeath(object sender, System.EventArgs e)
     {
-        throw new System.NotImplementedException();
+        AudioMan.TriggerPlayerDeathAudio();
     }
 
     private void SendPlayerHit(object sender, System.EventArgs e)
     {
-        manager.TriggerPlayerTakesDamageAudio(10);
+        AudioMan.TriggerPlayerTakesDamageAudio(10);
     }
 
     private void SendJump(object sender, System.EventArgs e)
     {
-        manager.TriggerPlayerJump();
+        AudioMan.TriggerPlayerJump();
     }
 
     public void TriggerPlayerOutOfBreathAudio()
     {
-        AudioManager.Instance.TriggerStamina();
+        AudioMan.TriggerStamina();
     }
 
 
 
-
-
-private void SwitchMusic(int trackIndex)
-    {
-        switcher.SwitchTrack(trackIndex);
-    }
 
 
 
@@ -57,8 +84,9 @@ private void SwitchMusic(int trackIndex)
 
     private void OnDisable()
     {
-        em.OnJumpInitiated -= SendJump;
-        em.OnPlayerGetsHit -= SendPlayerHit;
-        em.OnPlayerDeath -= SendPlayerDeath;
+        EventMan.OnJumpInitiated -= SendJump;
+        EventMan.OnPlayerGetsHit -= SendPlayerHit;
+        EventMan.OnPlayerDeath -= SendPlayerDeath;
+        SceneManager.activeSceneChanged -= SelectMusicByScene;
     }
 }

@@ -166,7 +166,8 @@ public class AudioManager : MonoBehaviour
     public void TriggerPlayerTakesDamageAudio(float damage)
     {
         damage = AudioUtility.ScaleValue(damage, 0, 20, -6, 6);
-        playerDamageGrunt.PlayRandom(-3 + damage, 3 + damage, 0.9f, 1.1f);
+        Debug.Log("damage: " + damage);
+        playerDamageGrunt.PlayRandom(-3 + damage, 3 + damage, 0.95f, 1.0f);
         StartCoroutine(CheckHealth());
     }
 
