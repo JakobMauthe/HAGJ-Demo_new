@@ -131,9 +131,11 @@ public class PlayerController : PhysicsObject {
         move.x = Input.GetAxis("Horizontal");
 
         if (Input.GetButtonDown("Jump") && grounded) {
-            velocity.y = jumpTakeOffSpeed;
-            EventManager.Instance.NotifyOfOnJumpInitiated(this);
-                
+            if (currentStamina > 10) {
+                velocity.y = jumpTakeOffSpeed;
+                EventManager.Instance.NotifyOfOnJumpInitiated(this);
+                UseStamina(attackLittleStaminaCost);
+            }   
         }
         else if (Input.GetButtonUp("Jump")) {
             velocity.y = velocity.y * .5f;
