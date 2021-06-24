@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,6 +12,8 @@ public class PlayerController : PhysicsObject {
     public HealthBar healthBar;
     public StaminaBar staminaBar;
 
+    public GameObject dropShadow;        
+
     [SerializeField, Range(0,1000)]
     float maxHealth = 100f;
 
@@ -19,6 +22,7 @@ public class PlayerController : PhysicsObject {
     
     private float currentHealth;
     private int currentStamina;
+
 
     private WaitForSeconds regenTick = new WaitForSeconds(0.1f);
     private Coroutine regen;
@@ -48,6 +52,9 @@ public class PlayerController : PhysicsObject {
 
     public float attackHeavyRange = 1f;
 
+    public float Health => currentHealth;
+    public int Stamina => currentStamina;
+
     public static PlayerController Instance { get; private set; }
 
     public override void Awake() {
@@ -59,10 +66,11 @@ public class PlayerController : PhysicsObject {
         staminaBar.SetMaxStamina(maxStamina);
     }
 
+
     public override void Update() {
         base.Update();
         animator.SetFloat("MovementSpeed", Mathf.Abs(velocity.x));
-        
+       
         if (Input.GetMouseButtonDown(0)&& !PauseMenu.gameIsPaused) {
             LittleAttack();
         }
@@ -76,7 +84,7 @@ public class PlayerController : PhysicsObject {
             //not enough stamina; maybe play sound or higlight staminabar
             return;
         }
-        animator.SetTrigger("HeavyAttack");
+        animator.SetTrigger("Attack2"); 
         UseStamina(attackLittleStaminaCost);
 
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackLittleRange, enemyLayers);
@@ -90,7 +98,7 @@ public class PlayerController : PhysicsObject {
             //not enough stamina; maybe play sound or higlight staminabar
             return;
         }
-        animator.SetTrigger("Attack2");
+        animator.SetTrigger("HeavyAttack");
         UseStamina(attackHeavyStaminaCost);
 
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackHeavyRange, enemyLayers);
@@ -121,18 +129,28 @@ public class PlayerController : PhysicsObject {
         Gizmos.DrawWireSphere(attackPoint.position, attackHeavyRange);
     }
 
-    protected override void ComputeVelocity() {
+    protected override void ComputeVelocity() {        
+                
         Vector2 move = Vector2.zero;
-
         move.x = Input.GetAxis("Horizontal");
 
+        if (grounded && !dropShadow.activeInHierarchy) {
+            dropShadow.SetActive(true);
+        }
+
         if (Input.GetButtonDown("Jump") && grounded) {
-            velocity.y = jumpTakeOffSpeed;
+            if (currentStamina > 10) {
+                velocity.y = jumpTakeOffSpeed;
+                EventManager.Instance.NotifyOfOnJumpInitiated(this);
+                UseStamina(attackLittleStaminaCost);
+
+                dropShadow.SetActive(false);          
+            }   
         }
         else if (Input.GetButtonUp("Jump")) {
             velocity.y = velocity.y * .5f;
         }
-        targetVelocity = move * maxMovementSpeed;
+        targetVelocity = move * maxMovementSpeed;        
     }    
     
     private IEnumerator PassiveRegenStamina() {
@@ -146,11 +164,13 @@ public class PlayerController : PhysicsObject {
     }
     public void TakeDamage(float damage) {
         if (damage >= currentHealth) {
+            EventManager.Instance.NotifyOfOnPlayerDeath(this);
             // Loose State
         }
         else {
             currentHealth -= damage;
-            //Play MCHurtAnimation
+            EventManager.Instance.NotifyOfOnPlayerGetsHit(this);
+            animator.SetTrigger("Hurt");
             healthBar.SetHealth(currentHealth);
         }
     }
