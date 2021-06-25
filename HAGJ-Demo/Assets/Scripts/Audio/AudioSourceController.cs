@@ -16,8 +16,8 @@ public class AudioSourceController : MonoBehaviour
     [Range(-81, 24)] public float startingVolume;
 
     [Header("Fader")]// Controls fades.
-    [Min(0)] [SerializeField] float FadeInOnAwakeTime = 0f;    
-    public float fadeVolume;
+    [Min(0)] [SerializeField] float FadeInOnAwakeTime = 0f;
+    [Range(-81, 24), SerializeField]  float faderVolume;
     public bool isFading;
     private IEnumerator fadeCoroutine;
     [HideInInspector] public float currentFadeTarget;
@@ -80,7 +80,7 @@ public class AudioSourceController : MonoBehaviour
         audioSource.playOnAwake = false;
         audioSource.volume = AudioUtility.ConvertDbtoA(startingVolume);
         audioSource.pitch = pitch;
-        fadeVolume = startingVolume;
+        faderVolume = startingVolume;
 
     }
 
@@ -169,14 +169,6 @@ public class AudioSourceController : MonoBehaviour
         if (distance > audioSource.maxDistance) return false;
         else return true;
 
-    }
-
-    private void GetAudioSourceVolume()
-    {
-        if (!audioSource)
-            audioSource = GetComponent<AudioSource>();
-
-        fadeVolume = AudioUtility.ConvertAtoDb(audioSource.volume);
     }
 
 
@@ -329,7 +321,7 @@ public class AudioSourceController : MonoBehaviour
     {
         if (fadetime <= 0.0f)
         {
-            fadeVolume =  targetVol;
+            faderVolume =  targetVol;
             UpdateParams();
 
             if (stopAfterFade)
@@ -365,16 +357,21 @@ public class AudioSourceController : MonoBehaviour
 
     private IEnumerator StartFadeInDb(float fadetime, float targetVol, AnimationCurve animcur, bool stopAfterFade)
     {
-        GetAudioSourceVolume();
+/*        if (!audioSource) audioSource = GetComponent<AudioSource>();
+                
+        faderVolume = AudioUtility.ConvertAtoDb(audioSource.volume);
+*/        float startVol = faderVolume;
+
+
+
+        //float startVol = fadeVolume;
+
+        Debug.Log(this + "on " + gameObject.name + " : Fading to " + targetVol + " from " + startVol + " over " + fadetime);
         float currentTime = 0f;
-        float startVol = fadeVolume;
-
-         Debug.Log(this + "on " + gameObject.name + " : Fading to " + targetVol + " from " + startVol + " over " + fadetime);
-
         while (currentTime < fadetime)
         {
             currentTime += Time.deltaTime;
-            fadeVolume = Mathf.Lerp(startVol, targetVol, animcur.Evaluate(currentTime / fadetime));
+            faderVolume = Mathf.Lerp(startVol, targetVol, animcur.Evaluate(currentTime / fadetime));
 
             UpdateParams();
             yield return null;
@@ -391,14 +388,18 @@ public class AudioSourceController : MonoBehaviour
         yield break;
     }
 
-    private float GetGain()
+
+    private void GetAudioSourceVolume()
     {
-        return inputGain + fadeVolume + outputGain;
+        if (!audioSource) audioSource = GetComponent<AudioSource>();
+
+        faderVolume = AudioUtility.ConvertAtoDb(audioSource.volume);
     }
+
 
     private void UpdateParams()
     {
-        float currentVol = GetGain();
+        float currentVol = inputGain + faderVolume + outputGain;
         audioSource.volume = AudioUtility.ConvertDbtoA(currentVol);
     }
 

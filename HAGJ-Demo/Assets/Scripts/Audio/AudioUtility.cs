@@ -15,17 +15,13 @@ public static class AudioUtility
     /// </summary>
 
 
-    public static float MinSoundLevel()
-    {
-        return -81f;
-    }
-
+    public static float minimum = -81f;
 
 
 
     public static float ConvertAtoDb(float amp)
     {
-        amp = Mathf.Clamp(amp, ConvertDbtoA(MinSoundLevel()), 1f);
+        amp = Mathf.Clamp(amp, ConvertDbtoA(minimum), 1f);
         return 20 * Mathf.Log(amp) / Mathf.Log(10);
     }
 

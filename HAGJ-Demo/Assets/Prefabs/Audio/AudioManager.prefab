@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 188062370}
   - component: {fileID: 188062369}
   m_Layer: 0
-  m_Name: SwordVsSword Clash
+  m_Name: SwordClash
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -30,7 +30,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 663987022}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!82 &188062370
 AudioSource:
@@ -145,7 +145,7 @@ MonoBehaviour:
   inputGain: 0
   startingVolume: 0
   FadeInOnAwakeTime: 0
-  fadeVolume: 0
+  faderVolume: 0
   isFading: 0
   currentFadeTarget: 0
   currentFadeTime: 0
@@ -309,7 +309,7 @@ MonoBehaviour:
   inputGain: 0
   startingVolume: -81
   FadeInOnAwakeTime: 0
-  fadeVolume: 0
+  faderVolume: 0
   isFading: 0
   currentFadeTarget: 0
   currentFadeTime: 0
@@ -351,7 +351,10 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 4923499370046557314}
   - {fileID: 188062371}
+  - {fileID: 3261533930480394548}
+  - {fileID: 6161234847629188556}
   m_Father: {fileID: 5551191768769185360}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -500,7 +503,7 @@ MonoBehaviour:
   inputGain: 0
   startingVolume: -81
   FadeInOnAwakeTime: 0
-  fadeVolume: 0
+  faderVolume: 0
   isFading: 0
   currentFadeTarget: 0
   currentFadeTime: 0
@@ -660,7 +663,7 @@ MonoBehaviour:
   inputGain: 0
   startingVolume: 0
   FadeInOnAwakeTime: 0
-  fadeVolume: 0
+  faderVolume: 0
   isFading: 0
   currentFadeTarget: 0
   currentFadeTime: 0
@@ -670,6 +673,168 @@ MonoBehaviour:
   - {fileID: 8300000, guid: fde4e26ba67d1444fb48cea822b5c30b, type: 3}
   - {fileID: 8300000, guid: a4a2ab35198f25c4eb01822866368d9a, type: 3}
   - {fileID: 8300000, guid: 08e3cbb4113a1804aa588faffb40202a, type: 3}
+  playOnAwake: 0
+  loopClips: 0
+  newClipPerPlay: 0
+  intervalBetweenPlays: 0
+  intervalRand: 0
+  pitch: 1
+  pitchRand: 0
+  looperIsLooping: 0
+  enableAudibilityCheck: 0
+--- !u!1 &718409480068160741
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6161234847629188556}
+  - component: {fileID: 967469224634223134}
+  - component: {fileID: 1512597876863656175}
+  m_Layer: 0
+  m_Name: SwordOnFlesh
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6161234847629188556
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 718409480068160741}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 663987022}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!82 &967469224634223134
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 718409480068160741}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!114 &1512597876863656175
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 718409480068160741}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19bb93859a1280a459df618e0797ccb8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioSource: {fileID: 0}
+  outputGain: -3
+  inputGain: 0
+  startingVolume: 0
+  FadeInOnAwakeTime: 0
+  faderVolume: 0
+  isFading: 0
+  currentFadeTarget: 0
+  currentFadeTime: 0
+  playlist:
+  - {fileID: 8300000, guid: a7412a55e35dcef41b033b921d2e275c, type: 3}
+  - {fileID: 8300000, guid: 4e4458133e7d29247af7ddfd8392981e, type: 3}
+  - {fileID: 8300000, guid: 21dd474157cee7443a24866675339457, type: 3}
   playOnAwake: 0
   loopClips: 0
   newClipPerPlay: 0
@@ -856,7 +1021,7 @@ MonoBehaviour:
   inputGain: 0
   startingVolume: -47.2
   FadeInOnAwakeTime: 1
-  fadeVolume: 0
+  faderVolume: 0
   isFading: 0
   currentFadeTarget: 0
   currentFadeTime: 0
@@ -864,6 +1029,171 @@ MonoBehaviour:
   - {fileID: 8300000, guid: b0916a7c36de8734ba8076aa49f5d218, type: 3}
   playOnAwake: 1
   loopClips: 1
+  newClipPerPlay: 0
+  intervalBetweenPlays: 0
+  intervalRand: 0
+  pitch: 1
+  pitchRand: 0
+  looperIsLooping: 0
+  enableAudibilityCheck: 0
+--- !u!1 &3729468373768386012
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3261533930480394548}
+  - component: {fileID: 7748588686298900131}
+  - component: {fileID: 783088891023287324}
+  m_Layer: 0
+  m_Name: SwordOnArmour
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3261533930480394548
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3729468373768386012}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 663987022}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!82 &7748588686298900131
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3729468373768386012}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!114 &783088891023287324
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3729468373768386012}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19bb93859a1280a459df618e0797ccb8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioSource: {fileID: 0}
+  outputGain: -3
+  inputGain: 0
+  startingVolume: 0
+  FadeInOnAwakeTime: 0
+  faderVolume: 0
+  isFading: 0
+  currentFadeTarget: 0
+  currentFadeTime: 0
+  playlist:
+  - {fileID: 8300000, guid: 2e9aa75460f4c474d897e4c5b226e820, type: 3}
+  - {fileID: 8300000, guid: 85a7b6edd4946f546a60a2808cfa00bd, type: 3}
+  - {fileID: 8300000, guid: 057c5981f23d43147ad7081d8ded4ce1, type: 3}
+  - {fileID: 8300000, guid: 6f6236f910a83224d88fa50adc543cb9, type: 3}
+  - {fileID: 8300000, guid: 8cc044c934e61044e8a456384dddcbcc, type: 3}
+  - {fileID: 8300000, guid: ba97c740b5a727a4ca979ad4c820bb82, type: 3}
+  playOnAwake: 0
+  loopClips: 0
   newClipPerPlay: 0
   intervalBetweenPlays: 0
   intervalRand: 0
@@ -924,20 +1254,22 @@ MonoBehaviour:
   lowHealthThreshold: 25
   lowStaminaThreshold: 33
   musicSwitch: {fileID: 5551191770399878304}
-  musicVolume: -15.4
+  musicVolume: -9
   switchKey: 120
   currentTrackIndex: -1
-  environmentVolume: -20.7
-  playerVolume: -6
+  environmentVolume: 0
+  playerVolume: 0
   playerJumpGrunt: {fileID: 5551191770463625658}
   playerDamageGrunt: {fileID: 5551191769939293405}
   playerDieGroan: {fileID: 5551191769491970159}
   playerAttackGrunt: {fileID: 2958980472886951790}
   playerStaminaBreath: {fileID: 226414412}
   playerHealthHeartbeat: {fileID: 2032831531}
-  swordVsSwordCollisionVolume: 0
-  swordVsSwordCollision: {fileID: 188062369}
-  actorParriesSoundKey: 113
+  swordVolume: 0
+  swordSwish: {fileID: 7187645922309794234}
+  swordClash: {fileID: 7187645922309794234}
+  swordOnArmour: {fileID: 783088891023287324}
+  swordOnFlesh: {fileID: 1512597876863656175}
 --- !u!114 &49003968
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1095,13 +1427,13 @@ MonoBehaviour:
   inputGain: 0
   startingVolume: -81
   FadeInOnAwakeTime: 0
-  fadeVolume: 0
+  faderVolume: 0
   isFading: 0
   currentFadeTarget: 0
   currentFadeTime: 0
   playlist:
   - {fileID: 8300000, guid: b0c0e76b275f01e49bbe913d6be7ff78, type: 3}
-  playOnAwake: 1
+  playOnAwake: 0
   loopClips: 1
   newClipPerPlay: 0
   intervalBetweenPlays: 0
@@ -1318,7 +1650,7 @@ MonoBehaviour:
   inputGain: 0
   startingVolume: 0
   FadeInOnAwakeTime: 0
-  fadeVolume: 0
+  faderVolume: 0
   isFading: 0
   currentFadeTarget: 0
   currentFadeTime: 0
@@ -1513,7 +1845,7 @@ MonoBehaviour:
   inputGain: 0
   startingVolume: -81
   FadeInOnAwakeTime: 0
-  fadeVolume: 0
+  faderVolume: 0
   isFading: 0
   currentFadeTarget: 0
   currentFadeTime: 0
@@ -1522,7 +1854,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 93adc1f4df4e9904294517b310476314, type: 3}
   playOnAwake: 1
   loopClips: 1
-  newClipPerPlay: 1
+  newClipPerPlay: 0
   intervalBetweenPlays: 0
   intervalRand: 0
   pitch: 1
@@ -1674,7 +2006,7 @@ MonoBehaviour:
   inputGain: 0
   startingVolume: -81
   FadeInOnAwakeTime: 0
-  fadeVolume: 0
+  faderVolume: 0
   isFading: 0
   currentFadeTarget: 0
   currentFadeTime: 0
@@ -1834,7 +2166,7 @@ MonoBehaviour:
   inputGain: 0
   startingVolume: 0
   FadeInOnAwakeTime: 0
-  fadeVolume: 0
+  faderVolume: 0
   isFading: 0
   currentFadeTarget: 0
   currentFadeTime: 0
@@ -2001,7 +2333,7 @@ MonoBehaviour:
   inputGain: 0
   startingVolume: -81
   FadeInOnAwakeTime: 0
-  fadeVolume: 0
+  faderVolume: 0
   isFading: 0
   currentFadeTarget: 0
   currentFadeTime: 0
@@ -2146,7 +2478,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5551191770399878306}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cb27f691abffeb244837b93c4d8f0819, type: 3}
   m_Name: 
@@ -2298,7 +2630,7 @@ MonoBehaviour:
   inputGain: 0
   startingVolume: 0
   FadeInOnAwakeTime: 0
-  fadeVolume: 0
+  faderVolume: 0
   isFading: 0
   currentFadeTarget: 0
   currentFadeTime: 0
@@ -2462,7 +2794,7 @@ MonoBehaviour:
   inputGain: 0
   startingVolume: 0
   FadeInOnAwakeTime: 0
-  fadeVolume: 0
+  faderVolume: 0
   isFading: 0
   currentFadeTarget: 0
   currentFadeTime: 0
@@ -2509,6 +2841,168 @@ Transform:
   m_Father: {fileID: 5551191768974356229}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &8303801789052017654
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4923499370046557314}
+  - component: {fileID: 7115940272627890283}
+  - component: {fileID: 7187645922309794234}
+  m_Layer: 0
+  m_Name: SwordSwish
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4923499370046557314
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8303801789052017654}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 663987022}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!82 &7115940272627890283
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8303801789052017654}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!114 &7187645922309794234
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8303801789052017654}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19bb93859a1280a459df618e0797ccb8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioSource: {fileID: 0}
+  outputGain: 0
+  inputGain: 0
+  startingVolume: 0
+  FadeInOnAwakeTime: 0
+  faderVolume: 0
+  isFading: 0
+  currentFadeTarget: 0
+  currentFadeTime: 0
+  playlist:
+  - {fileID: 8300000, guid: 46a92d5657c53504ab3b6d6829363948, type: 3}
+  - {fileID: 8300000, guid: b6e0ef950a703e8478e0dedbd7545cc6, type: 3}
+  - {fileID: 8300000, guid: 87d9b17fa83f4304886f22648c89be7c, type: 3}
+  playOnAwake: 0
+  loopClips: 0
+  newClipPerPlay: 0
+  intervalBetweenPlays: 0
+  intervalRand: 0
+  pitch: 1
+  pitchRand: 0
+  looperIsLooping: 0
+  enableAudibilityCheck: 0
 --- !u!1001 &4755484733822503316
 PrefabInstance:
   m_ObjectHideFlags: 0

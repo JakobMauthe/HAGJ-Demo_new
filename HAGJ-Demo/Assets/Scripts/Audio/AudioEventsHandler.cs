@@ -39,13 +39,17 @@ public class AudioEventsHandler : MonoBehaviour
         EventMan.OnPlayerDeath += SendPlayerDeath;
         EventMan.OnPlayerLittleAttack += EventMan_OnPlayerLittleAttack;
         EventMan.OnPlayerHeavyAttack += EventMan_OnPlayerHeavyAttack;
+        EventMan.OnEnemyAttack += EventMan_OnEnemyAttack;
+
+
         //EventMan.OnBlockInitiated += EventMan_OnBlockInitiated;
 
         SceneManager.activeSceneChanged += SelectMusicByScene;
 
-        SelectMusicByScene(currentScene, currentScene);
+        //SelectMusicByScene(currentScene, currentScene);
     }
 
+    
     private void EventMan_OnBlockInitiated(object sender, System.EventArgs e)
     {
         
@@ -55,40 +59,58 @@ public class AudioEventsHandler : MonoBehaviour
     private void EventMan_OnPlayerHeavyAttack(object sender, System.EventArgs e)
     {
         AudioManager.Instance.TriggerPlayerAttackAudio(AttackType.heavy);
+        SendSwordSwish(AttackType.heavy);
     }
 
     private void EventMan_OnPlayerLittleAttack(object sender, System.EventArgs e)
     {
         AudioManager.Instance.TriggerPlayerAttackAudio(AttackType.light);
+        SendSwordSwish(AttackType.light);
+    }
+    private void EventMan_OnEnemyAttack(object sender, System.EventArgs e)
+    {
+        SendSwordSwish(AttackType.light);
     }
 
-    private void SelectMusicByScene(Scene oldScene, Scene newScene)
+
+
+    void SelectMusicByScene(Scene oldScene, Scene newScene)
     {
         Debug.Log("MUSIC: Scene change detected. New scene: " + newScene.name + ". Switching to new audio container.");
         string sceneName = newScene.name;
 
-        if (sceneName.StartsWith("Main Menu"))
+        if (sceneName == Loader.Scene.MainMenu.ToString() || sceneName.StartsWith("MainMenu (Audio)"))
         {
             SwitchMusic(0);
         }
-        else if (sceneName.StartsWith("Testing Level"))
+        if (sceneName == Loader.Scene.TestingLevel.ToString() || sceneName.StartsWith("TestingLevel (Audio)"))
         {
             SwitchMusic(1);
         }
         else Debug.LogError(this.name + ": Unknown scene triggered, music cue not set up.");
     }
 
-    private void SwitchMusic(int trackIndex)
+
+    void SendSwordSwish(AttackType type)
+    {
+        AudioMan.TriggerSwordSwish(type);
+    }
+
+    void SendArmourHit()
+    {
+        AudioMan.TriggerArmourHit();
+    }
+    void SendFleshHit()
+    {
+        AudioMan.TriggerFleshHit();
+    }
+
+    void SwitchMusic(int trackIndex)
     {
         switcher.SwitchTrack(trackIndex);
     }
 
-
-
-
-
-
-    private void SendPlayerDeath(object sender, System.EventArgs e)
+    void SendPlayerDeath(object sender, System.EventArgs e)
     {
         AudioMan.TriggerPlayerDeathAudio();
     }

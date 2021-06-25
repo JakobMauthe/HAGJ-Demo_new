@@ -144,7 +144,7 @@ MonoBehaviour:
   audioSource: {fileID: 0}
   outputGain: -24
   inputGain: 0
-  startingVolume: 0
+  startingVolume: -32
   FadeInOnAwakeTime: 0
   fadeVolume: 0
   isFading: 0
@@ -175,5 +175,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   volumeJitter: 24
   panJitter: 0.5
-  speed: 0.2
-  gainOffset: 0
+  jitterSpeed: 0.2

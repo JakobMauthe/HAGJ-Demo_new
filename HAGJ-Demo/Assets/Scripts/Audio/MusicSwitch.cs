@@ -17,17 +17,19 @@ public class MusicSwitch : MonoBehaviour
 
         for (int i = 0; i < tracks.Length; ++i)
         {
+            AudioSourceController controller = tracks[i].GetComponent<AudioSourceController>();
+
             if (i == trackIndex)
             {
                 if (!CheckIfPlaying(tracks[i]))
                 {
-                    tracks[i].GetComponent<AudioSourceController>().PlayLoop();
-                }                    
-                tracks[i].GetComponent<AudioSourceController>().FadeTo(fadeMaxVolume, crossfadeDuration, 1.0f, false);
+                    controller.PlayLoop();
+                }
+                controller.FadeTo(fadeMaxVolume, crossfadeDuration, 1.0f, false);
             }
             else
             {
-                tracks[i].GetComponent<AudioSourceController>().FadeTo(AudioUtility.MinSoundLevel(), crossfadeDuration * 3f, 0.1f, false);
+                controller.FadeTo(AudioUtility.minimum, crossfadeDuration * 3f, 0.5f, false);
             }
         }
         currentMusicTrack = trackIndex;

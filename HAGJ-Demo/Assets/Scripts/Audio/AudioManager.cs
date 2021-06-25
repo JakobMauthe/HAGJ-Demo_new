@@ -30,17 +30,10 @@ public class AudioManager : MonoBehaviour
     public AudioSourceController playerJumpGrunt, playerDamageGrunt, playerDieGroan, playerAttackGrunt, playerStaminaBreath, playerHealthHeartbeat;
 
     [Header("Other")]
-    [SerializeField, Range(-81, 24)] float swordVsSwordCollisionVolume;
-    public AudioSourceController swordVsSwordCollision;
+    [SerializeField, Range(-81, 24)] float swordVolume;
+    public AudioSourceController swordSwish,swordClash,swordOnArmour, swordOnFlesh;
     
-
-    public KeyCode actorParriesSoundKey = KeyCode.Q;
-
-
-
-
-
-
+    // private:
     private bool hasInitialised = false;
 
     private void Awake()
@@ -80,9 +73,6 @@ public class AudioManager : MonoBehaviour
 
         /*   FOR TESTING ONLY    */
         
-        if (Input.GetKeyDown(actorParriesSoundKey))
-        {
-        }
     }
     #region Player Audio
 
@@ -99,7 +89,6 @@ public class AudioManager : MonoBehaviour
     }
 
     /* ATTACK */
-    // Comes directly from PlayerAudioEventHandler on the model.
     public void TriggerPlayerAttackAudio(AttackType attackType)
     {
         if (attackType == AttackType.light)
@@ -111,11 +100,36 @@ public class AudioManager : MonoBehaviour
             playerAttackGrunt.PlayRandom(-3, 3, 0.85f, 1.0f);
         }
     }
+
+    public void TriggerSwordSwish(AttackType attackType)
+    {
+        if (attackType == AttackType.light)
+        {
+            swordSwish.PlayRandom(-6, 0, 0.9f, 1.2f);
+        }
+        else if (attackType == AttackType.heavy)
+        {
+            swordSwish.PlayRandom(-3, 0, 0.75f, 0.95f);
+
+
+        }
+    }
+
+    /* ENEMY HIT */
+    // regular hit => armour; killing blow => flesh.
+    public void TriggerArmourHit()
+    {
+        swordOnArmour.PlayRandom(-3, 3, 0.8f, 1.2f);
+    }
+    public void TriggerFleshHit()
+    {
+        swordOnFlesh.PlayRandom(-3, 0, 0.9f, 1.1f);
+    }
+
     /* BLOCK */
     public void TriggerActorBlock()
     {
-        swordVsSwordCollision.PlayRandom(-9, 0, 0.9f, 1.1f);
-
+        swordClash.PlayRandom(-9, 0, 0.9f, 1.1f);
     }
 
 
@@ -144,7 +158,7 @@ public class AudioManager : MonoBehaviour
             }
             else
             { 
-                if (isStaminaAudioPlaying) playerStaminaBreath.FadeTo(AudioUtility.MinSoundLevel(), 2, 0.5f, true);
+                if (isStaminaAudioPlaying) playerStaminaBreath.FadeTo(AudioUtility.minimum, 2, 0.5f, true);
                 isStaminaAudioPlaying = false;
                 yield break;
             }
@@ -179,7 +193,7 @@ public class AudioManager : MonoBehaviour
             }
             else
             {
-                playerHealthHeartbeat.FadeTo(AudioUtility.MinSoundLevel(), 1f, 0.5f, true);
+                playerHealthHeartbeat.FadeTo(AudioUtility.minimum, 1f, 0.5f, true);
                 isHealthAudioPlaying = false;
                 yield break;
             }
@@ -222,6 +236,13 @@ public class AudioManager : MonoBehaviour
         playerHealthHeartbeat.SetInputGain(playerVolume);
         playerStaminaBreath.SetInputGain(playerVolume);
         playerJumpGrunt.SetInputGain(playerVolume);
+
+        //Sword
+        swordSwish.SetInputGain(swordVolume);
+        swordOnArmour.SetInputGain(swordVolume);
+        swordOnFlesh.SetInputGain(swordVolume);
+        swordClash.SetInputGain(swordVolume);
+
 
     }
 
