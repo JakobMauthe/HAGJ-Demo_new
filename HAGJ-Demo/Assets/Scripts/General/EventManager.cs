@@ -17,13 +17,13 @@ public class EventManager : MonoBehaviour {
     private void Awake() {
         if (_instance != null && _instance != this) {
             Destroy(this.gameObject);
+            return;
         }
-        else {
-            _instance = this;
-        }
+        _instance = this;
+        DontDestroyOnLoad(gameObject);
     }
 
-    public void NotifyOfOnJumpInitiated(object sender) {
+        public void NotifyOfOnJumpInitiated(object sender) {
         OnJumpInitiated?.Invoke(sender, EventArgs.Empty); 
     }
 

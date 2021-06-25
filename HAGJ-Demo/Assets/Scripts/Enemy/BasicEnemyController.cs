@@ -11,13 +11,20 @@ public class BasicEnemyController : PhysicsObject {
     }
     private State state;
 
+    public Animator animator;
+
     public float startHealth = 100;
     public HealthBar healthBar;
     protected float currentHealth;
 
+    //Movement
     private Vector3 startingPosition, toPatrolPosition;
     private bool patrolFirstWayActive = true;
-    public float enemyMaxMovementSpeed = 4f;
+    
+    
+    private float enemyMaxMovementSpeed = 1.5f;
+    public float enemyMaxPatrollingSpeed = 1.5f;
+    public float enemyMaxChasingSpeed = 2.5f;
 
     [SerializeField, Range(1f, 100f)]
     float targetChaseRange = 10f;
@@ -69,7 +76,6 @@ public class BasicEnemyController : PhysicsObject {
     }
 
     protected override void ComputeVelocity() {
-        //Debug.Log(state);
         switch (state) {
             case State.Patrol:
                 if (patrolFirstWayActive) {
@@ -112,6 +118,9 @@ public class BasicEnemyController : PhysicsObject {
     }
 
     public void Attack() {
+        enemyMaxMovementSpeed = 0f;
+        animator.SetFloat("MovementSpeed", enemyMaxMovementSpeed);
+        animator.SetTrigger("Attack");
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, playerLayer);
         foreach (Collider2D enemy in hitEnemies) {
             enemy.GetComponent<PlayerController>().TakeDamage((float)attackDamage);
@@ -119,6 +128,8 @@ public class BasicEnemyController : PhysicsObject {
     }
 
     public void MoveToPatrolPosition() {
+        enemyMaxMovementSpeed = enemyMaxPatrollingSpeed;
+        animator.SetFloat("MovementSpeed", enemyMaxMovementSpeed);
         Vector2 move = Vector2.zero;
 
         if (toPatrolPosition.x < startingPosition.x) {
@@ -131,6 +142,8 @@ public class BasicEnemyController : PhysicsObject {
     }
 
     public void MoveToStartingPosition() {
+        enemyMaxMovementSpeed = enemyMaxPatrollingSpeed;
+        animator.SetFloat("MovementSpeed", enemyMaxMovementSpeed);
         Vector2 move = Vector2.zero;
 
         if (toPatrolPosition.x > startingPosition.x) {
@@ -143,6 +156,8 @@ public class BasicEnemyController : PhysicsObject {
     }
 
     public void MoveToPlayerPosition() {
+        enemyMaxMovementSpeed = enemyMaxChasingSpeed;
+        animator.SetFloat("MovementSpeed", enemyMaxMovementSpeed);
         Vector2 move = Vector2.zero;
         if (transform.position.x > PlayerController.Instance.transform.position.x) {
             move.x = -1f;

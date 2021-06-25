@@ -12,6 +12,8 @@ public class PlayerController : PhysicsObject {
     public HealthBar healthBar;
     public StaminaBar staminaBar;
 
+    public GameObject dropShadow;        
+
     [SerializeField, Range(0,1000)]
     float maxHealth = 100f;
 
@@ -20,6 +22,7 @@ public class PlayerController : PhysicsObject {
     
     private float currentHealth;
     private int currentStamina;
+
 
     private WaitForSeconds regenTick = new WaitForSeconds(0.1f);
     private Coroutine regen;
@@ -63,15 +66,19 @@ public class PlayerController : PhysicsObject {
         staminaBar.SetMaxStamina(maxStamina);
     }
 
+
     public override void Update() {
         base.Update();
         animator.SetFloat("MovementSpeed", Mathf.Abs(velocity.x));
-        
+       
         if (Input.GetMouseButtonDown(0)&& !PauseMenu.gameIsPaused) {
             LittleAttack();
         }
         if (Input.GetMouseButtonDown(1) && !PauseMenu.gameIsPaused) {
             HeavyAttack();
+        }
+        if (Input.GetKeyDown(KeyCode.K)) {
+            GameManager.PlayerDied();
         }
     }
 
@@ -125,20 +132,28 @@ public class PlayerController : PhysicsObject {
         Gizmos.DrawWireSphere(attackPoint.position, attackHeavyRange);
     }
 
-    protected override void ComputeVelocity() {
+    protected override void ComputeVelocity() {        
+                
         Vector2 move = Vector2.zero;
-
         move.x = Input.GetAxis("Horizontal");
 
+        if (grounded && !dropShadow.activeInHierarchy) {
+            dropShadow.SetActive(true);
+        }
+
         if (Input.GetButtonDown("Jump") && grounded) {
-            velocity.y = jumpTakeOffSpeed;
-            EventManager.Instance.NotifyOfOnJumpInitiated(this);
-                
+            if (currentStamina > 10) {
+                velocity.y = jumpTakeOffSpeed;
+                EventManager.Instance.NotifyOfOnJumpInitiated(this);
+                UseStamina(attackLittleStaminaCost);
+
+                dropShadow.SetActive(false);          
+            }   
         }
         else if (Input.GetButtonUp("Jump")) {
             velocity.y = velocity.y * .5f;
         }
-        targetVelocity = move * maxMovementSpeed;
+        targetVelocity = move * maxMovementSpeed;        
     }    
     
     private IEnumerator PassiveRegenStamina() {
@@ -153,12 +168,12 @@ public class PlayerController : PhysicsObject {
     public void TakeDamage(float damage) {
         if (damage >= currentHealth) {
             EventManager.Instance.NotifyOfOnPlayerDeath(this);
-            // Loose State
+            GameManager.PlayerDied();
         }
         else {
             currentHealth -= damage;
             EventManager.Instance.NotifyOfOnPlayerGetsHit(this);
-            //Play MCHurtAnimation
+            animator.SetTrigger("Hurt");
             healthBar.SetHealth(currentHealth);
         }
     }
