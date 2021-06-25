@@ -41,6 +41,18 @@ public class AudioSourceController : MonoBehaviour
     public bool enableAudibilityCheck = false;
 
 
+    bool hasInit = false;
+
+    /*    DEBUGGING   */
+    private void OnValidate()
+    {
+        if (Application.isPlaying && hasInit)
+        {
+            UpdateParams();
+        }
+    }
+
+
 
     public void SetInputGain(float value)
     {
@@ -59,9 +71,7 @@ public class AudioSourceController : MonoBehaviour
     {
         // disables inspector fiddling
         inputGain = 0;
-
-        if (!audioSource)
-            audioSource = GetComponent<AudioSource>();
+        audioSource = GetComponent<AudioSource>();
 
         // Takes over audiosource functions.
         if (audioSource.isPlaying)
@@ -74,10 +84,10 @@ public class AudioSourceController : MonoBehaviour
 
     }
 
-
     private void Start()
     {
         Initialise();
+        
     }
 
     private void Initialise()
@@ -104,6 +114,8 @@ public class AudioSourceController : MonoBehaviour
             StartCoroutine(CheckAudibility(1));
         else
             StartPlayback();
+
+        hasInit = true;
 
     }
 
@@ -357,7 +369,7 @@ public class AudioSourceController : MonoBehaviour
         float currentTime = 0f;
         float startVol = fadeVolume;
 
-        // Debug.Log(this + "on " + gameObject.name + " : Fading to " + targetVol + " from " + startVol + " over " + fadetime);
+         Debug.Log(this + "on " + gameObject.name + " : Fading to " + targetVol + " from " + startVol + " over " + fadetime);
 
         while (currentTime < fadetime)
         {

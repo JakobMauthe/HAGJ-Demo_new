@@ -42,7 +42,7 @@ public class AudioEventsHandler : MonoBehaviour
         {
             SwitchMusic(0);
         }
-        else if (sceneName.StartsWith("Audio Lab"))
+        else if (sceneName.StartsWith("Testing Level"))
         {
             SwitchMusic(1);
         }

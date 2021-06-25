@@ -34,14 +34,20 @@ public class MusicShuffle : MonoBehaviour
             SwitchTrack(newTrackIndex);
             
             yield return new WaitForEndOfFrame();
-            float clipLength = mswitch.tracks[mswitch.currentMusicTrack].clip.length;
-            float clipTime = mswitch.tracks[mswitch.currentMusicTrack].time;
-            float timeRemaining = clipLength - clipTime;
-            float offsetInSecs = 5;
-            float waitTime = timeRemaining - offsetInSecs;
-            Debug.Log("Waiting " + waitTime + "secs. (clipLength = " + clipLength + ", clipTime = " + clipTime + " timeremaining = " + timeRemaining);
-
-
+            AudioSource newSource = mswitch.tracks[mswitch.currentMusicTrack];
+            float newClipLength = newSource.clip.length;
+            float newClipPlaytime = newSource.time; 
+            float timeRemaining = newClipLength - newClipPlaytime;
+            float crossfadeOffset = mswitch.crossfadeDuration;
+            float waitTime;
+            if (timeRemaining > crossfadeOffset)
+            {
+                waitTime = timeRemaining - crossfadeOffset;
+            }
+            else waitTime = timeRemaining;
+            
+            
+            Debug.Log("MUSIC: Waiting " + waitTime + "secs until new music transition. (clipLength = " + newClipLength + ", clipTime = " + newClipPlaytime + " timeremaining = " + timeRemaining);
 
             yield return new WaitForSeconds(waitTime);
         }

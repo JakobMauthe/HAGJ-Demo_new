@@ -27,12 +27,7 @@ public class AudioManager : MonoBehaviour
 
     [Header("Player")]
     [SerializeField, Range(-81, 24)] float playerVolume;
-    public AudioSourceController playerJumpGrunt;
-    public AudioSourceController playerDamageGrunt;
-    public AudioSourceController playerDieGroan;
-    public AudioSourceController playerAttackGrunt;
-    public AudioSourceController playerStaminaBreath;
-    public AudioSourceController playerHealthHeartbeat;
+    public AudioSourceController playerJumpGrunt, playerDamageGrunt, playerDieGroan, playerAttackGrunt, playerStaminaBreath, playerHealthHeartbeat;
     
 
     public KeyCode jumpSoundKey = KeyCode.Space; // if there's time, link to events but it's probably fine without.

@@ -27,7 +27,7 @@ public class MusicSwitch : MonoBehaviour
             }
             else
             {
-                tracks[i].GetComponent<AudioSourceController>().FadeTo(AudioUtility.MinSoundLevel(), crossfadeDuration * 3f, 0.5f, false);
+                tracks[i].GetComponent<AudioSourceController>().FadeTo(AudioUtility.MinSoundLevel(), crossfadeDuration * 3f, 0.1f, false);
             }
         }
         currentMusicTrack = trackIndex;
