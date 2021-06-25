@@ -10,6 +10,7 @@ public class BasicEnemyController : PhysicsObject {
         ChaseTarget,
         Attack,
         Blocked,
+        Hurt,
     }
     private State state;
 
@@ -53,6 +54,7 @@ public class BasicEnemyController : PhysicsObject {
     //blocked
 
     private float notBlockedTime;
+    private float notHurtTime;
 
     [SerializeField, Range(0.1f, 5f)]
     float blockedDuration = 1f;
@@ -69,6 +71,10 @@ public class BasicEnemyController : PhysicsObject {
         healthBar.SetMaxHealth(startHealth);
         state = State.Patrol;
         EventManager.Instance.OnEnemyAttack += EnemyAttack_OnEnemyAttackInitiated;
+    }
+
+    private void OnDestroy() {
+        EventManager.Instance.OnEnemyAttack -= EnemyAttack_OnEnemyAttackInitiated;
     }
 
     private void FindTarget() {
@@ -130,6 +136,11 @@ public class BasicEnemyController : PhysicsObject {
                     state = State.ChaseTarget;
                 }
                 break;
+            case State.Hurt:
+                if (Time.time < notHurtTime) {
+                    state = State.ChaseTarget;
+                }
+                break;
         }
     }
 
@@ -147,6 +158,7 @@ public class BasicEnemyController : PhysicsObject {
             if (playerController.IsBlocking) {
                 state = State.Blocked;
                 animator.SetTrigger("Blocked");
+                EventManager.Instance.NotifyOfOnBlockInitiated(this);
                 notBlockedTime = Time.time + blockedDuration;
             }
             else {
@@ -203,12 +215,16 @@ public class BasicEnemyController : PhysicsObject {
         } 
         else {
             currentHealth -= damage;
+            EventManager.Instance.NotifyOfOnEnemyGetsHit(this);
             animator.SetTrigger("Hurt"); //Play EenemyHurtAnimation
+            notHurtTime = Time.time + 0.5f;
+            state = State.Hurt;
             healthBar.SetHealth(currentHealth);
         }
     }
 
     public void Die() {
+        EventManager.Instance.NotifyOfOnEnemyDie(this);
         //Play Deathanimation
         //Instantiate dead body
         Destroy(gameObject);

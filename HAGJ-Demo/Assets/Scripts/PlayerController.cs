@@ -18,11 +18,16 @@ public class PlayerController : PhysicsObject {
     float maxHealth = 100f;
 
     [SerializeField, Range(0, 1000)]
-    int maxStamina = 100;   
-    
+    int maxStamina = 100;
+
+    [Header("For Audio")]
+    [SerializeField, Range(0, 100)] int lowHealthThreshold = 25;
+    [SerializeField, Range(0, 100)] int lowStaminaThreshold = 33;
+
     private float currentHealth;
     private int currentStamina;
 
+    private bool lowHealth, lowStamina;
 
     private WaitForSeconds regenTick = new WaitForSeconds(0.1f);
     private Coroutine regen;
@@ -72,9 +77,18 @@ public class PlayerController : PhysicsObject {
         healthBar.SetMaxHealth(maxHealth);
         staminaBar.SetMaxStamina(maxStamina);
         isBlocking = false;
+        lowStamina = lowHealth = false;
 
         EventManager.Instance.OnPlayerLittleAttack += LittleAttack_OnLittleAtackInitiated;
         EventManager.Instance.OnPlayerHeavyAttack += HeavyAttack_OnHeavyAtackInitiated;
+        EventManager.Instance.OnBlockInitiated += Blocked_OnBlockInitiated;
+    }
+
+
+    private void OnDestroy() {
+        EventManager.Instance.OnPlayerLittleAttack -= LittleAttack_OnLittleAtackInitiated;
+        EventManager.Instance.OnPlayerHeavyAttack -= HeavyAttack_OnHeavyAtackInitiated;
+        EventManager.Instance.OnBlockInitiated -= Blocked_OnBlockInitiated;
     }
 
 
@@ -128,11 +142,19 @@ public class PlayerController : PhysicsObject {
         }
     }
 
+    private void Blocked_OnBlockInitiated(object sender, EventArgs e) {
+        animator.SetTrigger("Blocked");
+    }
+
 
     void UseStamina(int amount) {
         if (amount <= currentStamina) {
             currentStamina -= amount;
             staminaBar.SetStamina(currentStamina);
+            if (currentStamina < lowStaminaThreshold) {
+                EventManager.Instance.NotifyOfOnStaminaLow(this);
+                lowStamina = true;
+            }            
 
             if (regen != null) {
                 StopCoroutine(regen);
@@ -177,10 +199,14 @@ public class PlayerController : PhysicsObject {
     }    
     
     private IEnumerator PassiveRegenStamina() {
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1.5f);
         while (currentStamina < maxStamina) {
             currentStamina += maxStamina / 100;
             staminaBar.SetStamina(currentStamina);
+            if (currentStamina > lowStaminaThreshold && lowStamina) {
+                EventManager.Instance.NotifyOfOnStaminaNotLow(this);
+                lowStamina = false;
+            }
             yield return regenTick;
         }
         regen = null;
@@ -192,6 +218,14 @@ public class PlayerController : PhysicsObject {
         }
         else {
             currentHealth -= damage;
+            if (currentHealth < lowHealthThreshold) {
+                EventManager.Instance.NotifyOfOnHealthLow(this);
+                lowHealth = true;
+            }
+            else if (currentHealth > lowHealthThreshold && lowHealth) {
+                EventManager.Instance.NotifyOfOnHealthNotLow(this);
+                lowHealth = false;
+            }
             EventManager.Instance.NotifyOfOnPlayerGetsHit(this);
             animator.SetTrigger("Hurt");
             healthBar.SetHealth(currentHealth);

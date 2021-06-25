@@ -18,6 +18,6 @@ public class WinZone : MonoBehaviour {
 			return;
 
 		//Tell the Game Manager that the player won
-		GameManager.PlayerWon();
+		GameManager.PlayerWon();		
 	}
 }

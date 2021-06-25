@@ -38,11 +38,11 @@ public class AudioEventsHandler : MonoBehaviour
         Debug.Log("MUSIC: Scene change detected. New scene: " + newScene.name + ". Switching to new audio container.");
         string sceneName = newScene.name;
 
-        if (sceneName.StartsWith("Main Menu"))
+        if (sceneName.StartsWith("MainMenu"))
         {
             SwitchMusic(0);
         }
-        else if (sceneName.StartsWith("Testing Level"))
+        else if (sceneName.StartsWith("TestingLevel"))
         {
             SwitchMusic(1);
         }

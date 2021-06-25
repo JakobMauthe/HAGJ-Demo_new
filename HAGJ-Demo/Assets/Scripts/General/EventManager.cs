@@ -11,7 +11,8 @@ public class EventManager : MonoBehaviour {
     //Events
     public event EventHandler OnJumpInitiated, OnPlayerGetsHit, 
         OnPlayerDeath, OnPlayerLittleAttack, OnPlayerHeavyAttack,
-        OnEnemyAttack;
+        OnEnemyAttack, OnBlockInitiated, OnEnemyGetsHit, OnEnemyDie,
+        OnStaminaLow, OnStaminaNotLow, OnHealthLow, OnHealthNotLow;
 
     public static EventManager Instance { get { return _instance; } }
 
@@ -24,7 +25,7 @@ public class EventManager : MonoBehaviour {
         DontDestroyOnLoad(gameObject);
     }
 
-        public void NotifyOfOnJumpInitiated(object sender) {
+    public void NotifyOfOnJumpInitiated(object sender) {
         OnJumpInitiated?.Invoke(sender, EventArgs.Empty); 
     }
 
@@ -42,5 +43,26 @@ public class EventManager : MonoBehaviour {
     }
     public void NotifyOfOnEnemyAttack(object sender) {
         OnEnemyAttack?.Invoke(sender, EventArgs.Empty);
+    }
+    public void NotifyOfOnBlockInitiated(object sender) {
+        OnBlockInitiated?.Invoke(sender, EventArgs.Empty);
+    }
+    public void NotifyOfOnEnemyGetsHit(object sender) {
+        OnEnemyGetsHit?.Invoke(sender, EventArgs.Empty);
+    }
+    public void NotifyOfOnEnemyDie(object sender) {
+        OnEnemyDie?.Invoke(sender, EventArgs.Empty);
+    }
+    public void NotifyOfOnStaminaLow(object sender) {
+        OnStaminaLow?.Invoke(sender, EventArgs.Empty);
+    }
+    public void NotifyOfOnStaminaNotLow(object sender) {
+        OnStaminaNotLow?.Invoke(sender, EventArgs.Empty);
+    }
+    public void NotifyOfOnHealthLow(object sender) {
+        OnHealthLow?.Invoke(sender, EventArgs.Empty);
+    }
+    public void NotifyOfOnHealthNotLow(object sender) {
+        OnHealthNotLow?.Invoke(sender, EventArgs.Empty);
     }
 }

@@ -5,17 +5,17 @@ using UnityEngine;
 public class AnimationEvents : MonoBehaviour
 {
     public void LittleAttack() {
-        EventManager.Instance.NotifyOfOnPlayerLittleAttack(gameObject);
+        EventManager.Instance.NotifyOfOnPlayerLittleAttack(this);
         //Notify of player little attack
     }
 
     public void HeavyAttack() {
-        EventManager.Instance.NotifyOfOnPlayerHeavyAttack(gameObject);
+        EventManager.Instance.NotifyOfOnPlayerHeavyAttack(this);
         //Notify of player heavy attack
     }
 
     public void EnemyAttack() {
-        EventManager.Instance.NotifyOfOnEnemyAttack(gameObject);
+        EventManager.Instance.NotifyOfOnEnemyAttack(this);
         //Notify of enemy attack
     }
 }
