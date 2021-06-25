@@ -6,14 +6,8 @@ using UnityEngine;
 /// Processes calls from the player game object (collisions, animations) and sends to audio engine.
 /// </summary>
 
-
-public enum AttackType
-{
-    light,
-    heavy
-}
 public class PlayerAudioEventHandler : MonoBehaviour
-{
+{/*
     public void TriggerPlayerAttackAudio(AttackType attackType)
     {
         AudioManager.Instance.TriggerPlayerAttackAudio(attackType);
@@ -25,6 +19,6 @@ public class PlayerAudioEventHandler : MonoBehaviour
     {
         
     }
-
+*/
 
 }

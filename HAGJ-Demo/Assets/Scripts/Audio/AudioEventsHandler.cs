@@ -6,6 +6,15 @@ using UnityEngine.Events;
 /// <summary>
 /// A bit easier to keep the event subscription and the functions separate.
 /// </summary>
+/// 
+
+
+public enum AttackType
+{
+    light,
+    heavy
+}
+
 public class AudioEventsHandler : MonoBehaviour
 {
     
@@ -28,11 +37,31 @@ public class AudioEventsHandler : MonoBehaviour
         EventMan.OnJumpInitiated += SendJump;
         EventMan.OnPlayerGetsHit += SendPlayerHit;
         EventMan.OnPlayerDeath += SendPlayerDeath;
+        EventMan.OnPlayerLittleAttack += EventMan_OnPlayerLittleAttack;
+        EventMan.OnPlayerHeavyAttack += EventMan_OnPlayerHeavyAttack;
+        //EventMan.OnBlockInitiated += EventMan_OnBlockInitiated;
 
         SceneManager.activeSceneChanged += SelectMusicByScene;
 
         SelectMusicByScene(currentScene, currentScene);
     }
+
+    private void EventMan_OnBlockInitiated(object sender, System.EventArgs e)
+    {
+        
+    }
+
+
+    private void EventMan_OnPlayerHeavyAttack(object sender, System.EventArgs e)
+    {
+        AudioManager.Instance.TriggerPlayerAttackAudio(AttackType.heavy);
+    }
+
+    private void EventMan_OnPlayerLittleAttack(object sender, System.EventArgs e)
+    {
+        AudioManager.Instance.TriggerPlayerAttackAudio(AttackType.light);
+    }
+
     private void SelectMusicByScene(Scene oldScene, Scene newScene)
     {
         Debug.Log("MUSIC: Scene change detected. New scene: " + newScene.name + ". Switching to new audio container.");
@@ -53,6 +82,10 @@ public class AudioEventsHandler : MonoBehaviour
     {
         switcher.SwitchTrack(trackIndex);
     }
+
+
+
+
 
 
     private void SendPlayerDeath(object sender, System.EventArgs e)
@@ -88,5 +121,8 @@ public class AudioEventsHandler : MonoBehaviour
         EventMan.OnPlayerGetsHit -= SendPlayerHit;
         EventMan.OnPlayerDeath -= SendPlayerDeath;
         SceneManager.activeSceneChanged -= SelectMusicByScene;
+        EventMan.OnPlayerLittleAttack -= EventMan_OnPlayerLittleAttack;
+        EventMan.OnPlayerHeavyAttack -= EventMan_OnPlayerHeavyAttack;
+        //EventMan.OnBlockInitiated -= EventMan_OnBlockInitiated;
     }
 }

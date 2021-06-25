@@ -28,12 +28,13 @@ public class AudioManager : MonoBehaviour
     [Header("Player")]
     [SerializeField, Range(-81, 24)] float playerVolume;
     public AudioSourceController playerJumpGrunt, playerDamageGrunt, playerDieGroan, playerAttackGrunt, playerStaminaBreath, playerHealthHeartbeat;
+
+    [Header("Other")]
+    [SerializeField, Range(-81, 24)] float swordVsSwordCollisionVolume;
+    public AudioSourceController swordVsSwordCollision;
     
 
-    public KeyCode jumpSoundKey = KeyCode.Space; // if there's time, link to events but it's probably fine without.
-    public KeyCode takeDamageSoundKey = KeyCode.O; // TODO: link to events
-    public KeyCode playerDieSoundKey = KeyCode.Q;
-    public KeyCode playerAttackSoundKey = KeyCode.A;
+    public KeyCode actorParriesSoundKey = KeyCode.Q;
 
 
 
@@ -79,19 +80,8 @@ public class AudioManager : MonoBehaviour
 
         /*   FOR TESTING ONLY    */
         
-        if (Input.GetKeyDown(takeDamageSoundKey))
+        if (Input.GetKeyDown(actorParriesSoundKey))
         {
-            TriggerPlayerTakesDamageAudio(10);
-        }
-        if (Input.GetKeyDown(playerDieSoundKey))
-        {
-            TriggerPlayerDeathAudio();
-        }
-        if (Input.GetKeyDown(switchKey))
-        {
-            currentTrackIndex = (currentTrackIndex + 1) % (musicSwitch.tracks.Length - 1);
-            musicSwitch.SwitchTrack(currentTrackIndex);
-
         }
     }
     #region Player Audio
@@ -107,9 +97,6 @@ public class AudioManager : MonoBehaviour
     {
         playerJumpGrunt.PlayRandom(-6, 2, 0.9f, 1.0f);
     }
-    
-
-
 
     /* ATTACK */
     // Comes directly from PlayerAudioEventHandler on the model.
@@ -124,6 +111,15 @@ public class AudioManager : MonoBehaviour
             playerAttackGrunt.PlayRandom(-3, 3, 0.85f, 1.0f);
         }
     }
+    /* BLOCK */
+    public void TriggerActorBlock()
+    {
+        swordVsSwordCollision.PlayRandom(-9, 0, 0.9f, 1.1f);
+
+    }
+
+
+
     /* STAMINA */
     // trigger stamina called from the audioeventshandler - coroutine runs audio and checks for stamina to regenerate //
     public void TriggerStamina()

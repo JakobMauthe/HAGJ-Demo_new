@@ -645,6 +645,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 188062369, guid: b06472c8aa7c323409879d7a22e3d23c, type: 3}
+      propertyPath: outputGain
+      value: -3
+      objectReference: {fileID: 0}
     - target: {fileID: 5551191768769185360, guid: b06472c8aa7c323409879d7a22e3d23c, type: 3}
       propertyPath: m_RootOrder
       value: 13
@@ -1498,6 +1502,7 @@ MonoBehaviour:
   playerLayer:
     serializedVersion: 2
     m_Bits: 64
+  blockedDuration: 1
 --- !u!70 &467438590
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -2058,7 +2063,6 @@ GameObject:
   - component: {fileID: 911854279}
   - component: {fileID: 911854278}
   - component: {fileID: 911854277}
-  - component: {fileID: 911854280}
   m_Layer: 0
   m_Name: ModelPlayer
   m_TagString: Untagged
@@ -2150,18 +2154,6 @@ Transform:
   m_Father: {fileID: 1226769503}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &911854280
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 911854276}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 78b1a834578db8d4bacaa1e46387c758, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1003865820
 GameObject:
   m_ObjectHideFlags: 0
@@ -3030,6 +3022,7 @@ MonoBehaviour:
   enemyLayers:
     serializedVersion: 2
     m_Bits: 128
+  blockingTime: 1
   attackLittleDamage: 15
   attackLittleStaminaCost: 10
   attackLittleRange: 0.5
