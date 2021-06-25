@@ -72,5 +72,7 @@ public class GameManager : MonoBehaviour {
 	void BackToMainMenu() {
 		UIManager.HideAllTexts();
 		Loader.Load(Loader.Scene.MainMenu);
-    }
+		var activeSceneName = (Loader.Scene)SceneManager.GetActiveScene().buildIndex;
+
+	}
 }
