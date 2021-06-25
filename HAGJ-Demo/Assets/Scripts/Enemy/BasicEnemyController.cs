@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,6 +9,7 @@ public class BasicEnemyController : PhysicsObject {
         Patrol,
         ChaseTarget,
         Attack,
+        Blocked,
     }
     private State state;
 
@@ -41,12 +43,20 @@ public class BasicEnemyController : PhysicsObject {
     float attackRange = 2.5f;
 
     [SerializeField, Range(0.1f, 10f)]
-    float attackRate = 0.75f;
+    float attackRate = 0.75f;    
 
     public Transform attackPoint;
     public LayerMask playerLayer;
 
     private float nextAttackTime;
+
+    //blocked
+
+    private float notBlockedTime;
+
+    [SerializeField, Range(0.1f, 5f)]
+    float blockedDuration = 1f;
+
 
     public float Health => currentHealth;
    
@@ -58,6 +68,7 @@ public class BasicEnemyController : PhysicsObject {
         currentHealth = startHealth;
         healthBar.SetMaxHealth(startHealth);
         state = State.Patrol;
+        EventManager.Instance.OnEnemyAttack += EnemyAttack_OnEnemyAttackInitiated;
     }
 
     private void FindTarget() {
@@ -67,12 +78,12 @@ public class BasicEnemyController : PhysicsObject {
     }
 
     public Vector3 GetRandomPatrollingPosition() {
-        return startingPosition + GetRandomDirection() * Random.Range(10f, 50f);
+        return startingPosition + GetRandomDirection() * UnityEngine.Random.Range(10f, 50f);
     }
 
     //Get Random Normalized x direction
     public Vector3 GetRandomDirection() {        
-        return new Vector3(Random.Range(-1f, 1f), transform.position.y).normalized;
+        return new Vector3(UnityEngine.Random.Range(-1f, 1f), transform.position.y).normalized;
     }
 
     protected override void ComputeVelocity() {
@@ -114,6 +125,11 @@ public class BasicEnemyController : PhysicsObject {
                     break;
                 }
                 break;
+            case State.Blocked:
+                if (Time.time< notBlockedTime) {
+                    state = State.ChaseTarget;
+                }
+                break;
         }
     }
 
@@ -121,9 +137,21 @@ public class BasicEnemyController : PhysicsObject {
         enemyMaxMovementSpeed = 0f;
         animator.SetFloat("MovementSpeed", enemyMaxMovementSpeed);
         animator.SetTrigger("Attack");
+        
+    }
+
+    private void EnemyAttack_OnEnemyAttackInitiated(object sender, EventArgs e) {
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, playerLayer);
         foreach (Collider2D enemy in hitEnemies) {
-            enemy.GetComponent<PlayerController>().TakeDamage((float)attackDamage);
+            PlayerController playerController = enemy.GetComponent < PlayerController>();
+            if (playerController.IsBlocking) {
+                state = State.Blocked;
+                animator.SetTrigger("Blocked");
+                notBlockedTime = Time.time + blockedDuration;
+            }
+            else {
+                playerController.TakeDamage((float)attackDamage);
+            }
         }
     }
 
@@ -175,7 +203,7 @@ public class BasicEnemyController : PhysicsObject {
         } 
         else {
             currentHealth -= damage;
-            //Play EenemyHurtAnimation
+            animator.SetTrigger("Hurt"); //Play EenemyHurtAnimation
             healthBar.SetHealth(currentHealth);
         }
     }
