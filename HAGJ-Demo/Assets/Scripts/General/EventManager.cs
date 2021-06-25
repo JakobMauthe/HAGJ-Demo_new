@@ -9,8 +9,9 @@ public class EventManager : MonoBehaviour {
     private static EventManager _instance;
 
     //Events
-    public event EventHandler OnJumpInitiated, OnPlayerGetsHit, OnPlayerDeath;
-
+    public event EventHandler OnJumpInitiated, OnPlayerGetsHit, 
+        OnPlayerDeath, OnPlayerLittleAttack, OnPlayerHeavyAttack,
+        OnEnemyAttack;
 
     public static EventManager Instance { get { return _instance; } }
 
@@ -32,5 +33,14 @@ public class EventManager : MonoBehaviour {
     }
     public void NotifyOfOnPlayerDeath(object sender) {
         OnPlayerDeath?.Invoke(sender, EventArgs.Empty); 
+    }
+    public void NotifyOfOnPlayerLittleAttack(object sender) {
+        OnPlayerLittleAttack?.Invoke(sender, EventArgs.Empty);
+    }
+    public void NotifyOfOnPlayerHeavyAttack(object sender) {
+        OnPlayerHeavyAttack?.Invoke(sender, EventArgs.Empty);
+    }
+    public void NotifyOfOnEnemyAttack(object sender) {
+        OnEnemyAttack?.Invoke(sender, EventArgs.Empty);
     }
 }

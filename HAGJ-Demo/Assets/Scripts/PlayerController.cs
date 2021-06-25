@@ -32,9 +32,14 @@ public class PlayerController : PhysicsObject {
     public float jumpTakeOffSpeed = 5f;
 
 
-    //Attacking 
+    //Attacking & blocking
     public Transform attackPoint;
     public LayerMask enemyLayers;
+    private bool isBlocking;
+
+    [SerializeField, Range(0.1f, 5f)]
+    float blockingTime = 1f;
+    
     //Little Attack
     [SerializeField, Range(0, 100)]
     int attackLittleDamage = 15;
@@ -55,6 +60,8 @@ public class PlayerController : PhysicsObject {
     public float Health => currentHealth;
     public int Stamina => currentStamina;
 
+    public bool IsBlocking => isBlocking;
+
     public static PlayerController Instance { get; private set; }
 
     public override void Awake() {
@@ -64,6 +71,10 @@ public class PlayerController : PhysicsObject {
         currentHealth = maxHealth;
         healthBar.SetMaxHealth(maxHealth);
         staminaBar.SetMaxStamina(maxStamina);
+        isBlocking = false;
+
+        EventManager.Instance.OnPlayerLittleAttack += LittleAttack_OnLittleAtackInitiated;
+        EventManager.Instance.OnPlayerHeavyAttack += HeavyAttack_OnHeavyAtackInitiated;
     }
 
 
@@ -77,6 +88,9 @@ public class PlayerController : PhysicsObject {
         if (Input.GetMouseButtonDown(1) && !PauseMenu.gameIsPaused) {
             HeavyAttack();
         }
+        if (Input.GetKeyDown(KeyCode.Q) && !isBlocking) {
+            Block();
+        }
         if (Input.GetKeyDown(KeyCode.K)) {
             GameManager.PlayerDied();
         }
@@ -88,12 +102,7 @@ public class PlayerController : PhysicsObject {
             return;
         }
         animator.SetTrigger("Attack2"); 
-        UseStamina(attackLittleStaminaCost);
-
-        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackLittleRange, enemyLayers);
-        foreach (Collider2D enemy in hitEnemies) {
-            enemy.GetComponent<BasicEnemyController>().TakeDamage((float)attackLittleDamage);
-        }
+        UseStamina(attackLittleStaminaCost);        
     }
 
     void HeavyAttack() {
@@ -102,13 +111,24 @@ public class PlayerController : PhysicsObject {
             return;
         }
         animator.SetTrigger("HeavyAttack");
-        UseStamina(attackHeavyStaminaCost);
+        UseStamina(attackHeavyStaminaCost);        
+    }
 
+    private void LittleAttack_OnLittleAtackInitiated(object sender, EventArgs e) {
+        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackLittleRange, enemyLayers);
+        foreach (Collider2D enemy in hitEnemies) {
+            enemy.GetComponent<BasicEnemyController>().TakeDamage((float)attackLittleDamage);
+        }
+    }
+
+    private void HeavyAttack_OnHeavyAtackInitiated(object sender, EventArgs e) {
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackHeavyRange, enemyLayers);
         foreach (Collider2D enemy in hitEnemies) {
             enemy.GetComponent<BasicEnemyController>().TakeDamage((float)attackHeavyDamage);
         }
     }
+
+
     void UseStamina(int amount) {
         if (amount <= currentStamina) {
             currentStamina -= amount;
@@ -176,5 +196,16 @@ public class PlayerController : PhysicsObject {
             animator.SetTrigger("Hurt");
             healthBar.SetHealth(currentHealth);
         }
+    }
+
+    public void Block() {
+        isBlocking = true;
+        animator.SetTrigger("Block");
+        StartCoroutine(BlockCountdown());
+    }
+
+    IEnumerator BlockCountdown() {
+        yield return new WaitForSeconds(blockingTime);
+        isBlocking = false;
     }
 }
