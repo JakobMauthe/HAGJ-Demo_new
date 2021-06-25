@@ -12,6 +12,7 @@ public class AudioManager : MonoBehaviour
 
     [Header("Music")]
     public MusicSwitch musicSwitch;
+    public MusicShuffler shuffler;
     [SerializeField, Range(-81, 24)] float musicVolume;
     GameObject[] musicObjects;
     public KeyCode switchKey = KeyCode.X;
@@ -19,7 +20,7 @@ public class AudioManager : MonoBehaviour
 
     [Header("Environment")]
     [SerializeField, Range(-81, 24)] float environmentVolume;
-    GameObject[] environmentObjects;
+    public GameObject[] environmentObjects;
 
     [Header("Player")]
     [SerializeField, Range(-81, 24)] float playerVolume;
@@ -151,7 +152,7 @@ public class AudioManager : MonoBehaviour
     }
 
     /* TAKE DAMAGE */
-    public void TriggerPlayerTakesDamageAudio(float damage)
+    public void TriggerPlayerTakesDamageSound(float damage)
     {
         damage = AudioUtility.ScaleValue(damage, 0, 20, -6, 6);
         playerDamageGrunt.PlayRandom(-3 + damage, 3 + damage, 0.95f, 1.0f);
@@ -178,7 +179,7 @@ public class AudioManager : MonoBehaviour
    
         /* DIE */
 
-    public void TriggerPlayerDeathAudio() 
+    public void TriggerPlayerDeathSound() 
     {
         playerDieGroan.PlayRandom(-3, 0, 0.95f, 1.05f);
     }

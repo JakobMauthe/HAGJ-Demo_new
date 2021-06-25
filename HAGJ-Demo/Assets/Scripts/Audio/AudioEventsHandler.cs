@@ -19,6 +19,7 @@ public class AudioEventsHandler : MonoBehaviour
     EventManager ev;
     AudioManager au;
     MusicSwitch switcher;
+    MusicShuffler shuffler;
     
 
     Scene currentScene;
@@ -31,15 +32,16 @@ public class AudioEventsHandler : MonoBehaviour
         currentScene = SceneManager.GetActiveScene();
         
         switcher = au.musicSwitch;
+        shuffler = au.shuffler;
         
 
         ev.OnJumpInitiated += SendJump;
         ev.OnPlayerGetsHit += SendPlayerHit;
         ev.OnPlayerDeath += SendPlayerDeath;
-        ev.OnPlayerLittleAttack += EventMan_OnPlayerLittleAttack;
-        ev.OnPlayerHeavyAttack += EventMan_OnPlayerHeavyAttack;
-        ev.OnEnemyAttack += EventMan_OnEnemyAttack;
-        ev.OnBlockInitiated += EventMan_OnBlockInitiated;
+        ev.OnPlayerLittleAttack += SendPlayerLittleAttack;
+        ev.OnPlayerHeavyAttack += SendPlayerHeavyAttack;
+        ev.OnEnemyAttack += SendEnemyAttack;
+        ev.OnBlockInitiated += SendBlockStart;
         ev.OnEnemyGetsHit += SendEnemyHit;
         ev.OnEnemyDie += SendEnemyDie;
         ev.OnHealthLow += SendHealthLow;
@@ -48,10 +50,48 @@ public class AudioEventsHandler : MonoBehaviour
         ev.OnStaminaNotLow += SendStaminaRecovered;
         
 
-        SceneManager.activeSceneChanged += SelectMusicByScene;
-
-        //SelectMusicByScene(currentScene, currentScene);
+        SceneManager.activeSceneChanged += CueMusicByScene;
+        CueMusicByScene(currentScene, currentScene);
     }
+
+
+    private void CueMusicByScene(Scene oldScene, Scene newScene)
+    {
+        Debug.Log("MUSIC: Scene change detected. New scene: " + newScene.name + ". Switching to new audio container.");
+        string sceneName = newScene.name;
+
+        if (sceneName == Loader.Scene.MainMenu.ToString() || sceneName.StartsWith("MainMenu (Audio)"))
+        {
+            SwitchMusic(0);
+            shuffler.StopShuffling();
+            for (int i = 0; i < au.environmentObjects.Length; ++i)
+            {
+                au.environmentObjects[i].GetComponent<AudioSourceController>().FadeTo(AudioUtility.minimum, 3, 0.5f, true);
+            }
+
+        }
+        else if (sceneName == Loader.Scene.TestingLevel.ToString() || sceneName.StartsWith("TestingLevel (Audio)"))
+        {
+            shuffler.BeginShuffling(1, 3);
+            for (int i = 0; i < au.environmentObjects.Length; ++i)
+            {
+                au.environmentObjects[i].GetComponent<AudioSourceController>().FadeTo(0, 5, 0.5f, false);
+            }
+        }
+        else if (sceneName == Loader.Scene.Loading.ToString())
+        {
+            shuffler.StopShuffling();
+            SwitchMusic(0);
+        }
+        else
+        {
+            shuffler.StopShuffling();
+            SwitchMusic(-1);
+            Debug.LogError(this.name + ": Unknown scene triggered (name: " + sceneName + "), music cue not fired.");
+        }
+        
+    }
+
 
     private void SendStaminaRecovered(object sender, System.EventArgs e)
     {
@@ -83,51 +123,28 @@ public class AudioEventsHandler : MonoBehaviour
         au.TriggerArmourHit();
     }
 
-    private void EventMan_OnBlockInitiated(object sender, System.EventArgs e)
+    private void SendBlockStart(object sender, System.EventArgs e)
     {
-        Debug.Log(this.name + ": onblockintiiated");
         au.TriggerBlockSound();
     }
 
 
-    private void EventMan_OnPlayerHeavyAttack(object sender, System.EventArgs e)
+    private void SendPlayerHeavyAttack(object sender, System.EventArgs e)
     {
         AudioManager.Instance.TriggerPlayerAttackAudio(AttackType.heavy);
-        SendSwordSwish(AttackType.heavy);
+        au.TriggerSwordSwish(AttackType.heavy);
+
     }
 
-    private void EventMan_OnPlayerLittleAttack(object sender, System.EventArgs e)
+    private void SendPlayerLittleAttack(object sender, System.EventArgs e)
     {
         AudioManager.Instance.TriggerPlayerAttackAudio(AttackType.light);
-        SendSwordSwish(AttackType.light);
+        au.TriggerSwordSwish(AttackType.light);
 
     }
-    private void EventMan_OnEnemyAttack(object sender, System.EventArgs e)
+    private void SendEnemyAttack(object sender, System.EventArgs e)
     {
-        SendSwordSwish(AttackType.light);
-    }
-
-
-
-    private void SelectMusicByScene(Scene oldScene, Scene newScene)
-    {
-        Debug.Log("MUSIC: Scene change detected. New scene: " + newScene.name + ". Switching to new audio container.");
-        string sceneName = newScene.name;
-
-        if (sceneName == Loader.Scene.MainMenu.ToString() || sceneName.StartsWith("MainMenu (Audio)"))
-        {
-            SwitchMusic(0);
-        }
-        else if (sceneName == Loader.Scene.TestingLevel.ToString() || sceneName.StartsWith("TestingLevel (Audio)"))
-        {
-            SwitchMusic(1);
-        }
-        else Debug.LogError(this.name + ": Unknown scene triggered, music cue not set up.");
-    }
-
-    void SendSwordSwish(AttackType type)
-    {
-        au.TriggerSwordSwish(type);
+        au.TriggerSwordSwish(AttackType.light);
     }
 
     private void SwitchMusic(int trackIndex)
@@ -138,12 +155,14 @@ public class AudioEventsHandler : MonoBehaviour
 
     private void SendPlayerDeath(object sender, System.EventArgs e)
     {
-        au.TriggerPlayerDeathAudio();
+        au.TriggerPlayerDeathSound();
+        au.TriggerFleshHit();
     }
 
     private void SendPlayerHit(object sender, System.EventArgs e)
     {
-        au.TriggerPlayerTakesDamageAudio(10);
+        au.TriggerPlayerTakesDamageSound(10);
+        au.TriggerArmourHit();
     }
 
     private void SendJump(object sender, System.EventArgs e)
@@ -164,10 +183,10 @@ public class AudioEventsHandler : MonoBehaviour
         ev.OnJumpInitiated -= SendJump;
         ev.OnPlayerGetsHit -= SendPlayerHit;
         ev.OnPlayerDeath -= SendPlayerDeath;
-        ev.OnPlayerLittleAttack -= EventMan_OnPlayerLittleAttack;
-        ev.OnPlayerHeavyAttack -= EventMan_OnPlayerHeavyAttack;
-        ev.OnEnemyAttack -= EventMan_OnEnemyAttack;
-        ev.OnBlockInitiated -= EventMan_OnBlockInitiated;
+        ev.OnPlayerLittleAttack -= SendPlayerLittleAttack;
+        ev.OnPlayerHeavyAttack -= SendPlayerHeavyAttack;
+        ev.OnEnemyAttack -= SendEnemyAttack;
+        ev.OnBlockInitiated -= SendBlockStart;
         ev.OnEnemyGetsHit -= SendEnemyHit;
         ev.OnEnemyDie -= SendEnemyDie;
         ev.OnHealthLow -= SendHealthLow;
@@ -175,7 +194,7 @@ public class AudioEventsHandler : MonoBehaviour
         ev.OnStaminaLow -= SendStaminaLow;
         ev.OnStaminaNotLow -= SendStaminaRecovered;
 
-        SceneManager.activeSceneChanged -= SelectMusicByScene;
+        SceneManager.activeSceneChanged -= CueMusicByScene;
        
     }
 }

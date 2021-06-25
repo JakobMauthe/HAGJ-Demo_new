@@ -1431,7 +1431,7 @@ MonoBehaviour:
   startHealth: 100
   healthBar: {fileID: 403764243}
   enemyMaxPatrollingSpeed: 1.5
-  enemyMaxChasingSpeed: 2.5
+  enemyMaxChasingSpeed: 15.97
   targetChaseRange: 10
   attackDamage: 10
   startAttackRange: 2.5
@@ -1466,7 +1466,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 467438588}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 33, y: -6.55, z: 0}
+  m_LocalPosition: {x: 17.27, y: -6.55, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 643963150}
@@ -2981,6 +2981,8 @@ MonoBehaviour:
   dropShadow: {fileID: 2035415686}
   maxHealth: 100
   maxStamina: 100
+  lowHealthThreshold: 25
+  lowStaminaThreshold: 33
   maxMovementSpeed: 5
   jumpTakeOffSpeed: 12
   attackPoint: {fileID: 1230146867}

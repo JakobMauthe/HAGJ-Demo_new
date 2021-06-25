@@ -1020,7 +1020,7 @@ MonoBehaviour:
   outputGain: -27.7
   inputGain: 0
   startingVolume: -47.2
-  FadeInOnAwakeTime: 1
+  FadeInOnAwakeTime: 0
   faderVolume: 0
   isFading: 0
   currentFadeTarget: 0
@@ -1251,13 +1251,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   listener: {fileID: 0}
   player: {fileID: 0}
-  lowHealthThreshold: 25
-  lowStaminaThreshold: 33
   musicSwitch: {fileID: 5551191770399878304}
+  shuffler: {fileID: 368038528}
   musicVolume: -9
   switchKey: 120
   currentTrackIndex: -1
   environmentVolume: 0
+  environmentObjects: []
   playerVolume: 0
   playerJumpGrunt: {fileID: 5551191770463625658}
   playerDamageGrunt: {fileID: 5551191769939293405}
@@ -1267,7 +1267,7 @@ MonoBehaviour:
   playerHealthHeartbeat: {fileID: 2032831531}
   swordVolume: 0
   swordSwish: {fileID: 7187645922309794234}
-  swordClash: {fileID: 7187645922309794234}
+  swordClash: {fileID: 188062369}
   swordOnArmour: {fileID: 783088891023287324}
   swordOnFlesh: {fileID: 1512597876863656175}
 --- !u!114 &49003968
@@ -2470,7 +2470,6 @@ MonoBehaviour:
   - {fileID: 5551191770011725345}
   crossfadeDuration: 5
   currentMusicTrack: -1
-  fadeMaxVolume: 0
 --- !u!114 &368038528
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2483,8 +2482,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb27f691abffeb244837b93c4d8f0819, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  trackIndexLower: 1
-  trackIndexUpper: 2
 --- !u!1 &5551191770463625660
 GameObject:
   m_ObjectHideFlags: 0

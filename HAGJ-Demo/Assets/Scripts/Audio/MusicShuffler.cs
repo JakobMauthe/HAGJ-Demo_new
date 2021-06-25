@@ -6,31 +6,27 @@ public class MusicShuffler : MonoBehaviour
 {
     MusicSwitch mswitch;
 
-    [SerializeField, Min(0)] float trackIndexLower = 1;
-    [SerializeField, Min(0)] float trackIndexUpper = 3;
-
     private void Start()
     {
         mswitch = GetComponent<MusicSwitch>();
-        BeginMusicPlayback();
     }
 
-    public void BeginMusicPlayback()
+    public void BeginShuffling(int lowerRange, int upperRange)
     {
-        StartCoroutine(ShuffleMusic());
+        StartCoroutine(ShuffleMusic(lowerRange, upperRange));
     }
 
-    public void StopMusicPlayback()
+    public void StopShuffling()
     {
         StopAllCoroutines();
     }
 
-    IEnumerator ShuffleMusic()
+    IEnumerator ShuffleMusic(int lowerRange, int upperRange)
     {
         while (true)
         {
 
-            int newTrackIndex = Mathf.RoundToInt(Random.Range(trackIndexLower, trackIndexUpper));            
+            int newTrackIndex = Random.Range(lowerRange, upperRange + 1);
             SwitchTrack(newTrackIndex);
             
             yield return new WaitForEndOfFrame();
