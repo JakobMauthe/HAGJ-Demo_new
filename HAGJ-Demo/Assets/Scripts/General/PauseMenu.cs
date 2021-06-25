@@ -4,11 +4,13 @@ using UnityEngine;
 
 public class PauseMenu : MonoBehaviour {
 
-    public LevelLoader levelLoader;
-
-    public static bool gameIsPaused = false;
+    public static bool gameIsPaused;
 
     public GameObject pauseMenuUI;
+
+    private void Awake() {
+        gameIsPaused = false;
+    }
 
     void Update() {
         if (Input.GetKeyDown(KeyCode.Escape)) {
@@ -34,7 +36,7 @@ public class PauseMenu : MonoBehaviour {
 
     public void LoadMenu() {
         Time.timeScale = 1f;
-        levelLoader.LoadSpecificLevel(0);
+        Loader.Load(Loader.Scene.MainMenu);
     }
 
     public void Quit() {

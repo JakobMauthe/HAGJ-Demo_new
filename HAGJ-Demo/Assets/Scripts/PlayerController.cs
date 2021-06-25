@@ -77,6 +77,9 @@ public class PlayerController : PhysicsObject {
         if (Input.GetMouseButtonDown(1) && !PauseMenu.gameIsPaused) {
             HeavyAttack();
         }
+        if (Input.GetKeyDown(KeyCode.K)) {
+            GameManager.PlayerDied();
+        }
     }
 
     void LittleAttack() {        
@@ -165,7 +168,7 @@ public class PlayerController : PhysicsObject {
     public void TakeDamage(float damage) {
         if (damage >= currentHealth) {
             EventManager.Instance.NotifyOfOnPlayerDeath(this);
-            // Loose State
+            GameManager.PlayerDied();
         }
         else {
             currentHealth -= damage;
