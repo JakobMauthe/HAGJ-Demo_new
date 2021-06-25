@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MusicShuffle : MonoBehaviour
+public class MusicShuffler : MonoBehaviour
 {
     MusicSwitch mswitch;
 
@@ -47,7 +47,7 @@ public class MusicShuffle : MonoBehaviour
             else waitTime = timeRemaining;
             
             
-            Debug.Log("MUSIC: Waiting " + waitTime + "secs until new music transition. (clipLength = " + newClipLength + ", clipTime = " + newClipPlaytime + " timeremaining = " + timeRemaining);
+            //Debug.Log("MUSIC: Waiting " + waitTime + "secs until new music transition. (clipLength = " + newClipLength + ", clipTime = " + newClipPlaytime + " timeremaining = " + timeRemaining);
 
             yield return new WaitForSeconds(waitTime);
         }

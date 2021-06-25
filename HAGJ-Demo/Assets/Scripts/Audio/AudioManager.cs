@@ -10,10 +10,6 @@ public class AudioManager : MonoBehaviour
     public GameObject listener;
     public PlayerController player;
 
-    [Header("Game Variables")]
-    [SerializeField, Range(0, 100)] int lowHealthThreshold = 25;
-    [SerializeField, Range(0, 100)] int lowStaminaThreshold = 33;
-
     [Header("Music")]
     public MusicSwitch musicSwitch;
     [SerializeField, Range(-81, 24)] float musicVolume;
@@ -127,7 +123,7 @@ public class AudioManager : MonoBehaviour
     }
 
     /* BLOCK */
-    public void TriggerActorBlock()
+    public void TriggerBlockSound()
     {
         swordClash.PlayRandom(-9, 0, 0.9f, 1.1f);
     }
@@ -135,35 +131,22 @@ public class AudioManager : MonoBehaviour
 
 
     /* STAMINA */
-    // trigger stamina called from the audioeventshandler - coroutine runs audio and checks for stamina to regenerate //
-    public void TriggerStamina()
+    
+    bool isLowStaminaAudioPlaying = false;
+    public void TriggerLowStaminaSound()
     {
-        StartCoroutine(CheckStamina());
-    }
-    bool isStaminaAudioPlaying = false;
-    IEnumerator CheckStamina()
-    {
-        while (true)
+        if (!isLowStaminaAudioPlaying)
         {
-            Debug.Log("AUDIO: running CheckStamina coroutine..");
-            if (player.Stamina < lowStaminaThreshold)
-            {
-                if (!isStaminaAudioPlaying)
-                {
-                    isStaminaAudioPlaying = true;
-                    playerStaminaBreath.FadeTo(0, 1, 0.5f, false);
-                    playerStaminaBreath.PlayLoop();
-                    
-                }
-            }
-            else
-            { 
-                if (isStaminaAudioPlaying) playerStaminaBreath.FadeTo(AudioUtility.minimum, 2, 0.5f, true);
-                isStaminaAudioPlaying = false;
-                yield break;
-            }
-            yield return new WaitForSeconds(0.1f);
-            yield return null;
+            playerStaminaBreath.FadeTo(0, 1, 0.5f, false);
+            playerStaminaBreath.PlayLoop();
+        }
+    }
+    public void StopLowStaminaSound()
+    {
+        if (isLowStaminaAudioPlaying)
+        {
+            playerStaminaBreath.FadeTo(AudioUtility.minimum, 1, 0.5f, true);
+            isLowStaminaAudioPlaying = false;
         }
     }
 
@@ -172,39 +155,30 @@ public class AudioManager : MonoBehaviour
     {
         damage = AudioUtility.ScaleValue(damage, 0, 20, -6, 6);
         playerDamageGrunt.PlayRandom(-3 + damage, 3 + damage, 0.95f, 1.0f);
-        StartCoroutine(CheckHealth());
     }
 
-    bool isHealthAudioPlaying = false;
-    IEnumerator CheckHealth()
+    bool isLowHealthAudioPlaying = false;
+    public void TriggerLowHealthSound()
     {
-        while (true)
+        if (!isLowHealthAudioPlaying)
         {
-            Debug.Log("AUDIO: running CheckHealth coroutine..");
-            if (player.Health < lowHealthThreshold)
-            {
-                if (!isHealthAudioPlaying)
-                {
-                    isHealthAudioPlaying = true;
-                    playerHealthHeartbeat.FadeTo(0, 0.1f, 0.5f, false);
-                    playerHealthHeartbeat.PlayLoop();
-
-                }
-            }
-            else
-            {
-                playerHealthHeartbeat.FadeTo(AudioUtility.minimum, 1f, 0.5f, true);
-                isHealthAudioPlaying = false;
-                yield break;
-            }
-            yield return new WaitForSeconds(0.1f);
-            yield return null;
+            playerHealthHeartbeat.FadeTo(0, 0.1f, 0.5f, false);
+            playerHealthHeartbeat.PlayLoop();
+        }
+    }
+    public void StopLowHealthSound()
+    {
+        if (isLowHealthAudioPlaying)
+        {
+            playerHealthHeartbeat.FadeTo(AudioUtility.minimum, 1, 0.5f, true);
+            isLowHealthAudioPlaying = false;
         }
     }
 
-    /* DIE */
+   
+        /* DIE */
 
-    public void TriggerPlayerDeathAudio()
+    public void TriggerPlayerDeathAudio() 
     {
         playerDieGroan.PlayRandom(-3, 0, 0.95f, 1.05f);
     }

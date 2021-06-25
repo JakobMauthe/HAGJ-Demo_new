@@ -357,16 +357,9 @@ public class AudioSourceController : MonoBehaviour
 
     private IEnumerator StartFadeInDb(float fadetime, float targetVol, AnimationCurve animcur, bool stopAfterFade)
     {
-/*        if (!audioSource) audioSource = GetComponent<AudioSource>();
-                
-        faderVolume = AudioUtility.ConvertAtoDb(audioSource.volume);
-*/        float startVol = faderVolume;
+        float startVol = faderVolume;
 
-
-
-        //float startVol = fadeVolume;
-
-        Debug.Log(this + "on " + gameObject.name + " : Fading to " + targetVol + " from " + startVol + " over " + fadetime);
+        //Debug.Log(this + "on " + gameObject.name + " : Fading to " + targetVol + " from " + startVol + " over " + fadetime);
         float currentTime = 0f;
         while (currentTime < fadetime)
         {
@@ -387,15 +380,6 @@ public class AudioSourceController : MonoBehaviour
 
         yield break;
     }
-
-
-    private void GetAudioSourceVolume()
-    {
-        if (!audioSource) audioSource = GetComponent<AudioSource>();
-
-        faderVolume = AudioUtility.ConvertAtoDb(audioSource.volume);
-    }
-
 
     private void UpdateParams()
     {
