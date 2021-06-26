@@ -30,9 +30,12 @@ public class AudioEventsHandler : MonoBehaviour
 
         _instance = this;
         DontDestroyOnLoad(gameObject);
+        
+        au = GetComponent<AudioManager>();
+        currentScene = SceneManager.GetActiveScene();
     }
 
-    EventManager ev;
+
     AudioManager au;
     MusicSwitch switcher;
     MusicShuffler shuffler;
@@ -41,29 +44,24 @@ public class AudioEventsHandler : MonoBehaviour
 
 
     private void Start()
-    {
-        ev = EventManager.Instance;
-        au = GetComponent<AudioManager>();
-        currentScene = SceneManager.GetActiveScene();
-        
+    {        
         switcher = au.musicSwitch;
-        shuffler = au.shuffler;
-        
+        shuffler = au.shuffler;        
 
-        ev.OnJumpInitiated += SendJump;
-        ev.OnPlayerGetsHit += SendPlayerHit;
-        ev.OnPlayerDeath += SendPlayerDeath;
-        ev.OnPlayerLittleAttack += SendPlayerLittleAttack;
-        ev.OnPlayerHeavyAttack += SendPlayerHeavyAttack;
-        ev.OnEnemyAttack += SendEnemyAttack;
-        ev.OnBlockInitiated += SendBlockStart;
-        ev.OnEnemyGetsHit += SendEnemyHit;
-        ev.OnEnemyDie += SendEnemyDie;
-        ev.OnHealthLow += SendHealthLow;
-        ev.OnHealthNotLow += SendHealthRecovered;
-        ev.OnStaminaLow += SendStaminaLow;
-        ev.OnStaminaNotLow += SendStaminaRecovered;
-        ev.OnEnemyStartChase += SendChaseStart;
+        EventManager.Instance.OnJumpInitiated += SendJump;
+        EventManager.Instance.OnPlayerGetsHit += SendPlayerHit;
+        EventManager.Instance.OnPlayerDeath += SendPlayerDeath;
+        EventManager.Instance.OnPlayerLittleAttack += SendPlayerLittleAttack;
+        EventManager.Instance.OnPlayerHeavyAttack += SendPlayerHeavyAttack;
+        EventManager.Instance.OnEnemyAttack += SendEnemyAttack;
+        EventManager.Instance.OnBlockInitiated += SendBlockStart;
+        EventManager.Instance.OnEnemyGetsHit += SendEnemyHit;
+        EventManager.Instance.OnEnemyDie += SendEnemyDie;
+        EventManager.Instance.OnHealthLow += SendHealthLow;
+        EventManager.Instance.OnHealthNotLow += SendHealthRecovered;
+        EventManager.Instance.OnStaminaLow += SendStaminaLow;
+        EventManager.Instance.OnStaminaNotLow += SendStaminaRecovered;
+        EventManager.Instance.OnEnemyStartChase += SendChaseStart;
 
         SceneManager.activeSceneChanged += CueMusicByScene;
 
@@ -195,19 +193,20 @@ public class AudioEventsHandler : MonoBehaviour
 
     private void OnDestroy()
     {
-        ev.OnJumpInitiated -= SendJump;
-        ev.OnPlayerGetsHit -= SendPlayerHit;
-        ev.OnPlayerDeath -= SendPlayerDeath;
-        ev.OnPlayerLittleAttack -= SendPlayerLittleAttack;
-        ev.OnPlayerHeavyAttack -= SendPlayerHeavyAttack;
-        ev.OnEnemyAttack -= SendEnemyAttack;
-        ev.OnBlockInitiated -= SendBlockStart;
-        ev.OnEnemyGetsHit -= SendEnemyHit;
-        ev.OnEnemyDie -= SendEnemyDie;
-        ev.OnHealthLow -= SendHealthLow;
-        ev.OnHealthNotLow -= SendHealthRecovered;
-        ev.OnStaminaLow -= SendStaminaLow;
-        ev.OnStaminaNotLow -= SendStaminaRecovered;
+        EventManager.Instance.OnJumpInitiated -= SendJump;
+        EventManager.Instance.OnPlayerGetsHit -= SendPlayerHit;
+        EventManager.Instance.OnPlayerDeath -= SendPlayerDeath;
+        EventManager.Instance.OnPlayerLittleAttack -= SendPlayerLittleAttack;
+        EventManager.Instance.OnPlayerHeavyAttack -= SendPlayerHeavyAttack;
+        EventManager.Instance.OnEnemyAttack -= SendEnemyAttack;
+        EventManager.Instance.OnBlockInitiated -= SendBlockStart;
+        EventManager.Instance.OnEnemyGetsHit -= SendEnemyHit;
+        EventManager.Instance.OnEnemyDie -= SendEnemyDie;
+        EventManager.Instance.OnHealthLow -= SendHealthLow;
+        EventManager.Instance.OnHealthNotLow -= SendHealthRecovered;
+        EventManager.Instance.OnStaminaLow -= SendStaminaLow;
+        EventManager.Instance.OnStaminaNotLow -= SendStaminaRecovered;
+        EventManager.Instance.OnEnemyStartChase -= SendChaseStart;
 
         SceneManager.activeSceneChanged -= CueMusicByScene;
        
