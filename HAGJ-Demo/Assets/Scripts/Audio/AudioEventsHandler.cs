@@ -82,18 +82,37 @@ public class AudioEventsHandler : MonoBehaviour
 
         if (sceneName.StartsWith(Loader.Scene.MainMenu.ToString()))
         {
+            
             SwitchMusic(0);
             shuffler.StopShuffling();
             for (int i = 0; i < au.environmentObjects.Length; ++i)
-            {
+            {                
                 au.environmentObjects[i].GetComponent<AudioSourceController>().FadeTo(AudioUtility.minimum, 3, 0.5f, true);
             }
 
         }
-        else if (sceneName.StartsWith(Loader.Scene.Loading.ToString()) || sceneName.StartsWith(Loader.Scene.Intro.ToString()))
+        else if (sceneName.StartsWith(Loader.Scene.Loading.ToString()))
         {
             shuffler.StopShuffling();
             SwitchMusic(0);
+        }
+        else if (sceneName.StartsWith(Loader.Scene.Intro.ToString()))
+        {
+            shuffler.StopShuffling();
+            SwitchMusic(0);
+            for (int i = 0; i < au.environmentObjects.Length; ++i)
+            {
+                au.environmentObjects[i].GetComponent<AudioSourceController>().FadeTo(-6, 5, 0.5f, false);
+            }
+            for (int i = 0; i < au.introFireCrackle.Length; ++i)
+            {
+                au.introFireCrackle[i].PlayLoop();
+                au.introFireCrackle[i].FadeTo(0, 1, 0.5f, false);
+            }
+
+            
+
+
         }
         else if (sceneName.StartsWith(Loader.Scene.Level1.ToString()) || sceneName.StartsWith(Loader.Scene.TestingLevel.ToString()))
         {
@@ -102,6 +121,11 @@ public class AudioEventsHandler : MonoBehaviour
             {
                 au.environmentObjects[i].GetComponent<AudioSourceController>().FadeTo(0, 5, 0.5f, false);
             }
+            for (int i = 0; i < au.introFireCrackle.Length; ++i)
+            {
+                au.introFireCrackle[i].FadeTo(AudioUtility.minimum, 5, 0.5f, true);
+            }
+               
         }
         
         else

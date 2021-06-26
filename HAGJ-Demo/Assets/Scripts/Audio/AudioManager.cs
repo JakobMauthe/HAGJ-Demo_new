@@ -14,17 +14,20 @@ public class AudioManager : MonoBehaviour
     public MusicSwitch musicSwitch;
     public MusicShuffler shuffler;
     [SerializeField, Range(-81, 24)] float musicVolume;
-    GameObject[] musicObjects;
+    public GameObject[] musicObjects;
 
     [Header("Environment")]
     [SerializeField, Range(-81, 24)] float environmentVolume;
     public GameObject[] environmentObjects;
+    public AudioSourceController[] introFireCrackle;
 
     [Header("Audio Objects")]
     [SerializeField, Range(-81, 24)] float playerVolume;
     public AudioSourceController playerJumpGrunt, playerDamageGrunt, playerDieGroan, playerAttackGrunt, playerStaminaBreath, playerHealthHeartbeat;
     public GameObject swordSwish, swordClash, swordOnArmour, swordOnFlesh, enemyAttackGrunt, enemyChargeGrunt;
     private GameObject oneshotContainer;
+
+
 
     // private:
     private bool hasInitialised = false;
@@ -246,16 +249,12 @@ public class AudioManager : MonoBehaviour
 
     void UpdateVolumes()
     {
-        hasInitialised = true;
 
-        musicObjects = GameObject.FindGameObjectsWithTag("snd_music");
         for (int i = 0; i < musicObjects.Length; ++i)
         {            
             musicObjects[i].GetComponent<AudioSourceController>().SetInputGain(musicVolume);
         }
 
-
-        environmentObjects = GameObject.FindGameObjectsWithTag("snd_environment");        
         for (int i = 0; i < environmentObjects.Length; ++i)
         {
             environmentObjects[i].GetComponent<AudioSourceController>().SetInputGain(environmentVolume);
@@ -268,5 +267,8 @@ public class AudioManager : MonoBehaviour
         playerHealthHeartbeat.SetInputGain(playerVolume);
         playerStaminaBreath.SetInputGain(playerVolume);
         playerJumpGrunt.SetInputGain(playerVolume);
+
+
+        hasInitialised = true;
     }
 }
