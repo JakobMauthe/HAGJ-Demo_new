@@ -126,12 +126,12 @@ public class AudioEventsHandler : MonoBehaviour
 
     private void SendHealthRecovered(object sender, System.EventArgs e)
     {
-        au.TriggerLowHealthSound();
+        au.StopLowHealthSound();
     }
 
     private void SendHealthLow(object sender, System.EventArgs e)
     {
-        au.StopLowHealthSound();
+        au.TriggerLowHealthSound();
     }
 
     private void SendEnemyDie(Vector2 position)
@@ -178,6 +178,8 @@ public class AudioEventsHandler : MonoBehaviour
     {
         au.TriggerPlayerDeathSound();
         au.TriggerFleshHit(transform.position);
+
+        au.StopLowHealthSound();
     }
 
     private void SendPlayerHit(object sender, System.EventArgs e)

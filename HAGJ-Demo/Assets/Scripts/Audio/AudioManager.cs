@@ -121,12 +121,10 @@ public class AudioManager : MonoBehaviour
         if (attackType == AttackType.light)
         {
             CreateOneShotSoundObject(swordSwish, position, -6, 0, 0.9f, 1.2f);
-            //swordSwish.PlayRandom(-6, 0, 0.9f, 1.2f);
         }
         else if (attackType == AttackType.heavy)
         {
             CreateOneShotSoundObject(swordSwish, position, -3, 0, 0.75f, 0.95f);
-            //swordSwish.PlayRandom();
         }
     }
 
@@ -152,12 +150,10 @@ public class AudioManager : MonoBehaviour
     public void TriggerEnemyAttackSound(Vector2 position)
     {
         CreateOneShotSoundObject(enemyAttackGrunt, position, -3, 3, 0.9f, 1f);
-        //enemyAttackGrunt.PlayRandom(-3, 3, 0.9f, 1f);
     }
     public void TriggerEnemyChargeSound(Vector2 position)
     {
         CreateOneShotSoundObject(enemyChargeGrunt, position, -6, 0, 0.9f, 1f);
-        //enemyChargeGrunt.PlayRandom(-6, 0, 0.9f, 1f);
     }
 
 
@@ -166,19 +162,16 @@ public class AudioManager : MonoBehaviour
     public void TriggerArmourHit(Vector2 position)
     {
         CreateOneShotSoundObject(swordOnArmour, position, -3, 3, 0.8f, 1.2f);
-        //swordOnArmour.PlayRandom(-3, 3, 0.8f, 1.2f);
     }
     public void TriggerFleshHit(Vector2 position)
     {
         CreateOneShotSoundObject(swordOnFlesh, position, -3, 0, 0.9f, 1.1f);
-        //swordOnFlesh.PlayRandom(-3, 0, 0.9f, 1.1f);
     }
 
     /* BLOCK */
     public void TriggerBlockSound(Vector2 position)
     {
         CreateOneShotSoundObject(swordClash, position, -9, 0, 0.9f, 1.1f);
-        //swordClash.PlayRandom(-9, 0, 0.9f, 1.1f);
     }
 
 
@@ -218,6 +211,12 @@ public class AudioManager : MonoBehaviour
         {
             playerHealthHeartbeat.FadeTo(0, 0.1f, 0.5f, false);
             playerHealthHeartbeat.PlayLoop();
+
+            environmentVolume -= 12f;
+            musicVolume -= 12f;
+            UpdateVolumes();
+
+            isLowHealthAudioPlaying = true;
         }
     }
     public void StopLowHealthSound()
@@ -225,6 +224,11 @@ public class AudioManager : MonoBehaviour
         if (isLowHealthAudioPlaying)
         {
             playerHealthHeartbeat.FadeTo(AudioUtility.minimum, 1, 0.5f, true);
+
+            environmentVolume += 12f;
+            musicVolume += 12f;
+            UpdateVolumes();
+
             isLowHealthAudioPlaying = false;
         }
     }
@@ -251,7 +255,7 @@ public class AudioManager : MonoBehaviour
         }
 
 
-        environmentObjects = GameObject.FindGameObjectsWithTag("snd_environment");
+        environmentObjects = GameObject.FindGameObjectsWithTag("snd_environment");        
         for (int i = 0; i < environmentObjects.Length; ++i)
         {
             environmentObjects[i].GetComponent<AudioSourceController>().SetInputGain(environmentVolume);
@@ -265,9 +269,4 @@ public class AudioManager : MonoBehaviour
         playerStaminaBreath.SetInputGain(playerVolume);
         playerJumpGrunt.SetInputGain(playerVolume);
     }
-
-
-
-
-
 }
