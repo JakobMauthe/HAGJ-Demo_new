@@ -141,7 +141,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   audioSource: {fileID: 0}
-  outputGain: -3.7
+  outputGain: -6
   inputGain: 0
   startingVolume: -81
   FadeInOnAwakeTime: 0
@@ -156,7 +156,7 @@ MonoBehaviour:
   newClipPerPlay: 0
   intervalBetweenPlays: 0
   intervalRand: 0
-  pitch: 1
+  pitch: 0.8
   pitchRand: 0.1
   looperIsLooping: 0
   enableAudibilityCheck: 0
@@ -2105,11 +2105,11 @@ MonoBehaviour:
   currentFadeTarget: 0
   currentFadeTime: 0
   playlist:
-  - {fileID: 8300000, guid: a7634c510ecc88d4dbceb69f09f2ccbe, type: 3}
-  - {fileID: 8300000, guid: 97d4d9e6f3164bf4eb6c4d3c17322a2e, type: 3}
-  - {fileID: 8300000, guid: 56639053975af3f45b379261a38f62ed, type: 3}
-  - {fileID: 8300000, guid: 83e1276afe6d2dc4cbd4462808f84427, type: 3}
-  - {fileID: 8300000, guid: 90d4deb91415cfa44bb965b5e8a1bb22, type: 3}
+  - {fileID: 8300000, guid: 84bcf5bbd92c3054bbccd8e379219a9c, type: 3}
+  - {fileID: 8300000, guid: 2511443a168b1304297e58e6af528d3c, type: 3}
+  - {fileID: 8300000, guid: f756bf403fcf4354d8feb51b9a6ed980, type: 3}
+  - {fileID: 8300000, guid: 619e1c40ce2e9cf449ee7cdd38daf620, type: 3}
+  - {fileID: 8300000, guid: 79ce43fef5b1d6e48accf9a9c2dd4b4a, type: 3}
   playOnAwake: 0
   loopClips: 0
   newClipPerPlay: 0

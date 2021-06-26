@@ -165,7 +165,7 @@ public class AudioManager : MonoBehaviour
     }
     public void TriggerFleshHit(Vector2 position)
     {
-        CreateOneShotSoundObject(swordOnFlesh, position, -3, 0, 0.9f, 1.1f);
+        CreateOneShotSoundObject(swordOnFlesh, position, -3, 0, 0.7f, 1.0f);
     }
 
     /* BLOCK */
