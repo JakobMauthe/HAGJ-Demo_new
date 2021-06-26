@@ -140,6 +140,7 @@ public class AudioManager : MonoBehaviour
         {
             playerStaminaBreath.FadeTo(0, 1, 0.5f, false);
             playerStaminaBreath.PlayLoop();
+            isLowStaminaAudioPlaying = true;
         }
     }
     public void StopLowStaminaSound()

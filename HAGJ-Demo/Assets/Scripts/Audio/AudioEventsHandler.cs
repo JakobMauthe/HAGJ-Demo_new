@@ -20,10 +20,7 @@ public class AudioEventsHandler : MonoBehaviour
     AudioManager au;
     MusicSwitch switcher;
     MusicShuffler shuffler;
-    
-
     Scene currentScene;
-    
 
     private void Start()
     {
@@ -47,10 +44,10 @@ public class AudioEventsHandler : MonoBehaviour
         ev.OnHealthLow += SendHealthLow;
         ev.OnHealthNotLow += SendHealthRecovered;
         ev.OnStaminaLow += SendStaminaLow;
-        ev.OnStaminaNotLow += SendStaminaRecovered;
-        
+        ev.OnStaminaNotLow += SendStaminaRecovered;       
 
         SceneManager.activeSceneChanged += CueMusicByScene;
+
         CueMusicByScene(currentScene, currentScene);
     }
 
@@ -58,9 +55,11 @@ public class AudioEventsHandler : MonoBehaviour
     private void CueMusicByScene(Scene oldScene, Scene newScene)
     {
         Debug.Log("MUSIC: Scene change detected. New scene: " + newScene.name + ". Switching to new audio container.");
+        currentScene = newScene;
         string sceneName = newScene.name;
 
-        if (sceneName == Loader.Scene.MainMenu.ToString() || sceneName.StartsWith("MainMenu (Audio)"))
+
+        if (sceneName.StartsWith(Loader.Scene.MainMenu.ToString()))
         {
             SwitchMusic(0);
             shuffler.StopShuffling();
@@ -70,7 +69,7 @@ public class AudioEventsHandler : MonoBehaviour
             }
 
         }
-        else if (sceneName == Loader.Scene.TestingLevel.ToString() || sceneName.StartsWith("TestingLevel (Audio)"))
+        else if (sceneName.StartsWith(Loader.Scene.TestingLevel.ToString()))
         {
             shuffler.BeginShuffling(1, 3);
             for (int i = 0; i < au.environmentObjects.Length; ++i)
@@ -78,7 +77,7 @@ public class AudioEventsHandler : MonoBehaviour
                 au.environmentObjects[i].GetComponent<AudioSourceController>().FadeTo(0, 5, 0.5f, false);
             }
         }
-        else if (sceneName == Loader.Scene.Loading.ToString())
+        else if (sceneName.StartsWith(Loader.Scene.Loading.ToString()))
         {
             shuffler.StopShuffling();
             SwitchMusic(0);
@@ -178,7 +177,7 @@ public class AudioEventsHandler : MonoBehaviour
 
 
 
-    private void OnDisable()
+    private void OnDestroy()
     {
         ev.OnJumpInitiated -= SendJump;
         ev.OnPlayerGetsHit -= SendPlayerHit;
