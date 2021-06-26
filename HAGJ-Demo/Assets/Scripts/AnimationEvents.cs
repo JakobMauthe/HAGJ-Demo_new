@@ -15,7 +15,7 @@ public class AnimationEvents : MonoBehaviour
     }
 
     public void EnemyAttack() {
-        EventManager.Instance.NotifyOfOnEnemyAttack(this);
+        EventManager.Instance.NotifyOfOnEnemyAttack(transform.position);
         //Notify of enemy attack
     }
 }

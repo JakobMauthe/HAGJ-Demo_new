@@ -16,11 +16,29 @@ public enum AttackType
 
 public class AudioEventsHandler : MonoBehaviour
 {
+    
+    private static AudioEventsHandler _instance;
+    public static AudioEventsHandler Instance { get { return _instance; } }
+
+    private void Awake()
+    {
+        if (_instance != null && _instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        _instance = this;
+        DontDestroyOnLoad(gameObject);
+    }
+
     EventManager ev;
     AudioManager au;
     MusicSwitch switcher;
     MusicShuffler shuffler;
     Scene currentScene;
+
+
 
     private void Start()
     {
@@ -44,17 +62,22 @@ public class AudioEventsHandler : MonoBehaviour
         ev.OnHealthLow += SendHealthLow;
         ev.OnHealthNotLow += SendHealthRecovered;
         ev.OnStaminaLow += SendStaminaLow;
-        ev.OnStaminaNotLow += SendStaminaRecovered;       
+        ev.OnStaminaNotLow += SendStaminaRecovered;
+        ev.OnEnemyStartChase += SendChaseStart;
 
         SceneManager.activeSceneChanged += CueMusicByScene;
 
         CueMusicByScene(currentScene, currentScene);
     }
 
+    private void SendChaseStart(Vector2 position)
+    {
+        au.TriggerEnemyChargeSound(position);
+    }
 
     private void CueMusicByScene(Scene oldScene, Scene newScene)
     {
-        Debug.Log("MUSIC: Scene change detected. New scene: " + newScene.name + ". Switching to new audio container.");
+        //Debug.Log("MUSIC: Scene change detected. New scene: " + newScene.name + ". Switching to new audio container.");
         currentScene = newScene;
         string sceneName = newScene.name;
 
@@ -69,7 +92,12 @@ public class AudioEventsHandler : MonoBehaviour
             }
 
         }
-        else if (sceneName.StartsWith(Loader.Scene.TestingLevel.ToString()))
+        else if (sceneName.StartsWith(Loader.Scene.Loading.ToString()) || sceneName.StartsWith(Loader.Scene.Intro.ToString()))
+        {
+            shuffler.StopShuffling();
+            SwitchMusic(0);
+        }
+        else if (sceneName.StartsWith(Loader.Scene.Level1.ToString()) || sceneName.StartsWith(Loader.Scene.TestingLevel.ToString()))
         {
             shuffler.BeginShuffling(1, 3);
             for (int i = 0; i < au.environmentObjects.Length; ++i)
@@ -77,11 +105,7 @@ public class AudioEventsHandler : MonoBehaviour
                 au.environmentObjects[i].GetComponent<AudioSourceController>().FadeTo(0, 5, 0.5f, false);
             }
         }
-        else if (sceneName.StartsWith(Loader.Scene.Loading.ToString()))
-        {
-            shuffler.StopShuffling();
-            SwitchMusic(0);
-        }
+        
         else
         {
             shuffler.StopShuffling();
@@ -112,22 +136,19 @@ public class AudioEventsHandler : MonoBehaviour
         au.StopLowHealthSound();
     }
 
-    private void SendEnemyDie(object sender, System.EventArgs e)
+    private void SendEnemyDie(Vector2 position)
     {
-        // CONNECT TO POSITION
-        au.TriggerFleshHit(transform.position);
+        au.TriggerFleshHit(position);
     }
 
-    private void SendEnemyHit(object sender, System.EventArgs e)
+    private void SendEnemyHit(Vector2 position)
     {
-        // CONNECT TO POSITION
-        au.TriggerArmourHit(transform.position);
+        au.TriggerArmourHit(position);
     }
 
-    private void SendBlockStart(object sender, System.EventArgs e)
+    private void SendBlockStart(Vector2 position)
     {
-        // CONNECT TO POSITION
-        au.TriggerBlockSound(transform.position);
+        au.TriggerBlockSound(position);
     }
 
 
@@ -143,10 +164,10 @@ public class AudioEventsHandler : MonoBehaviour
         au.TriggerSwordSwish(transform.position, AttackType.light);
 
     }
-    private void SendEnemyAttack(object sender, System.EventArgs e)
+    private void SendEnemyAttack(Vector2 position)
     {
         au.TriggerSwordSwish(transform.position, AttackType.light);// todo: update with enemy pos
-        au.TriggerEnemyAttackSound(transform.position);
+        au.TriggerEnemyAttackSound(position);
     }
 
     private void SwitchMusic(int trackIndex)
@@ -171,14 +192,6 @@ public class AudioEventsHandler : MonoBehaviour
     {
         au.TriggerPlayerJump();
     }
-
-
-
-
-
-
-
-
 
     private void OnDestroy()
     {

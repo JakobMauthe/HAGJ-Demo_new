@@ -20,7 +20,7 @@ public class MusicSwitch : MonoBehaviour
         }
 
 
-        Debug.Log("MUSIC: Crossfading from track #" + currentMusicTrack + " to #" + trackIndex);
+        //Debug.Log("MUSIC: Crossfading from track #" + currentMusicTrack + " to #" + trackIndex);
         if (trackIndex == currentMusicTrack) return;
 
         for (int i = 0; i < tracks.Length; ++i)

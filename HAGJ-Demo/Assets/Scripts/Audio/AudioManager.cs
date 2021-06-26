@@ -7,7 +7,7 @@ public class AudioManager : MonoBehaviour
     private static AudioManager _instance;
     public static AudioManager Instance { get { return _instance; } }
 
-    public GameObject listener;
+    public AudioListener listener;
     public PlayerController player;
 
     [Header("Music")]
@@ -52,10 +52,29 @@ public class AudioManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
+
+
     void Start()
     {
-        if (!listener) listener = Camera.main.gameObject;
+
         if (!player) player = PlayerController.Instance;
+
+        // If the scene contains a player character, make sure it's the only listener in the scene, otherwise defaults to main camera.
+        if (player)
+        {
+            if (Camera.main.GetComponent<AudioListener>())
+            {
+                Camera.main.GetComponent<AudioListener>().enabled = false;
+            }
+            listener = player.GetComponent<AudioListener>();
+        } 
+        else
+        {
+            listener = Camera.main.GetComponent<AudioListener>();
+        }
+
+       
+       
 
         UpdateVolumes();
 
@@ -76,10 +95,11 @@ public class AudioManager : MonoBehaviour
     }
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Backslash))
+        if (player)
         {
-            TriggerEnemyChargeSound(transform.position);
+            transform.position = listener.transform.position;
         }
+        else transform.position = Camera.main.transform.position;
     }
 
     #region Trigger Audio
@@ -123,7 +143,6 @@ public class AudioManager : MonoBehaviour
 
     private void CreateOneShotSoundObject(GameObject obj, Vector2 position, float volMin, float volMax, float pitchMin, float pitchMax)
     {
-        Debug.Log("AUDIO: Creating a oneshot sound object of type " + obj.name + " at position " + position);
         var newObj = Instantiate(obj, position, Quaternion.identity);
         newObj.transform.parent = oneshotContainer.transform;
 
@@ -137,10 +156,8 @@ public class AudioManager : MonoBehaviour
     {
         
         float duration = clip.length / pitch;
-        Debug.Log("AUDIO: Destroying oneshot sound object " + obj.name + " after " + duration + "s.");
         yield return new WaitForSeconds(duration);        
         Destroy(obj);
-        Debug.Log("AUDIO: " + obj.name + " destroyed.");
     }
 
     public void TriggerEnemyAttackSound(Vector2 position)
@@ -171,7 +188,7 @@ public class AudioManager : MonoBehaviour
     /* BLOCK */
     public void TriggerBlockSound(Vector2 position)
     {
-        CreateOneShotSoundObject(swordOnFlesh, position, -9, 0, 0.9f, 1.1f);
+        CreateOneShotSoundObject(swordClash, position, -9, 0, 0.9f, 1.1f);
         //swordClash.PlayRandom(-9, 0, 0.9f, 1.1f);
     }
 

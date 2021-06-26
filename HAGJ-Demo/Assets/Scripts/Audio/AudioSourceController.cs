@@ -166,7 +166,7 @@ public class AudioSourceController : MonoBehaviour
 
     public bool CheckIfAudible()
     {
-        GameObject listener = AudioManager.Instance.listener;
+        var listener = AudioManager.Instance.listener;
         float distance = Vector3.Distance(transform.position, listener.transform.position);
         if (distance > audioSource.maxDistance) return false;
         else return true;
