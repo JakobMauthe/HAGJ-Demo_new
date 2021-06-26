@@ -186,14 +186,6 @@ PrefabInstance:
       propertyPath: staminaBar
       value: 
       objectReference: {fileID: 1576564891}
-    - target: {fileID: 2623291874995013685, guid: 34ef35c5b8deb064eb899a90667862fd, type: 3}
-      propertyPath: attackHeavyStaminaCost
-      value: 25
-      objectReference: {fileID: 0}
-    - target: {fileID: 2623291874995013685, guid: 34ef35c5b8deb064eb899a90667862fd, type: 3}
-      propertyPath: attackLittleStaminaCost
-      value: 10
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 34ef35c5b8deb064eb899a90667862fd, type: 3}
 --- !u!1 &169143224

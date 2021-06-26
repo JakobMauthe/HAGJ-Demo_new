@@ -94,6 +94,7 @@ GameObject:
   - component: {fileID: 2623291874995013643}
   - component: {fileID: 2623291874995013642}
   - component: {fileID: 2623291874995013685}
+  - component: {fileID: 6163113409229656927}
   m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
@@ -185,11 +186,19 @@ MonoBehaviour:
     m_Bits: 128
   blockingTime: 1
   attackLittleDamage: 15
-  attackLittleStaminaCost: 1
+  attackLittleStaminaCost: 10
   attackLittleRange: 0.5
   attackHeavyDamage: 40
-  attackHeavyStaminaCost: 1
+  attackHeavyStaminaCost: 25
   attackHeavyRange: 2
+--- !u!81 &6163113409229656927
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2623291874995013644}
+  m_Enabled: 1
 --- !u!1 &2623291874998387045
 GameObject:
   m_ObjectHideFlags: 0
