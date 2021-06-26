@@ -114,36 +114,39 @@ public class AudioEventsHandler : MonoBehaviour
 
     private void SendEnemyDie(object sender, System.EventArgs e)
     {
-        au.TriggerFleshHit();
+        // CONNECT TO POSITION
+        au.TriggerFleshHit(transform.position);
     }
 
     private void SendEnemyHit(object sender, System.EventArgs e)
     {
-        au.TriggerArmourHit();
+        // CONNECT TO POSITION
+        au.TriggerArmourHit(transform.position);
     }
 
     private void SendBlockStart(object sender, System.EventArgs e)
     {
-        au.TriggerBlockSound();
+        // CONNECT TO POSITION
+        au.TriggerBlockSound(transform.position);
     }
 
 
     private void SendPlayerHeavyAttack(object sender, System.EventArgs e)
     {
         AudioManager.Instance.TriggerPlayerAttackAudio(AttackType.heavy);
-        au.TriggerSwordSwish(AttackType.heavy);
-
+        au.TriggerSwordSwish(transform.position, AttackType.heavy);
     }
 
     private void SendPlayerLittleAttack(object sender, System.EventArgs e)
     {
         AudioManager.Instance.TriggerPlayerAttackAudio(AttackType.light);
-        au.TriggerSwordSwish(AttackType.light);
+        au.TriggerSwordSwish(transform.position, AttackType.light);
 
     }
     private void SendEnemyAttack(object sender, System.EventArgs e)
     {
-        au.TriggerSwordSwish(AttackType.light);
+        au.TriggerSwordSwish(transform.position, AttackType.light);// todo: update with enemy pos
+        au.TriggerEnemyAttackSound(transform.position);
     }
 
     private void SwitchMusic(int trackIndex)
@@ -155,13 +158,13 @@ public class AudioEventsHandler : MonoBehaviour
     private void SendPlayerDeath(object sender, System.EventArgs e)
     {
         au.TriggerPlayerDeathSound();
-        au.TriggerFleshHit();
+        au.TriggerFleshHit(transform.position);
     }
 
     private void SendPlayerHit(object sender, System.EventArgs e)
     {
         au.TriggerPlayerTakesDamageSound(10);
-        au.TriggerArmourHit();
+        au.TriggerArmourHit(transform.position);
     }
 
     private void SendJump(object sender, System.EventArgs e)

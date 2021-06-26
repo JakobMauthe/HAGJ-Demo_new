@@ -82,16 +82,6 @@ public class AudioSourceController : MonoBehaviour
         audioSource.pitch = pitch;
         faderVolume = startingVolume;
 
-    }
-
-    private void Start()
-    {
-        Initialise();
-        
-    }
-
-    private void Initialise()
-    {
         // Chooses/plays clips as set.
         if (playlist.Count == 0)
         {
@@ -110,6 +100,18 @@ public class AudioSourceController : MonoBehaviour
         else
             audioSource.clip = playlist[0];
 
+
+    }
+
+    private void Start()
+    {
+        Initialise();
+        
+    }
+
+    private void Initialise()
+    {
+        
         if (enableAudibilityCheck)
             StartCoroutine(CheckAudibility(1));
         else
@@ -184,29 +186,6 @@ public class AudioSourceController : MonoBehaviour
         
     }
 
-    public void PlayRandom()
-    {
-        StopLooping(0);
-        audioSource.clip = AudioUtility.RandomClipFromList(playlist);
-        audioSource.Play();        
-    }
-    /// <summary>
-    /// Plays one of the clips in the Playlist list at random.
-    /// </summary>
-    /// <param name="volRand">Volume randomisation range in decibels. Offset by input gain.</param>
-    /// <param name="pitchRand">Pitch randomisation range.</param>
-    public void PlayRandom(float volRand, float pitchRand)
-    {
-        float vol = Random.Range(-volRand, volRand);
-        FadeTo(vol, 0, 0.5f, false);
-
-        pitch = 1.0f + Random.Range(-pitchRand, pitchRand);
-        audioSource.pitch = pitch;
-
-        StopLooping(0);
-        audioSource.clip = AudioUtility.RandomClipFromList(playlist);
-        audioSource.Play();
-    }
     /// <summary>
     /// Plays one of the clips in the Playlist list at random.
     /// </summary>
@@ -218,11 +197,16 @@ public class AudioSourceController : MonoBehaviour
     {
         float vol = Random.Range(volMin, volMax);
         FadeTo(vol, 0, 0.5f, false);
+
         pitch = Random.Range(pitchMin, pitchMax);
         audioSource.pitch = pitch;
 
         StopLooping(0);
-        audioSource.clip = AudioUtility.RandomClipFromList(playlist);
+
+        var randomClip = AudioUtility.RandomClipFromList(playlist);
+        audioSource.clip = randomClip;
+        Debug.Log("new clip: " + randomClip + ". audiosource clip: " + audioSource.clip.name );
+
         audioSource.Play();
     }
 

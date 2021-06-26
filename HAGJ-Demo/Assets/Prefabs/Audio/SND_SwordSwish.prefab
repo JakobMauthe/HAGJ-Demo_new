@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &934263463992516895
+--- !u!1 &8239839724683965643
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,45 +8,44 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 934263463992516892}
-  - component: {fileID: 934263463992516893}
-  - component: {fileID: 934263463992516894}
-  - component: {fileID: 934263463992516883}
+  - component: {fileID: 4987461429045912511}
+  - component: {fileID: 7179908579798013782}
+  - component: {fileID: 7123402459133576839}
   m_Layer: 0
-  m_Name: SND_BrownWind
+  m_Name: SND_SwordSwish
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &934263463992516892
+--- !u!4 &4987461429045912511
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 934263463992516895}
+  m_GameObject: {fileID: 8239839724683965643}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 26.086927, y: -2.9168222, z: -0.3759258}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!82 &934263463992516893
+--- !u!82 &7179908579798013782
 AudioSource:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 934263463992516895}
+  m_GameObject: {fileID: 8239839724683965643}
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: 87d9b17fa83f4304886f22648c89be7c, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
-  m_Pitch: 1
+  m_Pitch: 1.135715
   Loop: 0
   Mute: 0
   Spatialize: 0
@@ -129,31 +128,33 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &934263463992516894
+--- !u!114 &7123402459133576839
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 934263463992516895}
+  m_GameObject: {fileID: 8239839724683965643}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 19bb93859a1280a459df618e0797ccb8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  audioSource: {fileID: 934263463992516893}
-  outputGain: -24
+  audioSource: {fileID: 7179908579798013782}
+  outputGain: 0
   inputGain: 0
-  startingVolume: -32
+  startingVolume: 0
   FadeInOnAwakeTime: 0
   faderVolume: 0
   isFading: 0
   currentFadeTarget: 0
   currentFadeTime: 0
   playlist:
-  - {fileID: 8300000, guid: 83b7f0a7fa0a93745b001764a1be05cc, type: 3}
-  playOnAwake: 1
-  loopClips: 1
+  - {fileID: 8300000, guid: 46a92d5657c53504ab3b6d6829363948, type: 3}
+  - {fileID: 8300000, guid: b6e0ef950a703e8478e0dedbd7545cc6, type: 3}
+  - {fileID: 8300000, guid: 87d9b17fa83f4304886f22648c89be7c, type: 3}
+  playOnAwake: 0
+  loopClips: 0
   newClipPerPlay: 0
   intervalBetweenPlays: 0
   intervalRand: 0
@@ -161,18 +162,3 @@ MonoBehaviour:
   pitchRand: 0
   looperIsLooping: 0
   enableAudibilityCheck: 0
---- !u!114 &934263463992516883
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 934263463992516895}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 58b3719a8aaa2a84c91aa764f2714c47, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  volumeJitter: 24
-  panJitter: 0.5
-  jitterSpeed: 0.2

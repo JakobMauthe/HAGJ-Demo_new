@@ -26,10 +26,17 @@ public class AudioManager : MonoBehaviour
     [SerializeField, Range(-81, 24)] float playerVolume;
     public AudioSourceController playerJumpGrunt, playerDamageGrunt, playerDieGroan, playerAttackGrunt, playerStaminaBreath, playerHealthHeartbeat;
 
-    [Header("Other")]
+    [Header("Enemy")]
+
+
+    [Header("Oneshot Sounds")]
+    private GameObject oneshotContainer;
     [SerializeField, Range(-81, 24)] float swordVolume;
-    public AudioSourceController swordSwish,swordClash,swordOnArmour, swordOnFlesh;
-    
+    public GameObject swordSwish, swordClash, swordOnArmour, swordOnFlesh;
+    [SerializeField, Range(-81, 24)] float enemyVolume;
+    public GameObject enemyAttackGrunt, enemyChargeGrunt;
+
+
     // private:
     private bool hasInitialised = false;
 
@@ -51,6 +58,10 @@ public class AudioManager : MonoBehaviour
         if (!player) player = PlayerController.Instance;
 
         UpdateVolumes();
+
+        oneshotContainer = new GameObject();
+        oneshotContainer.name = "OneShot Sounds";
+        oneshotContainer.transform.parent = gameObject.transform;
     }
 
     private void OnValidate()
@@ -63,17 +74,15 @@ public class AudioManager : MonoBehaviour
         }
        
     }
-
-    void Update()
+    private void Update()
     {
-
-
-        /*   FOR TESTING ONLY    */
-        
+        if (Input.GetKeyDown(KeyCode.Backslash))
+        {
+            TriggerEnemyChargeSound(transform.position);
+        }
     }
-    #region Player Audio
 
-
+    #region Trigger Audio
     /* MOVE */
 
     public void TriggerPlayerWalk()
@@ -98,35 +107,72 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    public void TriggerSwordSwish(AttackType attackType)
+    public void TriggerSwordSwish(Vector2 position, AttackType attackType)
     {
         if (attackType == AttackType.light)
         {
-            swordSwish.PlayRandom(-6, 0, 0.9f, 1.2f);
+            CreateOneShotSoundObject(swordSwish, position, -6, 0, 0.9f, 1.2f);
+            //swordSwish.PlayRandom(-6, 0, 0.9f, 1.2f);
         }
         else if (attackType == AttackType.heavy)
         {
-            swordSwish.PlayRandom(-3, 0, 0.75f, 0.95f);
-
-
+            CreateOneShotSoundObject(swordSwish, position, -3, 0, 0.75f, 0.95f);
+            //swordSwish.PlayRandom();
         }
     }
 
+    private void CreateOneShotSoundObject(GameObject obj, Vector2 position, float volMin, float volMax, float pitchMin, float pitchMax)
+    {
+        Debug.Log("AUDIO: Creating a oneshot sound object of type " + obj.name + " at position " + position);
+        var newObj = Instantiate(obj, position, Quaternion.identity);
+        newObj.transform.parent = oneshotContainer.transform;
+
+        var asc = newObj.GetComponent<AudioSourceController>();
+        asc.PlayRandom(volMin, volMax, pitchMin, pitchMax);
+
+        StartCoroutine(WaitThenDestroy(newObj, asc.audioSource.clip, asc.pitch));
+
+    }
+    IEnumerator WaitThenDestroy(GameObject obj, AudioClip clip, float pitch)
+    {
+        
+        float duration = clip.length / pitch;
+        Debug.Log("AUDIO: Destroying oneshot sound object " + obj.name + " after " + duration + "s.");
+        yield return new WaitForSeconds(duration);        
+        Destroy(obj);
+        Debug.Log("AUDIO: " + obj.name + " destroyed.");
+    }
+
+    public void TriggerEnemyAttackSound(Vector2 position)
+    {
+        CreateOneShotSoundObject(enemyAttackGrunt, position, -3, 3, 0.9f, 1f);
+        //enemyAttackGrunt.PlayRandom(-3, 3, 0.9f, 1f);
+    }
+    public void TriggerEnemyChargeSound(Vector2 position)
+    {
+        CreateOneShotSoundObject(enemyChargeGrunt, position, -6, 0, 0.9f, 1f);
+        //enemyChargeGrunt.PlayRandom(-6, 0, 0.9f, 1f);
+    }
+
+
     /* ENEMY HIT */
     // regular hit => armour; killing blow => flesh.
-    public void TriggerArmourHit()
+    public void TriggerArmourHit(Vector2 position)
     {
-        swordOnArmour.PlayRandom(-3, 3, 0.8f, 1.2f);
+        CreateOneShotSoundObject(swordOnArmour, position, -3, 3, 0.8f, 1.2f);
+        //swordOnArmour.PlayRandom(-3, 3, 0.8f, 1.2f);
     }
-    public void TriggerFleshHit()
+    public void TriggerFleshHit(Vector2 position)
     {
-        swordOnFlesh.PlayRandom(-3, 0, 0.9f, 1.1f);
+        CreateOneShotSoundObject(swordOnFlesh, position, -3, 0, 0.9f, 1.1f);
+        //swordOnFlesh.PlayRandom(-3, 0, 0.9f, 1.1f);
     }
 
     /* BLOCK */
-    public void TriggerBlockSound()
+    public void TriggerBlockSound(Vector2 position)
     {
-        swordClash.PlayRandom(-9, 0, 0.9f, 1.1f);
+        CreateOneShotSoundObject(swordOnFlesh, position, -9, 0, 0.9f, 1.1f);
+        //swordClash.PlayRandom(-9, 0, 0.9f, 1.1f);
     }
 
 
@@ -213,11 +259,14 @@ public class AudioManager : MonoBehaviour
         playerStaminaBreath.SetInputGain(playerVolume);
         playerJumpGrunt.SetInputGain(playerVolume);
 
+        enemyAttackGrunt.GetComponent<AudioSourceController>().SetInputGain(enemyVolume);
+        enemyChargeGrunt.GetComponent<AudioSourceController>().SetInputGain(enemyVolume);
+
         //Sword
-        swordSwish.SetInputGain(swordVolume);
-        swordOnArmour.SetInputGain(swordVolume);
-        swordOnFlesh.SetInputGain(swordVolume);
-        swordClash.SetInputGain(swordVolume);
+        swordSwish.GetComponent<AudioSourceController>().SetInputGain(swordVolume);
+        swordOnArmour.GetComponent<AudioSourceController>().SetInputGain(swordVolume);
+        swordOnFlesh.GetComponent<AudioSourceController>().SetInputGain(swordVolume);
+        swordClash.GetComponent<AudioSourceController>().SetInputGain(swordVolume);
 
 
     }
