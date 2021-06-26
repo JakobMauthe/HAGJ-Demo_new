@@ -657,7 +657,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   audioSource: {fileID: 4612853344943512086}
-  outputGain: -27.7
+  outputGain: -2.9
   inputGain: 0
   startingVolume: -47.2
   FadeInOnAwakeTime: 0
@@ -727,19 +727,19 @@ MonoBehaviour:
   player: {fileID: 0}
   musicSwitch: {fileID: 5551191770399878304}
   shuffler: {fileID: 368038528}
-  musicVolume: -81
+  musicVolume: -9
   switchKey: 120
   currentTrackIndex: -1
-  environmentVolume: -81
+  environmentVolume: 0
   environmentObjects: []
-  playerVolume: -1
+  playerVolume: 0
   playerJumpGrunt: {fileID: 5551191770463625658}
   playerDamageGrunt: {fileID: 5551191769939293405}
   playerDieGroan: {fileID: 5551191769491970159}
   playerAttackGrunt: {fileID: 2958980472886951790}
   playerStaminaBreath: {fileID: 226414412}
   playerHealthHeartbeat: {fileID: 2032831531}
-  swordVolume: 0
+  swordVolume: -3
   swordSwish: {fileID: 8239839724683965643, guid: b431845c2fafb7944a19ac3785b82662, type: 3}
   swordClash: {fileID: 8687748497996848797, guid: 972efdc27d7bf314a9d55755da438271, type: 3}
   swordOnArmour: {fileID: 8075103072590092030, guid: ca9c23cc3b472c147876376d26e3c092, type: 3}

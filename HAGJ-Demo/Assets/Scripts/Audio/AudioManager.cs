@@ -15,27 +15,16 @@ public class AudioManager : MonoBehaviour
     public MusicShuffler shuffler;
     [SerializeField, Range(-81, 24)] float musicVolume;
     GameObject[] musicObjects;
-    public KeyCode switchKey = KeyCode.X;
-    public int currentTrackIndex = -1;
 
     [Header("Environment")]
     [SerializeField, Range(-81, 24)] float environmentVolume;
     public GameObject[] environmentObjects;
 
-    [Header("Player")]
+    [Header("Audio Objects")]
     [SerializeField, Range(-81, 24)] float playerVolume;
     public AudioSourceController playerJumpGrunt, playerDamageGrunt, playerDieGroan, playerAttackGrunt, playerStaminaBreath, playerHealthHeartbeat;
-
-    [Header("Enemy")]
-
-
-    [Header("Oneshot Sounds")]
+    public GameObject swordSwish, swordClash, swordOnArmour, swordOnFlesh, enemyAttackGrunt, enemyChargeGrunt;
     private GameObject oneshotContainer;
-    [SerializeField, Range(-81, 24)] float swordVolume;
-    public GameObject swordSwish, swordClash, swordOnArmour, swordOnFlesh;
-    [SerializeField, Range(-81, 24)] float enemyVolume;
-    public GameObject enemyAttackGrunt, enemyChargeGrunt;
-
 
     // private:
     private bool hasInitialised = false;
@@ -275,17 +264,6 @@ public class AudioManager : MonoBehaviour
         playerHealthHeartbeat.SetInputGain(playerVolume);
         playerStaminaBreath.SetInputGain(playerVolume);
         playerJumpGrunt.SetInputGain(playerVolume);
-
-        enemyAttackGrunt.GetComponent<AudioSourceController>().SetInputGain(enemyVolume);
-        enemyChargeGrunt.GetComponent<AudioSourceController>().SetInputGain(enemyVolume);
-
-        //Sword
-        swordSwish.GetComponent<AudioSourceController>().SetInputGain(swordVolume);
-        swordOnArmour.GetComponent<AudioSourceController>().SetInputGain(swordVolume);
-        swordOnFlesh.GetComponent<AudioSourceController>().SetInputGain(swordVolume);
-        swordClash.GetComponent<AudioSourceController>().SetInputGain(swordVolume);
-
-
     }
 
 

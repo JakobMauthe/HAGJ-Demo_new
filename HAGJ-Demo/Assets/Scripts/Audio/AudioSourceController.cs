@@ -205,8 +205,7 @@ public class AudioSourceController : MonoBehaviour
 
         var randomClip = AudioUtility.RandomClipFromList(playlist);
         audioSource.clip = randomClip;
-        Debug.Log("new clip: " + randomClip + ". audiosource clip: " + audioSource.clip.name );
-
+        
         audioSource.Play();
     }
 
