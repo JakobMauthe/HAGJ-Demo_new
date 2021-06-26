@@ -115,7 +115,13 @@ public class PlayerController : PhysicsObject {
             //not enough stamina; maybe play sound or higlight staminabar
             return;
         }
-        animator.SetTrigger("Attack2"); 
+        int randomAttack = UnityEngine.Random.Range(0, 2);
+        if (randomAttack == 0) {
+            animator.SetTrigger("Attack1");
+        }
+        else {
+            animator.SetTrigger("Attack2");
+        }
         UseStamina(attackLittleStaminaCost);        
     }
 
@@ -174,6 +180,10 @@ public class PlayerController : PhysicsObject {
         Gizmos.DrawWireSphere(attackPoint.position, attackHeavyRange);
     }
 
+    protected override void SetGroundedForAnimation(bool groundedForAnimation) {
+        animator.SetBool("grounded", groundedForAnimation);
+    }
+
     protected override void ComputeVelocity() {        
                 
         Vector2 move = Vector2.zero;
@@ -186,6 +196,7 @@ public class PlayerController : PhysicsObject {
         if (Input.GetButtonDown("Jump") && grounded) {
             if (currentStamina > 10) {
                 velocity.y = jumpTakeOffSpeed;
+                animator.SetTrigger("Jump");
                 EventManager.Instance.NotifyOfOnJumpInitiated(this);
                 UseStamina(attackLittleStaminaCost);
 
