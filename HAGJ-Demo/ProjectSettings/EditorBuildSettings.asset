@@ -13,5 +13,20 @@ EditorBuildSettings:
     guid: 99c76acf02ac10e4f8172fbb78abe4b7
   - enabled: 1
     path: Assets/Scenes/TestingLevel.unity
-    guid: ca85fe8a637655d418e7db8961c20822
+    guid: d75327718047e12458eac99ecbc444dc
+  - enabled: 1
+    path: Assets/Scenes/Intro.unity
+    guid: f7131a309f9ffee4a9c80917bc1cc697
+  - enabled: 1
+    path: Assets/Scenes/Level1.unity
+    guid: a87a16b8c9293ae49acd714ffefba7b8
+  - enabled: 0
+    path: Assets/Scenes/TestingLevel (Audio) 25-6 2.unity
+    guid: 30c65808afa861d41b4e570b4ade6014
+  - enabled: 0
+    path: 
+    guid: 12f7afc7e3ab98749921d2a51406b3f3
+  - enabled: 0
+    path: 
+    guid: fedd3d34339e9644589811194e793c22
   m_configObjects: {}

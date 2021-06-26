@@ -148,10 +148,9 @@ public class PlayerController : PhysicsObject {
         }
     }
 
-    private void Blocked_OnBlockInitiated(object sender, EventArgs e) {
+    private void Blocked_OnBlockInitiated(Vector2 somePositionIdontNeed) {
         animator.SetTrigger("Blocked");
     }
-
 
     void UseStamina(int amount) {
         if (amount <= currentStamina) {

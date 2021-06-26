@@ -10,6 +10,8 @@ public static class Loader {
         MainMenu,
         Loading,
         TestingLevel,
+        Intro,
+        Level1,
     }
 
     private static Action onLoaderCallback;
