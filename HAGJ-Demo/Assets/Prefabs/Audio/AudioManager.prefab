@@ -141,7 +141,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   audioSource: {fileID: 0}
-  outputGain: -6
+  outputGain: 0
   inputGain: 0
   startingVolume: -81
   FadeInOnAwakeTime: 0
@@ -728,7 +728,7 @@ MonoBehaviour:
   musicSwitch: {fileID: 5551191770399878304}
   shuffler: {fileID: 368038528}
   musicVolume: -9
-  environmentVolume: 0
+  environmentVolume: -6
   environmentObjects: []
   playerVolume: 0
   playerJumpGrunt: {fileID: 5551191770463625658}
