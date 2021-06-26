@@ -79,16 +79,19 @@ public class AudioEventsHandler : MonoBehaviour
         currentScene = newScene;
         string sceneName = newScene.name;
 
+        au.StopHeartbeat(); // if we have more levels, remove this
 
         if (sceneName.StartsWith(Loader.Scene.MainMenu.ToString()))
         {
             
             SwitchMusic(0);
             shuffler.StopShuffling();
+
             for (int i = 0; i < au.environmentObjects.Length; ++i)
             {                
                 au.environmentObjects[i].GetComponent<AudioSourceController>().FadeTo(AudioUtility.minimum, 3, 0.5f, true);
             }
+         
 
         }
         else if (sceneName.StartsWith(Loader.Scene.Loading.ToString()))
@@ -109,10 +112,6 @@ public class AudioEventsHandler : MonoBehaviour
                 au.introFireCrackle[i].PlayLoop();
                 au.introFireCrackle[i].FadeTo(0, 1, 0.5f, false);
             }
-
-            
-
-
         }
         else if (sceneName.StartsWith(Loader.Scene.Level1.ToString()) || sceneName.StartsWith(Loader.Scene.TestingLevel.ToString()))
         {
