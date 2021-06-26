@@ -178,7 +178,7 @@ public class AudioEventsHandler : MonoBehaviour
 
 
 
-    private void OnDisable()
+    private void OnDestroy()
     {
         ev.OnJumpInitiated -= SendJump;
         ev.OnPlayerGetsHit -= SendPlayerHit;

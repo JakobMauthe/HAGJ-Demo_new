@@ -70,7 +70,7 @@ public class BasicEnemyController : PhysicsObject {
         currentHealth = startHealth;
         healthBar.SetMaxHealth(startHealth);
         state = State.Patrol;
-        EventManager.Instance.OnEnemyAttack += EnemyAttack_OnEnemyAttackInitiated;
+        EventManager.Instance.OnEnemyAttack += EnemyAttack_OnEnemyAttackInitiated;  
     }
 
     private void OnDestroy() {
@@ -80,6 +80,7 @@ public class BasicEnemyController : PhysicsObject {
     private void FindTarget() {
         if (Vector3.Distance(transform.position, PlayerController.Instance.transform.position) < targetChaseRange) {
             state = State.ChaseTarget;
+            EventManager.Instance.NotifyOfOnEnemyStartChase(new Vector2 (transform.position.x, transform.position.y));
         }
     }
 
@@ -151,14 +152,14 @@ public class BasicEnemyController : PhysicsObject {
         
     }
 
-    private void EnemyAttack_OnEnemyAttackInitiated(object sender, EventArgs e) {
+    private void EnemyAttack_OnEnemyAttackInitiated(Vector2 somePositionWhichVariableIsNotUsed) {
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, playerLayer);
         foreach (Collider2D enemy in hitEnemies) {
             PlayerController playerController = enemy.GetComponent < PlayerController>();
             if (playerController.IsBlocking) {
                 state = State.Blocked;
                 animator.SetTrigger("Blocked");
-                EventManager.Instance.NotifyOfOnBlockInitiated(this);
+                EventManager.Instance.NotifyOfOnBlockInitiated(new Vector2(transform.position.x, transform.position.y));
                 notBlockedTime = Time.time + blockedDuration;
             }
             else {
@@ -215,7 +216,7 @@ public class BasicEnemyController : PhysicsObject {
         } 
         else {
             currentHealth -= damage;
-            EventManager.Instance.NotifyOfOnEnemyGetsHit(this);
+            EventManager.Instance.NotifyOfOnEnemyGetsHit(new Vector2(transform.position.x, transform.position.y));
             animator.SetTrigger("Hurt"); //Play EenemyHurtAnimation
             notHurtTime = Time.time + 0.5f;
             state = State.Hurt;
@@ -224,7 +225,7 @@ public class BasicEnemyController : PhysicsObject {
     }
 
     public void Die() {
-        EventManager.Instance.NotifyOfOnEnemyDie(this);
+        EventManager.Instance.NotifyOfOnEnemyDie(new Vector2(transform.position.x, transform.position.y));
         //Play Deathanimation
         //Instantiate dead body
         Destroy(gameObject);
