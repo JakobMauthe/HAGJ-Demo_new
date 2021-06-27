@@ -5,6 +5,13 @@ using UnityEngine;
 
 public class PlayerController : PhysicsObject {
 
+    public enum State {
+        Alive,
+        Dead,
+    }
+
+    private State state;
+
     public Animator animator;
 
     //Health and Stamina
@@ -78,6 +85,7 @@ public class PlayerController : PhysicsObject {
         staminaBar.SetMaxStamina(maxStamina);
         isBlocking = false;
         lowStamina = lowHealth = false;
+        state = State.Alive;
 
         EventManager.Instance.OnPlayerLittleAttack += LittleAttack_OnLittleAtackInitiated;
         EventManager.Instance.OnPlayerHeavyAttack += HeavyAttack_OnHeavyAtackInitiated;
@@ -95,6 +103,9 @@ public class PlayerController : PhysicsObject {
     public override void Update() {
         base.Update();
         animator.SetFloat("MovementSpeed", Mathf.Abs(velocity.x));
+        if (state == State.Dead) {
+            return;
+        }
        
         if (Input.GetMouseButtonDown(0)&& !PauseMenu.gameIsPaused) {
             LittleAttack();
@@ -183,8 +194,11 @@ public class PlayerController : PhysicsObject {
         animator.SetBool("grounded", groundedForAnimation);
     }
 
-    protected override void ComputeVelocity() {        
-                
+    protected override void ComputeVelocity() {
+        if (state == State.Dead) {
+            return;
+        }
+        
         Vector2 move = Vector2.zero;
         move.x = Input.GetAxis("Horizontal");
 
@@ -223,8 +237,12 @@ public class PlayerController : PhysicsObject {
     }
     public void TakeDamage(float damage) {
         if (damage >= currentHealth) {
-            EventManager.Instance.NotifyOfOnPlayerDeath(this);
-            GameManager.PlayerDied();
+            if(state != State.Dead) {
+                state = State.Dead;
+                EventManager.Instance.NotifyOfOnPlayerDeath(this);
+                EventManager.Instance.NotifyOfOnHealthNotLow(this);
+                GameManager.PlayerDied();               
+            }            
         }
         else {
             currentHealth -= damage;
