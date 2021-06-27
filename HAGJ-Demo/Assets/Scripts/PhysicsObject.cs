@@ -32,6 +32,7 @@ public class PhysicsObject : MonoBehaviour {
         velocity.x = targetVelocity.x;
 
         grounded = false;
+        SetGroundedForAnimation(grounded);
 
         Vector2 deltaPosition = velocity * Time.deltaTime;
 
@@ -55,6 +56,10 @@ public class PhysicsObject : MonoBehaviour {
 
     }
 
+    protected virtual void SetGroundedForAnimation(bool groundedForAnimation) {
+
+    }
+
     void Movement(Vector2 move, bool yMovement) {
         float distance = move.magnitude;
         if (distance > minMoveDistance) {
@@ -67,6 +72,7 @@ public class PhysicsObject : MonoBehaviour {
                 Vector2 currentNormal = hitBufferList[i].normal;
                 if (currentNormal.y > minGroundNormalY) {
                     grounded = true;
+                    SetGroundedForAnimation(grounded);
                     if (yMovement) {
                         groundNormal = currentNormal;
                         currentNormal.x = 0;

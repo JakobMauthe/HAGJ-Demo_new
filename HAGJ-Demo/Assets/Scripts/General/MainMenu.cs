@@ -5,8 +5,7 @@ using UnityEngine;
 public class MainMenu : MonoBehaviour {
 
     public void PlayGame() {
-        //levelLoader.LoadSpecificLevel(2);
-        Debug.Log("No level 1 yet!");
+        Loader.Load(Loader.Scene.Intro);
     }
     public void TestLevel() {
         Loader.Load(Loader.Scene.TestingLevel);

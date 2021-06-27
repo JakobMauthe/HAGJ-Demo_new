@@ -5,8 +5,8 @@ public class UIManager : MonoBehaviour {
 	static UIManager current;
 	
 	public GameObject gameOverUI;    // Game over UI Element
-	public GameObject winUI;		 // Win UI Element
-
+	public GameObject winUI;         // Win UI Element
+	public GameObject lvl1finishUI;  // lvl1 Finish UI Element
 
 	void Awake() {
 		
@@ -26,6 +26,7 @@ public class UIManager : MonoBehaviour {
 	public static void HideAllTexts() {
 		HideGameOverText();
 		HideWinText();
+		HideLevel1FinishText();
 	}
 
 	public static void ShowGameOverText() {
@@ -53,5 +54,19 @@ public class UIManager : MonoBehaviour {
 			return;
 
 		current.winUI.SetActive(false);
+	}
+
+	public static void ShowLevel1FinishText() {
+		if (current == null)
+			return;
+
+		current.lvl1finishUI.SetActive(true);
+	}
+
+	public static void HideLevel1FinishText() {
+		if (current == null)
+			return;
+
+		current.lvl1finishUI.SetActive(false);
 	}
 }

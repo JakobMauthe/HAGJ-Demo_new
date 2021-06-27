@@ -2,6 +2,7 @@
 // Game Manager know
 
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class WinZone : MonoBehaviour {
 	int playerLayer;    //The layer the player game object is on
@@ -17,7 +18,17 @@ public class WinZone : MonoBehaviour {
 		if (collision.gameObject.layer != playerLayer)
 			return;
 
-		//Tell the Game Manager that the player won
-		GameManager.PlayerWon();
+		int currentScene = SceneManager.GetActiveScene().buildIndex;
+
+		//Let GameManager know that player finished Level1 if Active Scene is Level1
+		//Let GameManager know that player won  if Active Scene is Level2
+		if (currentScene == (int) Loader.Scene.Level1) {
+			GameManager.Level1Finished();
+			EventManager.Instance.NotifyOfOnHealthNotLow(this);
+		}
+        else if (currentScene == (int) Loader.Scene.Level2) {
+			GameManager.PlayerWon();
+			EventManager.Instance.NotifyOfOnHealthNotLow(this);
+		}
 	}
 }
