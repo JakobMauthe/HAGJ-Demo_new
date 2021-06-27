@@ -186,10 +186,10 @@ MonoBehaviour:
     m_Bits: 128
   blockingTime: 1
   attackLittleDamage: 15
-  attackLittleStaminaCost: 10
+  attackLittleStaminaCost: 7
   attackLittleRange: 0.5
-  attackHeavyDamage: 40
-  attackHeavyStaminaCost: 25
+  attackHeavyDamage: 22
+  attackHeavyStaminaCost: 15
   attackHeavyRange: 2
 --- !u!81 &6163113409229656927
 AudioListener:

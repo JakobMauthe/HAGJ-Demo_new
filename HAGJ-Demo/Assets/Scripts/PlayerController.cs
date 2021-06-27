@@ -102,15 +102,22 @@ public class PlayerController : PhysicsObject {
 
     public override void Update() {
         base.Update();
+        bool attackAllowed = true;
         animator.SetFloat("MovementSpeed", Mathf.Abs(velocity.x));
         if (state == State.Dead) {
             return;
         }
+        if(animator.GetCurrentAnimatorStateInfo(0).IsName("Player_Atack1") ||
+           animator.GetCurrentAnimatorStateInfo(0).IsName("Player_HeavyAttack") ||
+           animator.GetCurrentAnimatorStateInfo(0).IsName("Player_Atack2")
+           ) {
+            attackAllowed = false;
+        }
        
-        if (Input.GetMouseButtonDown(0)&& !PauseMenu.gameIsPaused) {
+        if (Input.GetMouseButtonDown(0) && !PauseMenu.gameIsPaused && attackAllowed) {
             LittleAttack();
         }
-        if (Input.GetMouseButtonDown(1) && !PauseMenu.gameIsPaused) {
+        if (Input.GetMouseButtonDown(1) && !PauseMenu.gameIsPaused && attackAllowed) {
             HeavyAttack();
         }
         if (Input.GetKeyDown(KeyCode.Q) && !isBlocking) {
