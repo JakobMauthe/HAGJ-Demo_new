@@ -13,12 +13,15 @@ public class BasicEnemyController : PhysicsObject {
         Hurt,
         Guard,
         BackToGuardPosition,
+        Dying,
     }
     private State state;
 
     public bool guardOnly;
 
     public Animator animator;
+
+    public GameObject prefab_DeadBody;
 
     public float startHealth = 100;
     public HealthBar healthBar;
@@ -172,6 +175,8 @@ public class BasicEnemyController : PhysicsObject {
                 }                
                 FindTarget();
                 break;
+            case State.Dying:
+                break;
         }
     }
 
@@ -251,6 +256,7 @@ public class BasicEnemyController : PhysicsObject {
 
     public void TakeDamage(float damage) {
         if (damage >= currentHealth) {
+            state = State.Dying;
             Die();
         } 
         else {
@@ -264,9 +270,25 @@ public class BasicEnemyController : PhysicsObject {
     }
 
     public void Die() {
-        EventManager.Instance.NotifyOfOnEnemyDie(new Vector2(transform.position.x, transform.position.y));
-        //Play Deathanimation
-        //Instantiate dead body
+        animator.SetTrigger("Death");
+        EventManager.Instance.NotifyOfOnEnemyDie(new Vector2(transform.position.x, transform.position.y));        
+        healthBar.gameObject.SetActive(false);
+        Invoke("CreateACorpse", 1f);   //Instantiate dead body after 1 sec
+        Invoke("DestroyGameObject", 1f);  //destroy the GameObject      
+    }
+
+    private void DestroyGameObject() {
         Destroy(gameObject);
+    }
+
+    //Instantiate dead body prefab at position of enemy
+    private void CreateACorpse() {
+        Vector3 corpsePosition = new Vector3(transform.position.x, transform.position.y + 2.4f, 0);
+        if (facingRight) {
+            Instantiate(prefab_DeadBody, corpsePosition, Quaternion.identity);
+        }
+        else {
+            Instantiate(prefab_DeadBody, corpsePosition, Quaternion.Euler(0, 180, 0));
+        }
     }
 }

@@ -427,11 +427,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gravityModifier: 1
   minGroundNormalY: 0.65
+  guardOnly: 0
   animator: {fileID: 7862425348042290795}
+  prefab_DeadBody: {fileID: 3604783572146400149, guid: 267921e9f73090e468d226422716f3a1, type: 3}
   startHealth: 100
   healthBar: {fileID: 7862425347588826859}
   enemyMaxPatrollingSpeed: 1.5
   enemyMaxChasingSpeed: 3
+  patrolToPoint: 10
   targetChaseRange: 10
   attackDamage: 10
   startAttackRange: 2.5

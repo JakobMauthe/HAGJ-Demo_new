@@ -1,7 +1,22 @@
 fileFormatVersion: 2
-guid: cdfd98889608a5044b6cd7f128240604
+guid: 05f38a1210ba4874d8b9a4b45defcfd6
 TextureImporter:
-  internalIDToNameTable: []
+  internalIDToNameTable:
+  - first:
+      213: 1581222142511709092
+    second: Enemy1_Death_0
+  - first:
+      213: -1089089237563844189
+    second: Enemy1_Death_1
+  - first:
+      213: 1781245770804160274
+    second: Enemy1_Death_2
+  - first:
+      213: 2525608054196187081
+    second: Enemy1_Death_3
+  - first:
+      213: 9114707369590701512
+    second: Enemy1_Death_4
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -41,12 +56,12 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 8
+  spritePixelsToUnits: 16
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -103,7 +118,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Enemy1_Attack_0
+      name: Enemy1_Death_0
       rect:
         serializedVersion: 2
         x: 0
@@ -117,14 +132,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 176f64a6bbc7ea7e0800000000000000
-      internalID: -1752326060616780175
+      spriteID: 4ab74633921a1f510800000000000000
+      internalID: 1581222142511709092
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Enemy1_Attack_1
+      name: Enemy1_Death_1
       rect:
         serializedVersion: 2
         x: 128
@@ -138,14 +153,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d5112064095501b60800000000000000
-      internalID: 7714760239823851869
+      spriteID: 3a95e42db17c2e0f0800000000000000
+      internalID: -1089089237563844189
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Enemy1_Attack_2
+      name: Enemy1_Death_2
       rect:
         serializedVersion: 2
         x: 256
@@ -159,14 +174,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: dba28a1fe803389b0800000000000000
-      internalID: -5079162564245968195
+      spriteID: 217e272579148b810800000000000000
+      internalID: 1781245770804160274
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Enemy1_Attack_3
+      name: Enemy1_Death_3
       rect:
         serializedVersion: 2
         x: 384
@@ -180,14 +195,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 72e0893431676a6e0800000000000000
-      internalID: -1826642773741662681
+      spriteID: 9cfaa30e423cc0320800000000000000
+      internalID: 2525608054196187081
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Enemy1_Attack_4
+      name: Enemy1_Death_4
       rect:
         serializedVersion: 2
         x: 512
@@ -201,29 +216,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 557c1922f6bbee200800000000000000
-      internalID: 211312318528735061
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Enemy1_Attack_5
-      rect:
-        serializedVersion: 2
-        x: 640
-        y: 0
-        width: 128
-        height: 128
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 580345738a5e76f00800000000000000
-      internalID: 1110108343815647365
+      spriteID: 8cdb6149f02fd7e70800000000000000
+      internalID: 9114707369590701512
       vertices: []
       indices: 
       edges: []
