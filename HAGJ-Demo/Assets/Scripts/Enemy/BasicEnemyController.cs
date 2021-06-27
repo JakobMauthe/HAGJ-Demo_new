@@ -11,8 +11,12 @@ public class BasicEnemyController : PhysicsObject {
         Attack,
         Blocked,
         Hurt,
+        Guard,
+        BackToGuardPosition,
     }
     private State state;
+
+    public bool guardOnly;
 
     public Animator animator;
 
@@ -29,13 +33,16 @@ public class BasicEnemyController : PhysicsObject {
     public float enemyMaxPatrollingSpeed = 1.5f;
     public float enemyMaxChasingSpeed = 2.5f;
 
+    [SerializeField, Range(-30f, 30f)]
+    float patrolToPoint = 10f;
+
     [SerializeField, Range(1f, 100f)]
     float targetChaseRange = 10f;
 
 
     //attacking
     [SerializeField, Range(0f, 100f)]
-    float attackDamage = 10f;
+    float attackDamage = 15f;
 
     [SerializeField, Range(0.1f, 10f)]
     float startAttackRange = 2f;
@@ -64,13 +71,20 @@ public class BasicEnemyController : PhysicsObject {
    
 
     void OnEnable() {
-        startingPosition = transform.position;
-        toPatrolPosition = GetRandomPatrollingPosition();
-        toPatrolPosition = startingPosition - new Vector3(20f, 0f, 0f); // delete me
+        startingPosition = transform.position;        //setting the StartingPosition
+        toPatrolPosition = startingPosition + new Vector3(patrolToPoint, 0f, 0f); // setting the PatrolPosition
         currentHealth = startHealth;
         healthBar.SetMaxHealth(startHealth);
-        state = State.Patrol;
-        EventManager.Instance.OnEnemyAttack += EnemyAttack_OnEnemyAttackInitiated;  
+        if (guardOnly) {
+            state = State.Guard;
+        }
+        else {
+            state = State.Patrol;
+        }
+    }
+
+    private void Start() {
+        EventManager.Instance.OnEnemyAttack += EnemyAttack_OnEnemyAttackInitiated;
     }
 
     private void OnDestroy() {
@@ -94,15 +108,18 @@ public class BasicEnemyController : PhysicsObject {
     }
 
     protected override void ComputeVelocity() {
+        float reachedPositionDistance = 1f;
         switch (state) {
+            case State.Guard:
+                FindTarget();
+                break;
             case State.Patrol:
                 if (patrolFirstWayActive) {
                     MoveToPatrolPosition();
                 }
                 else if (!patrolFirstWayActive) {
                     MoveToStartingPosition();
-                }
-                float reachedPositionDistance = 1f;
+                }                
                 if (Vector3.Distance(transform.position, toPatrolPosition) < reachedPositionDistance) {
                     patrolFirstWayActive = false;
                 }
@@ -118,7 +135,12 @@ public class BasicEnemyController : PhysicsObject {
                 }
                 MoveToPlayerPosition();
                 if (Vector3.Distance(transform.position, PlayerController.Instance.transform.position) > targetChaseRange) {
-                    state = State.Patrol;
+                    if (guardOnly) {
+                        state = State.BackToGuardPosition;
+                    }
+                    else {
+                        state = State.Patrol;
+                    }
                     break;
                 }
                 break;
@@ -141,6 +163,14 @@ public class BasicEnemyController : PhysicsObject {
                 if (Time.time < notHurtTime) {
                     state = State.ChaseTarget;
                 }
+                break;
+            case State.BackToGuardPosition:                
+                MoveToStartingPosition();
+                if (Vector3.Distance(transform.position, startingPosition) < (reachedPositionDistance)) {
+                    state = State.Guard;
+                    animator.SetFloat("MovementSpeed", 0f);
+                }                
+                FindTarget();
                 break;
         }
     }
@@ -186,12 +216,21 @@ public class BasicEnemyController : PhysicsObject {
         enemyMaxMovementSpeed = enemyMaxPatrollingSpeed;
         animator.SetFloat("MovementSpeed", enemyMaxMovementSpeed);
         Vector2 move = Vector2.zero;
-
-        if (toPatrolPosition.x > startingPosition.x) {
-            move.x = -1f;
+        if (guardOnly) {
+            if (transform.position.x < startingPosition.x) {
+                move.x = 1f;
+            }
+            else {
+                move.x = -1f;
+            }
         }
-        else {
-            move.x = 1f;
+        else { 
+            if (toPatrolPosition.x > startingPosition.x) {
+                move.x = -1f;
+            }
+            else {
+                move.x = 1f;
+            }
         }
         targetVelocity = move * enemyMaxMovementSpeed;
     }
