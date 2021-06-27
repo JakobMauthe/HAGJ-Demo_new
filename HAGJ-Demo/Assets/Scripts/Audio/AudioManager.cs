@@ -237,8 +237,11 @@ public class AudioManager : MonoBehaviour
     }
     public void StopHeartbeat()
     {
-        playerHealthHeartbeat.FadeTo(AudioUtility.minimum, 1, 0.5f, true);
-        isLowHealthAudioPlaying = false;
+        if (isLowHealthAudioPlaying)
+        {
+            playerHealthHeartbeat.FadeTo(AudioUtility.minimum, 1, 0.5f, true);
+            isLowHealthAudioPlaying = false;
+        }        
     }
 
    

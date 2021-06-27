@@ -141,7 +141,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   audioSource: {fileID: 2907557994073261441}
-  outputGain: -3
+  outputGain: -6
   inputGain: -81
   startingVolume: 0
   FadeInOnAwakeTime: 0

@@ -17,22 +17,11 @@ public enum AttackType
 public class AudioEventsHandler : MonoBehaviour
 {
     
-    private static AudioEventsHandler _instance;
-    public static AudioEventsHandler Instance { get { return _instance; } }
-
     private void Awake()
     {
-        if (_instance != null && _instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-
-        _instance = this;
-        DontDestroyOnLoad(gameObject);
         
         au = GetComponent<AudioManager>();
-        currentScene = SceneManager.GetActiveScene();
+        
     }
 
 
@@ -65,6 +54,7 @@ public class AudioEventsHandler : MonoBehaviour
 
         SceneManager.activeSceneChanged += CueMusicByScene;
 
+        currentScene = SceneManager.GetActiveScene();
         CueMusicByScene(currentScene, currentScene);
     }
 
@@ -79,33 +69,47 @@ public class AudioEventsHandler : MonoBehaviour
         currentScene = newScene;
         string sceneName = newScene.name;
 
-        au.StopHeartbeat(); // if we have more levels, remove this
+        
 
-        if (sceneName.StartsWith(Loader.Scene.MainMenu.ToString()))
+        if (sceneName == Loader.Scene.Loading.ToString())
         {
             
+        }
+        else if (sceneName == Loader.Scene.Quote.ToString())
+        {
+            // Opening quote: hildegard cello solo + fire crackle
             SwitchMusic(0);
             shuffler.StopShuffling();
-
-            for (int i = 0; i < au.environmentObjects.Length; ++i)
-            {                
-                au.environmentObjects[i].GetComponent<AudioSourceController>().FadeTo(AudioUtility.minimum, 3, 0.5f, true);
+            
+            for (int i = 0; i < au.introFireCrackle.Length; ++i)
+            {
+                au.introFireCrackle[i].PlayLoop();
+                au.introFireCrackle[i].FadeTo(0, 2, 0.5f, false);
             }
-         
+        }
+        else if (sceneName == Loader.Scene.MainMenu.ToString())
+        {
+            // Main Menu: hildegard cello solo.
+            au.StopHeartbeat();
+            SwitchMusic(0);
+            shuffler.StopShuffling();
 
-        }
-        else if (sceneName.StartsWith(Loader.Scene.Loading.ToString()))
-        {
-            shuffler.StopShuffling();
-            SwitchMusic(0);
-        }
-        else if (sceneName.StartsWith(Loader.Scene.Intro.ToString()))
-        {
-            shuffler.StopShuffling();
-            SwitchMusic(0);
             for (int i = 0; i < au.environmentObjects.Length; ++i)
             {
-                au.environmentObjects[i].GetComponent<AudioSourceController>().FadeTo(-6, 5, 0.5f, false);
+                au.environmentObjects[i].GetComponent<AudioSourceController>().FadeTo(AudioUtility.minimum, 3, 0.5f, true);
+            }
+            for (int i = 0; i < au.introFireCrackle.Length; ++i)
+            {
+                au.introFireCrackle[i].FadeTo(AudioUtility.minimum, 1, 0.5f, false);
+            }
+        }
+        else if (sceneName == Loader.Scene.Intro.ToString())
+        {
+            // Intro text: Fire crackle with a bit of environment
+            SwitchMusic(-1);
+            for (int i = 0; i < au.environmentObjects.Length; ++i)
+            {
+                au.environmentObjects[i].GetComponent<AudioSourceController>().FadeTo(0, 5, 0.5f, false);
             }
             for (int i = 0; i < au.introFireCrackle.Length; ++i)
             {
@@ -113,27 +117,49 @@ public class AudioEventsHandler : MonoBehaviour
                 au.introFireCrackle[i].FadeTo(0, 1, 0.5f, false);
             }
         }
-        else if (sceneName.StartsWith(Loader.Scene.Level1.ToString()) || sceneName.StartsWith(Loader.Scene.TestingLevel.ToString()))
+        else if (sceneName == Loader.Scene.Level1.ToString())
         {
-            shuffler.BeginShuffling(1, 3);
+            // Level 1: Instrumental battle music
+            shuffler.BeginShuffling(2, 3);
+            for (int i = 0; i < au.environmentObjects.Length; ++i)
+            {
+                au.environmentObjects[i].GetComponent<AudioSourceController>().FadeTo(-6, 5, 0.5f, false);
+            }
+            for (int i = 0; i < au.introFireCrackle.Length; ++i)
+            {
+                au.introFireCrackle[i].FadeTo(AudioUtility.minimum, 1, 0.5f, true);
+            }
+        }
+        else if (sceneName == Loader.Scene.Cutscene_lvl1_to_lvl2.ToString())
+        {
+            // Cutscene: open battle music, hold suspense, environment up.
+            shuffler.StopShuffling();
+            SwitchMusic(1);
             for (int i = 0; i < au.environmentObjects.Length; ++i)
             {
                 au.environmentObjects[i].GetComponent<AudioSourceController>().FadeTo(0, 5, 0.5f, false);
             }
+            
+
+        }
+        else if (sceneName == Loader.Scene.Level2.ToString())
+        {
+            // Level 2: Choral battle music, less environment
+            shuffler.StopShuffling();
+            SwitchMusic(4);
+            for (int i = 0; i < au.environmentObjects.Length; ++i)
+            {
+                au.environmentObjects[i].GetComponent<AudioSourceController>().FadeTo(-12, 5, 0.5f, false);
+            }
             for (int i = 0; i < au.introFireCrackle.Length; ++i)
             {
-                au.introFireCrackle[i].FadeTo(AudioUtility.minimum, 5, 0.5f, true);
+                au.introFireCrackle[i].FadeTo(AudioUtility.minimum, 1, 0.5f, true);
             }
-               
-        }
-        
-        else
-        {
-            shuffler.StopShuffling();
-            SwitchMusic(-1);
-            Debug.LogError(this.name + ": Unknown scene triggered (name: " + sceneName + "), music cue not fired.");
-        }
-        
+
+        }        
+        else Debug.LogError(this + ": scene loaded that wasn't accounted for. Scene name: " + sceneName);
+
+
     }
 
 
