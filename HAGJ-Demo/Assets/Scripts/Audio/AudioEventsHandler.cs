@@ -79,13 +79,7 @@ public class AudioEventsHandler : MonoBehaviour
         {
             // Opening quote: hildegard cello solo + fire crackle
             SwitchMusic(0);
-            shuffler.StopShuffling();
-            
-            for (int i = 0; i < au.introFireCrackle.Length; ++i)
-            {
-                au.introFireCrackle[i].PlayLoop();
-                au.introFireCrackle[i].FadeTo(0, 2, 0.5f, false);
-            }
+            shuffler.StopShuffling();            
         }
         else if (sceneName == Loader.Scene.MainMenu.ToString())
         {
@@ -97,11 +91,7 @@ public class AudioEventsHandler : MonoBehaviour
             for (int i = 0; i < au.environmentObjects.Length; ++i)
             {
                 au.environmentObjects[i].GetComponent<AudioSourceController>().FadeTo(AudioUtility.minimum, 3, 0.5f, true);
-            }
-            for (int i = 0; i < au.introFireCrackle.Length; ++i)
-            {
-                au.introFireCrackle[i].FadeTo(AudioUtility.minimum, 1, 0.5f, false);
-            }
+            }            
         }
         else if (sceneName == Loader.Scene.Intro.ToString())
         {

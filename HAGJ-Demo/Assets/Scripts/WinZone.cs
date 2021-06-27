@@ -24,9 +24,11 @@ public class WinZone : MonoBehaviour {
 		//Let GameManager know that player won  if Active Scene is Level2
 		if (currentScene == (int) Loader.Scene.Level1) {
 			GameManager.Level1Finished();
-        }
+			EventManager.Instance.NotifyOfOnHealthNotLow(this);
+		}
         else if (currentScene == (int) Loader.Scene.Level2) {
 			GameManager.PlayerWon();
+			EventManager.Instance.NotifyOfOnHealthNotLow(this);
 		}
 	}
 }

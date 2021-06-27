@@ -83,7 +83,7 @@ public class GameManager : MonoBehaviour {
 		Loader.Load(Loader.Scene.MainMenu);
 	}
 
-	void GoToCutScene_lvl1_to_lvl2() {
+	void GoToCutScene_lvl1_to_lvl2() {		
 		UIManager.HideAllTexts();
 		Loader.Load(Loader.Scene.Cutscene_lvl1_to_lvl2);
 	}
