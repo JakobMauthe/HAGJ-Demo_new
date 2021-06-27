@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/Quote.unity
+    guid: 05771864a49d32a4b92e0d7e3446b43b
+  - enabled: 1
     path: Assets/Scenes/MainMenu.unity
     guid: aaca7c5c090ad214ab731a991e93a593
   - enabled: 1
@@ -20,4 +23,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Level1.unity
     guid: a87a16b8c9293ae49acd714ffefba7b8
+  - enabled: 1
+    path: Assets/Scenes/Cutscene_lvl1_to_lvl2.unity
+    guid: e02a66cf151a7c2499f5083c6fc0365a
+  - enabled: 1
+    path: Assets/Scenes/Level2.unity
+    guid: 3a0526fb500a9d44cad2b26cdf3fefd6
   m_configObjects: {}

@@ -737,7 +737,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1735445078}
         m_TargetAssemblyTypeName: IntroContinue, Assembly-CSharp
-        m_MethodName: ContinueToLevelOne
+        m_MethodName: ContinueToLevelTwo
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -920,15 +920,12 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'The year is 1230 AD. Following centuries of attempting to convert the
-    Prussian pagans, the Holy Roman Emperor commands the Teutonic Knights to launch
-    a crusade against the heathens. You are Hermann Balk, a Knight-Brother of the
-    Teutonic Order, and our Lord has chosen you to follow this righteous path.
-
-    
-
-    Arise,
-    crusader, and fight for the Grand Master, for the Emperor, and for God.'
+  m_text: Walking through the forest, you see stone people, standing in these ancient
+    woods. Tombstones, perhaps? For whom, you wonder - them, or us? Do they celebrate
+    a Christian death or mourn a pagan one? No, these must mark the site of their
+    heathen rituals. You feel a chill. Maybe these rocks are the pagan gods themselves,
+    petrified at the sight of you. Ahead of you is a wide clearing. At its centre
+    is a colossal, ancient tree.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: a204dbd0cf30fc341a2d916455874e41, type: 2}
   m_sharedMaterial: {fileID: 3582909261848851341, guid: a204dbd0cf30fc341a2d916455874e41, type: 2}
@@ -950,13 +947,13 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: -1183493901
+  m_TextStyleHashCode: 93368250
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 40
-  m_fontSizeBase: 40
+  m_fontSize: 50
+  m_fontSizeBase: 50
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -991,7 +988,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 10, y: 10, z: 10, w: 10}
+  m_margin: {x: 10, y: 10, z: 0, w: 10}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0

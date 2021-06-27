@@ -7,11 +7,14 @@ using UnityEngine.SceneManagement;
 public static class Loader {
     
     public enum Scene {  //All Scenes must be registered here
+        Quote,
         MainMenu,
         Loading,
         TestingLevel,
         Intro,
         Level1,
+        Cutscene_lvl1_to_lvl2,
+        Level2,        
     }
 
     private static Action onLoaderCallback;

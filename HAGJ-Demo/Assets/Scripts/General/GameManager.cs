@@ -61,6 +61,15 @@ public class GameManager : MonoBehaviour {
 		//AudioManager.PlayWonAudio();
 	}
 
+	public static void Level1Finished() {
+		//If there is no current Game Manager, exit
+		if (_instance == null)
+			return;		
+
+		UIManager.ShowLevel1FinishText();
+		_instance.Invoke("GoToCutScene_lvl1_to_lvl2", _instance.deathSequenceDuration);		
+	}
+
 	void RestartScene() {
 		//Play the scene restart audio
 		//AudioManager.PlaySceneRestartAudio();
@@ -72,7 +81,10 @@ public class GameManager : MonoBehaviour {
 	void BackToMainMenu() {
 		UIManager.HideAllTexts();
 		Loader.Load(Loader.Scene.MainMenu);
-		var activeSceneName = (Loader.Scene)SceneManager.GetActiveScene().buildIndex;
+	}
 
+	void GoToCutScene_lvl1_to_lvl2() {
+		UIManager.HideAllTexts();
+		Loader.Load(Loader.Scene.Cutscene_lvl1_to_lvl2);
 	}
 }
