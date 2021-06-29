@@ -36,6 +36,7 @@ public class PauseMenu : MonoBehaviour {
 
     public void LoadMenu() {
         Time.timeScale = 1f;
+        EventManager.Instance.NotifyOfOnHealthNotLow(this);
         Loader.Load(Loader.Scene.MainMenu);
     }
 

@@ -5,6 +5,13 @@ using UnityEngine;
 
 public class PlayerController : PhysicsObject {
 
+    public enum State {
+        Alive,
+        Dead,
+    }
+
+    private State state;
+
     public Animator animator;
 
     //Health and Stamina
@@ -62,6 +69,8 @@ public class PlayerController : PhysicsObject {
 
     public float attackHeavyRange = 1f;
 
+    public bool dirtyIsPaused = false;  //for the letter event; change to GameMangager isPause or sth
+
     public float Health => currentHealth;
     public int Stamina => currentStamina;
 
@@ -78,6 +87,7 @@ public class PlayerController : PhysicsObject {
         staminaBar.SetMaxStamina(maxStamina);
         isBlocking = false;
         lowStamina = lowHealth = false;
+        state = State.Alive;
 
         EventManager.Instance.OnPlayerLittleAttack += LittleAttack_OnLittleAtackInitiated;
         EventManager.Instance.OnPlayerHeavyAttack += HeavyAttack_OnHeavyAtackInitiated;
@@ -94,12 +104,22 @@ public class PlayerController : PhysicsObject {
 
     public override void Update() {
         base.Update();
+        bool attackAllowed = true;
         animator.SetFloat("MovementSpeed", Mathf.Abs(velocity.x));
+        if (state == State.Dead) {
+            return;
+        }
+        if(animator.GetCurrentAnimatorStateInfo(0).IsName("Player_Atack1") ||
+           animator.GetCurrentAnimatorStateInfo(0).IsName("Player_HeavyAttack") ||
+           animator.GetCurrentAnimatorStateInfo(0).IsName("Player_Atack2")
+           ) {
+            attackAllowed = false;
+        }
        
-        if (Input.GetMouseButtonDown(0)&& !PauseMenu.gameIsPaused) {
+        if (Input.GetMouseButtonDown(0) && !PauseMenu.gameIsPaused && attackAllowed && !dirtyIsPaused) {
             LittleAttack();
         }
-        if (Input.GetMouseButtonDown(1) && !PauseMenu.gameIsPaused) {
+        if (Input.GetMouseButtonDown(1) && !PauseMenu.gameIsPaused && attackAllowed && !dirtyIsPaused) {
             HeavyAttack();
         }
         if (Input.GetKeyDown(KeyCode.Q) && !isBlocking) {
@@ -183,8 +203,11 @@ public class PlayerController : PhysicsObject {
         animator.SetBool("grounded", groundedForAnimation);
     }
 
-    protected override void ComputeVelocity() {        
-                
+    protected override void ComputeVelocity() {
+        if (state == State.Dead) {
+            return;
+        }
+        
         Vector2 move = Vector2.zero;
         move.x = Input.GetAxis("Horizontal");
 
@@ -223,8 +246,12 @@ public class PlayerController : PhysicsObject {
     }
     public void TakeDamage(float damage) {
         if (damage >= currentHealth) {
-            EventManager.Instance.NotifyOfOnPlayerDeath(this);
-            GameManager.PlayerDied();
+            if(state != State.Dead) {
+                state = State.Dead;
+                EventManager.Instance.NotifyOfOnPlayerDeath(this);
+                EventManager.Instance.NotifyOfOnHealthNotLow(this);
+                GameManager.PlayerDied();               
+            }            
         }
         else {
             currentHealth -= damage;
