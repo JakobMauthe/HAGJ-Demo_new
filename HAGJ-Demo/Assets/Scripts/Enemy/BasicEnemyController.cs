@@ -17,6 +17,8 @@ public class BasicEnemyController : PhysicsObject {
     }
     private State state;
 
+    private GameObject player;
+
     public bool guardOnly;
 
     public Animator animator;
@@ -74,6 +76,7 @@ public class BasicEnemyController : PhysicsObject {
    
 
     void OnEnable() {
+        player = GameObject.FindWithTag("Player");
         startingPosition = transform.position;        //setting the StartingPosition
         toPatrolPosition = startingPosition + new Vector3(patrolToPoint, 0f, 0f); // setting the PatrolPosition
         currentHealth = startHealth;
@@ -87,7 +90,7 @@ public class BasicEnemyController : PhysicsObject {
     }
 
     private void Start() {
-        EventManager.Instance.OnEnemyAttack += EnemyAttack_OnEnemyAttackInitiated;
+        EventManager.Instance.OnEnemyAttack += EnemyAttack_OnEnemyAttackInitiated;        
     }
 
     private void OnDestroy() {
@@ -95,7 +98,7 @@ public class BasicEnemyController : PhysicsObject {
     }
 
     private void FindTarget() {
-        if (Vector3.Distance(transform.position, PlayerController.Instance.transform.position) < targetChaseRange) {
+        if (Vector3.Distance(transform.position, player.transform.position) < targetChaseRange) {
             state = State.ChaseTarget;
             EventManager.Instance.NotifyOfOnEnemyStartChase(new Vector2 (transform.position.x, transform.position.y));
         }
@@ -132,12 +135,12 @@ public class BasicEnemyController : PhysicsObject {
                 FindTarget();
                 break;
             case State.ChaseTarget:
-                if (Vector3.Distance(transform.position, PlayerController.Instance.transform.position) < startAttackRange) {
+                if (Vector3.Distance(transform.position, player.transform.position) < startAttackRange) {
                     state = State.Attack;
                     break;
                 }
                 MoveToPlayerPosition();
-                if (Vector3.Distance(transform.position, PlayerController.Instance.transform.position) > targetChaseRange) {
+                if (Vector3.Distance(transform.position, player.transform.position) > targetChaseRange) {
                     if (guardOnly) {
                         state = State.BackToGuardPosition;
                     }
@@ -152,7 +155,7 @@ public class BasicEnemyController : PhysicsObject {
                     Attack();
                     nextAttackTime = Time.time + attackRate;
                 }
-                if (Vector3.Distance(transform.position, PlayerController.Instance.transform.position) > startAttackRange) {
+                if (Vector3.Distance(transform.position, player.transform.position) > startAttackRange) {
                     state = State.ChaseTarget;
                     break;
                 }
@@ -244,7 +247,7 @@ public class BasicEnemyController : PhysicsObject {
         enemyMaxMovementSpeed = enemyMaxChasingSpeed;
         animator.SetFloat("MovementSpeed", enemyMaxMovementSpeed);
         Vector2 move = Vector2.zero;
-        if (transform.position.x > PlayerController.Instance.transform.position.x) {
+        if (transform.position.x > player.transform.position.x) {
             move.x = -1f;
         }
         else {

@@ -69,18 +69,13 @@ public class PlayerController : PhysicsObject {
 
     public float attackHeavyRange = 1f;
 
-    public bool dirtyIsPaused = false;  //for the letter event; change to GameMangager isPause or sth
-
     public float Health => currentHealth;
     public int Stamina => currentStamina;
 
     public bool IsBlocking => isBlocking;
 
-    public static PlayerController Instance { get; private set; }
-
     public override void Awake() {
         base.Awake();
-        Instance = this;
         currentStamina = maxStamina;
         currentHealth = maxHealth;
         healthBar.SetMaxHealth(maxHealth);
@@ -116,10 +111,10 @@ public class PlayerController : PhysicsObject {
             attackAllowed = false;
         }
        
-        if (Input.GetMouseButtonDown(0) && !PauseMenu.gameIsPaused && attackAllowed && !dirtyIsPaused) {
+        if (Input.GetMouseButtonDown(0) && !GameManager.IsGamePaused() && attackAllowed) {
             LittleAttack();
         }
-        if (Input.GetMouseButtonDown(1) && !PauseMenu.gameIsPaused && attackAllowed && !dirtyIsPaused) {
+        if (Input.GetMouseButtonDown(1) && !GameManager.IsGamePaused() && attackAllowed) {
             HeavyAttack();
         }
         if (Input.GetKeyDown(KeyCode.Q) && !isBlocking) {

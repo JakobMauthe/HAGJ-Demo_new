@@ -8,7 +8,7 @@ public class AudioManager : MonoBehaviour
     public static AudioManager Instance { get { return _instance; } }
 
     public AudioListener listener;
-    public PlayerController player;
+    private GameObject player;
 
     [Header("Music")]
     public MusicSwitch musicSwitch;
@@ -49,7 +49,8 @@ public class AudioManager : MonoBehaviour
     void Start()
     {
 
-        if (!player) player = PlayerController.Instance;
+        if (!player) player = GameObject.FindWithTag("Player"); 
+        
 
         // If the scene contains a player character, make sure it's the only listener in the scene, otherwise defaults to main camera.
         if (player)

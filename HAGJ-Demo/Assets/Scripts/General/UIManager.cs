@@ -1,7 +1,7 @@
 using UnityEngine;
-using TMPro;
 
 public class UIManager : MonoBehaviour {
+
 	static UIManager current;
 	
 	public GameObject gameOverUI;    // Game over UI Element
@@ -19,11 +19,13 @@ public class UIManager : MonoBehaviour {
 		//This is the current UIManager and it should persist between scene loads
 		current = this;
 		HideAllTexts();
-
 		DontDestroyOnLoad(gameObject);
 	}
 
 	public static void HideAllTexts() {
+		if (current == null)
+			return;
+
 		HideGameOverText();
 		HideWinText();
 		HideLevel1FinishText();
