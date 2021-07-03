@@ -89,14 +89,6 @@ public class BasicEnemyController : PhysicsObject {
         }
     }
 
-    private void Start() {
-        EventManager.Instance.OnEnemyAttack += EnemyAttack_OnEnemyAttackInitiated;        
-    }
-
-    private void OnDestroy() {
-        EventManager.Instance.OnEnemyAttack -= EnemyAttack_OnEnemyAttackInitiated;
-    }
-
     private void FindTarget() {
         if (Vector3.Distance(transform.position, player.transform.position) < targetChaseRange) {
             state = State.ChaseTarget;
@@ -190,13 +182,14 @@ public class BasicEnemyController : PhysicsObject {
         
     }
 
-    private void EnemyAttack_OnEnemyAttackInitiated(Vector2 somePositionWhichVariableIsNotUsed) {
+    public void EnemyAttackInitiated() {
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, playerLayer);
         foreach (Collider2D enemy in hitEnemies) {
-            PlayerController playerController = enemy.GetComponent < PlayerController>();
+            PlayerController playerController = enemy.GetComponent <PlayerController>();
             if (playerController.IsBlocking) {
                 state = State.Blocked;
                 animator.SetTrigger("Blocked");
+                playerController.BlockSuccesful();
                 EventManager.Instance.NotifyOfOnBlockInitiated(new Vector2(transform.position.x, transform.position.y));
                 notBlockedTime = Time.time + blockedDuration;
             }

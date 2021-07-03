@@ -2,20 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AnimationEvents : MonoBehaviour
-{
-    public void LittleAttack() {
+public class AnimationEvents : MonoBehaviour {
+    private GameObject player;
+
+    private void OnEnable() {
+        player = GameObject.FindWithTag("Player");
+    }
+
+    public void LittleAttack() {  //Notify of player little attack
         EventManager.Instance.NotifyOfOnPlayerLittleAttack(this);
-        //Notify of player little attack
+        player.GetComponent<PlayerController>().LittleAttack_calledByAnimationEvents();
     }
 
-    public void HeavyAttack() {
+    public void HeavyAttack() { //Notify of player heavy attack   
         EventManager.Instance.NotifyOfOnPlayerHeavyAttack(this);
-        //Notify of player heavy attack
+        player.GetComponent<PlayerController>().HeavyAttack_calledByAnimationEvents();
     }
 
-    public void EnemyAttack() {
+    public void EnemyAttack() { //Notify of enemy attack        
         EventManager.Instance.NotifyOfOnEnemyAttack(transform.position);
-        //Notify of enemy attack
-    }
+        transform.GetComponentInParent<BasicEnemyController>().EnemyAttackInitiated();    }
 }

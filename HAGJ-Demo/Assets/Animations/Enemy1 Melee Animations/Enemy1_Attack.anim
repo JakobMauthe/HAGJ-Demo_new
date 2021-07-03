@@ -84,7 +84,7 @@ AnimationClip:
   - time: 0.5
     functionName: EnemyAttack
     data: 
-    objectReferenceParameter: {fileID: 0}
+    objectReferenceParameter: {fileID: 7862425347650967812, guid: 0aba4d6e84f1b5a468c415ba87421369, type: 3}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0

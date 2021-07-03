@@ -83,19 +83,7 @@ public class PlayerController : PhysicsObject {
         isBlocking = false;
         lowStamina = lowHealth = false;
         state = State.Alive;
-
-        EventManager.Instance.OnPlayerLittleAttack += LittleAttack_OnLittleAtackInitiated;
-        EventManager.Instance.OnPlayerHeavyAttack += HeavyAttack_OnHeavyAtackInitiated;
-        EventManager.Instance.OnBlockInitiated += Blocked_OnBlockInitiated;
     }
-
-
-    private void OnDestroy() {
-        EventManager.Instance.OnPlayerLittleAttack -= LittleAttack_OnLittleAtackInitiated;
-        EventManager.Instance.OnPlayerHeavyAttack -= HeavyAttack_OnHeavyAtackInitiated;
-        EventManager.Instance.OnBlockInitiated -= Blocked_OnBlockInitiated;
-    }
-
 
     public override void Update() {
         base.Update();
@@ -149,21 +137,21 @@ public class PlayerController : PhysicsObject {
         UseStamina(attackHeavyStaminaCost);        
     }
 
-    private void LittleAttack_OnLittleAtackInitiated(object sender, EventArgs e) {
+    public void LittleAttack_calledByAnimationEvents() {
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackLittleRange, enemyLayers);
         foreach (Collider2D enemy in hitEnemies) {
             enemy.GetComponent<BasicEnemyController>().TakeDamage((float)attackLittleDamage);
         }
     }
 
-    private void HeavyAttack_OnHeavyAtackInitiated(object sender, EventArgs e) {
+    public void HeavyAttack_calledByAnimationEvents() {
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackHeavyRange, enemyLayers);
         foreach (Collider2D enemy in hitEnemies) {
             enemy.GetComponent<BasicEnemyController>().TakeDamage((float)attackHeavyDamage);
         }
     }
 
-    private void Blocked_OnBlockInitiated(Vector2 somePositionIdontNeed) {
+    public void BlockSuccesful() {
         animator.SetTrigger("Blocked");
     }
 
