@@ -5,6 +5,47 @@ using UnityEngine;
 
 public class BasicEnemyController : PhysicsObject {
 
+    [Header("References")]
+    public HealthBar healthBar;
+    public Animator animator;
+    public GameObject prefab_DeadBody;
+    public Transform attackPoint;
+    public LayerMask playerLayer;
+
+    [Header("Health")]
+    [SerializeField, Range(0, 100)] int startHealth = 100;
+
+    protected float currentHealth;
+
+    [Header("Patrolling or Guard")]
+    public bool guardOnly;
+    [SerializeField, Range(-30f, 30f)] float patrolToPoint = 10f;
+
+    [Header("Movement")]
+    [SerializeField, Range(0.1f, 10f)] float enemyMaxPatrollingSpeed = 1.5f;
+    [SerializeField, Range(1f, 100f)] float targetChaseRange = 10f;
+    [SerializeField, Range(0.1f, 10f)] float enemyMaxChasingSpeed = 2.5f;
+    private Vector3 startingPosition, toPatrolPosition;
+    private bool patrolFirstWayActive = true;
+    private float enemyMaxMovementSpeed = 1.5f;
+
+    [Header("Attacking")]
+    [SerializeField, Range(0, 100)] int attackDamage = 15;
+    [SerializeField, Range(0.1f, 10f)] float startAttackRange = 2f;
+    [SerializeField, Range(0.1f, 10f)] float attackRange = 2.5f;
+    [SerializeField, Range(0.1f, 10f)] float attackRate = 0.75f;  
+
+    private float nextAttackTime;
+
+    [Header("Blocking")]
+    [SerializeField, Range(0.1f, 5f)] float blockedDuration = 1f;
+
+    private float notBlockedTime;
+    private float notHurtTime;
+
+    private GameObject player;
+    private State state;
+
     private enum State {
         Patrol,
         ChaseTarget,
@@ -14,66 +55,12 @@ public class BasicEnemyController : PhysicsObject {
         Guard,
         BackToGuardPosition,
         Dying,
-    }
-    private State state;
-
-    public bool guardOnly;
-
-    public Animator animator;
-
-    public GameObject prefab_DeadBody;
-
-    public float startHealth = 100;
-    public HealthBar healthBar;
-    protected float currentHealth;
-
-    //Movement
-    private Vector3 startingPosition, toPatrolPosition;
-    private bool patrolFirstWayActive = true;
-    
-    
-    private float enemyMaxMovementSpeed = 1.5f;
-    public float enemyMaxPatrollingSpeed = 1.5f;
-    public float enemyMaxChasingSpeed = 2.5f;
-
-    [SerializeField, Range(-30f, 30f)]
-    float patrolToPoint = 10f;
-
-    [SerializeField, Range(1f, 100f)]
-    float targetChaseRange = 10f;
-
-
-    //attacking
-    [SerializeField, Range(0f, 100f)]
-    float attackDamage = 15f;
-
-    [SerializeField, Range(0.1f, 10f)]
-    float startAttackRange = 2f;
-
-    [SerializeField, Range(0.1f, 10f)]
-    float attackRange = 2.5f;
-
-    [SerializeField, Range(0.1f, 10f)]
-    float attackRate = 0.75f;    
-
-    public Transform attackPoint;
-    public LayerMask playerLayer;
-
-    private float nextAttackTime;
-
-    //blocked
-
-    private float notBlockedTime;
-    private float notHurtTime;
-
-    [SerializeField, Range(0.1f, 5f)]
-    float blockedDuration = 1f;
-
+    }    
 
     public float Health => currentHealth;
-   
 
     void OnEnable() {
+        player = GameObject.FindWithTag("Player");
         startingPosition = transform.position;        //setting the StartingPosition
         toPatrolPosition = startingPosition + new Vector3(patrolToPoint, 0f, 0f); // setting the PatrolPosition
         currentHealth = startHealth;
@@ -86,16 +73,8 @@ public class BasicEnemyController : PhysicsObject {
         }
     }
 
-    private void Start() {
-        EventManager.Instance.OnEnemyAttack += EnemyAttack_OnEnemyAttackInitiated;
-    }
-
-    private void OnDestroy() {
-        EventManager.Instance.OnEnemyAttack -= EnemyAttack_OnEnemyAttackInitiated;
-    }
-
     private void FindTarget() {
-        if (Vector3.Distance(transform.position, PlayerController.Instance.transform.position) < targetChaseRange) {
+        if (Vector3.Distance(transform.position, player.transform.position) < targetChaseRange) {
             state = State.ChaseTarget;
             EventManager.Instance.NotifyOfOnEnemyStartChase(new Vector2 (transform.position.x, transform.position.y));
         }
@@ -132,12 +111,12 @@ public class BasicEnemyController : PhysicsObject {
                 FindTarget();
                 break;
             case State.ChaseTarget:
-                if (Vector3.Distance(transform.position, PlayerController.Instance.transform.position) < startAttackRange) {
+                if (Vector3.Distance(transform.position, player.transform.position) < startAttackRange) {
                     state = State.Attack;
                     break;
                 }
                 MoveToPlayerPosition();
-                if (Vector3.Distance(transform.position, PlayerController.Instance.transform.position) > targetChaseRange) {
+                if (Vector3.Distance(transform.position, player.transform.position) > targetChaseRange) {
                     if (guardOnly) {
                         state = State.BackToGuardPosition;
                     }
@@ -152,7 +131,7 @@ public class BasicEnemyController : PhysicsObject {
                     Attack();
                     nextAttackTime = Time.time + attackRate;
                 }
-                if (Vector3.Distance(transform.position, PlayerController.Instance.transform.position) > startAttackRange) {
+                if (Vector3.Distance(transform.position, player.transform.position) > startAttackRange) {
                     state = State.ChaseTarget;
                     break;
                 }
@@ -187,18 +166,19 @@ public class BasicEnemyController : PhysicsObject {
         
     }
 
-    private void EnemyAttack_OnEnemyAttackInitiated(Vector2 somePositionWhichVariableIsNotUsed) {
+    public void EnemyAttackInitiated() {
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, playerLayer);
         foreach (Collider2D enemy in hitEnemies) {
-            PlayerController playerController = enemy.GetComponent < PlayerController>();
+            PlayerController playerController = enemy.GetComponent <PlayerController>();
             if (playerController.IsBlocking) {
                 state = State.Blocked;
                 animator.SetTrigger("Blocked");
+                playerController.BlockSuccesful();
                 EventManager.Instance.NotifyOfOnBlockInitiated(new Vector2(transform.position.x, transform.position.y));
                 notBlockedTime = Time.time + blockedDuration;
             }
             else {
-                playerController.TakeDamage((float)attackDamage);
+                playerController.TakeDamage(attackDamage);
             }
         }
     }
@@ -244,17 +224,16 @@ public class BasicEnemyController : PhysicsObject {
         enemyMaxMovementSpeed = enemyMaxChasingSpeed;
         animator.SetFloat("MovementSpeed", enemyMaxMovementSpeed);
         Vector2 move = Vector2.zero;
-        if (transform.position.x > PlayerController.Instance.transform.position.x) {
+        if (transform.position.x > player.transform.position.x) {
             move.x = -1f;
         }
         else {
             move.x = 1f;
         }
         targetVelocity = move * enemyMaxMovementSpeed;
-
     }
 
-    public void TakeDamage(float damage) {
+    public void TakeDamage(int damage) {
         if (damage >= currentHealth) {
             state = State.Dying;
             Die();

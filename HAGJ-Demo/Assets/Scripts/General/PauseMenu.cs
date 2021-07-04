@@ -4,17 +4,11 @@ using UnityEngine;
 
 public class PauseMenu : MonoBehaviour {
 
-    public static bool gameIsPaused;
-
     public GameObject pauseMenuUI;
-
-    private void Awake() {
-        gameIsPaused = false;
-    }
 
     void Update() {
         if (Input.GetKeyDown(KeyCode.Escape)) {
-            if (gameIsPaused) {
+            if (GameManager.IsGamePaused()) {
                 Resume();
             }
             else {
@@ -24,18 +18,16 @@ public class PauseMenu : MonoBehaviour {
     }
     public void Resume() {
         pauseMenuUI.SetActive(false);
-        Time.timeScale = 1f;
-        gameIsPaused = false;
+        GameManager.UnPauseGame();
     }
 
     void Pause() {
         pauseMenuUI.SetActive(true);
-        Time.timeScale = 0f;
-        gameIsPaused = true;
+        GameManager.PauseGame();
     }
 
     public void LoadMenu() {
-        Time.timeScale = 1f;
+        GameManager.UnPauseGame();
         EventManager.Instance.NotifyOfOnHealthNotLow(this);
         Loader.Load(Loader.Scene.MainMenu);
     }

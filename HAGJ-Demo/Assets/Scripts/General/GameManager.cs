@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour {
 
 	public float deathSequenceDuration = 1.5f;  //How long player death takes before restarting
 		
-	bool isGameOver;                            //Is the game currently over?
+	private bool isGamePaused;                            //Is the game currently over?
 
 	public static GameManager Instance { get { return _instance; } }
 
@@ -26,16 +26,31 @@ public class GameManager : MonoBehaviour {
 
 		_instance = this;
 		DontDestroyOnLoad(gameObject);
-	}	
+	}
+    
 
-	public static bool IsGameOver() {
-		//If there is no current Game Manager, return false
+    public static bool IsGamePaused() {
 		if (_instance == null)
 			return false;
 
-		//Return the state of the game
-		return _instance.isGameOver;
-	}	
+		return _instance.isGamePaused;
+	}
+
+	public static void PauseGame() {
+		if (_instance == null)
+			return;
+
+		Time.timeScale = 0f;
+		_instance.isGamePaused = true;
+	}
+
+	public static void UnPauseGame() {
+		if (_instance == null)
+			return;
+
+		Time.timeScale = 1f;
+		_instance.isGamePaused = false;
+	}
 
 	public static void PlayerDied() {
 		//If there is no current Game Manager, exit
@@ -51,9 +66,6 @@ public class GameManager : MonoBehaviour {
 		//If there is no current Game Manager, exit
 		if (_instance == null)
 			return;
-
-		//The game is now over
-		_instance.isGameOver = true;
 
 		UIManager.ShowWinText();
 		_instance.Invoke("BackToMainMenu", _instance.deathSequenceDuration);
