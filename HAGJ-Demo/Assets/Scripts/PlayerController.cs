@@ -5,72 +5,52 @@ using UnityEngine;
 
 public class PlayerController : PhysicsObject {
 
-    public enum State {
-        Alive,
-        Dead,
-    }
-
-    private State state;
-
-    public Animator animator;
-
-    //Health and Stamina
-
+    [Header("References")]
     public HealthBar healthBar;
     public StaminaBar staminaBar;
+    public GameObject dropShadow;
+    public Animator animator;
+    public Transform attackPoint;
+    public LayerMask enemyLayers;
 
-    public GameObject dropShadow;        
+    [Header("Health & Stamina")]
+    [SerializeField, Range(0, 1000)] int maxHealth = 100;
+    [SerializeField, Range(0, 1000)] int maxStamina = 100;
 
-    [SerializeField, Range(0,1000)]
-    float maxHealth = 100f;
-
-    [SerializeField, Range(0, 1000)]
-    int maxStamina = 100;
-
-    [Header("For Audio")]
-    [SerializeField, Range(0, 100)] int lowHealthThreshold = 25;
-    [SerializeField, Range(0, 100)] int lowStaminaThreshold = 33;
-
-    private float currentHealth;
-    private int currentStamina;
-
+    private int currentHealth, currentStamina;
     private bool lowHealth, lowStamina;
-
     private WaitForSeconds regenTick = new WaitForSeconds(0.1f);
     private Coroutine regen;
 
-    //Movement
+    [Header("For Audio")]
+    [SerializeField, Range(0, 100)] int lowHealthThreshold = 25;
+    [SerializeField, Range(0, 100)] int lowStaminaThreshold = 33;    
+
+    [Header("Movement")]
     public float maxMovementSpeed = 5f;
     public float jumpTakeOffSpeed = 5f;
 
+    [Header("Little Attack")]
+    [SerializeField, Range(0, 100)] int attackLittleDamage = 15;
+    [SerializeField, Range(0, 100)] int attackLittleStaminaCost = 10;
+    [SerializeField, Range(0.1f, 10f)] float attackLittleRange = 0.5f;
 
-    //Attacking & blocking
-    public Transform attackPoint;
-    public LayerMask enemyLayers;
+    [Header("Heavy Attack")]
+    [SerializeField, Range(0, 100)] int attackHeavyDamage = 40;
+    [SerializeField, Range(0, 100)] int attackHeavyStaminaCost = 25;
+    [SerializeField, Range(0.1f, 10f)] float attackHeavyRange = 1f;
+
+    [Header("Blocking")]
+    [SerializeField, Range(0.1f, 5f)] float blockingTime = 1f;
+
     private bool isBlocking;
 
-    [SerializeField, Range(0.1f, 5f)]
-    float blockingTime = 1f;
-    
-    //Little Attack
-    [SerializeField, Range(0, 100)]
-    int attackLittleDamage = 15;
+    private State state;
 
-    [SerializeField, Range(0, 100)]
-    int attackLittleStaminaCost = 10;
-
-    public float attackLittleRange = 0.5f;
-    //Heavy Attack
-    [SerializeField, Range(0, 100)]
-    int attackHeavyDamage = 40;
-
-    [SerializeField, Range(0, 100)]
-    int attackHeavyStaminaCost = 25;
-
-    public float attackHeavyRange = 1f;
-
-    public float Health => currentHealth;
-    public int Stamina => currentStamina;
+    public enum State {
+        Alive,
+        Dead,
+    }    
 
     public bool IsBlocking => isBlocking;
 
@@ -80,8 +60,7 @@ public class PlayerController : PhysicsObject {
         currentHealth = maxHealth;
         healthBar.SetMaxHealth(maxHealth);
         staminaBar.SetMaxStamina(maxStamina);
-        isBlocking = false;
-        lowStamina = lowHealth = false;
+        isBlocking = lowStamina = lowHealth = false;
         state = State.Alive;
     }
 
@@ -140,14 +119,14 @@ public class PlayerController : PhysicsObject {
     public void LittleAttack_calledByAnimationEvents() {
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackLittleRange, enemyLayers);
         foreach (Collider2D enemy in hitEnemies) {
-            enemy.GetComponent<BasicEnemyController>().TakeDamage((float)attackLittleDamage);
+            enemy.GetComponent<BasicEnemyController>().TakeDamage(attackLittleDamage);
         }
     }
 
     public void HeavyAttack_calledByAnimationEvents() {
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackHeavyRange, enemyLayers);
         foreach (Collider2D enemy in hitEnemies) {
-            enemy.GetComponent<BasicEnemyController>().TakeDamage((float)attackHeavyDamage);
+            enemy.GetComponent<BasicEnemyController>().TakeDamage(attackHeavyDamage);
         }
     }
 
@@ -227,7 +206,7 @@ public class PlayerController : PhysicsObject {
         }
         regen = null;
     }
-    public void TakeDamage(float damage) {
+    public void TakeDamage(int damage) {
         if (damage >= currentHealth) {
             if(state != State.Dead) {
                 state = State.Dead;
